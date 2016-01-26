@@ -1,0 +1,620 @@
+\NeedsTeXFormat{LaTeX2e}
+%thesis document class
+\documentclass[12pt,twoside,a4paper]{report}
+
+%http://www.howtotex.com/packages/9-essential-latex-packages-everyone-should-use/
+
+%https://www.ctan.org/pkg/nag
+\RequirePackage[l2tabu, orthodox]{nag}
+%
+%\usepackage[utf8]{inputenc}
+
+%https://www.ctan.org/pkg/indentfirst?lang=en
+\usepackage{indentfirst}
+
+%https://www.ctan.org/pkg/microtype
+\usepackage{microtype}
+
+%https://www.ctan.org/pkg/setspace?lang=en
+\usepackage{setspace}
+
+%https://www.ctan.org/pkg/amsmath
+\usepackage{amsmath, amssymb, amsthm}
+
+%https://www.ctan.org/pkg/siunitx
+\usepackage{siunitx}
+
+%https://www.ctan.org/pkg/geometry
+\usepackage[a4paper]{geometry}
+
+%https://www.ctan.org/pkg/fancybox
+\usepackage{fancybox}
+
+%https://www.ctan.org/pkg/listings
+\usepackage{listings}
+
+%https://www.ctan.org/pkg/url?lang=en
+\usepackage{url}
+
+%https://www.ctan.org/pkg/graphicx?lang=en
+\usepackage{graphicx}
+
+%https://www.ctan.org/pkg/array?lang=en
+\usepackage{array}
+
+%https://www.ctan.org/pkg/fancyhdr?lang=en
+\usepackage{fancyhdr}
+
+%https://www.ctan.org/pkg/booktabs
+\usepackage{booktabs}
+
+%http://www.tug.dk/FontCatalogue/lmodern/
+\usepackage{lmodern}
+\usepackage[T1]{fontenc}
+
+%https://www.ctan.org/pkg/hyperref?lang=en
+\usepackage{hyperref}
+% pdf settings assures outlines being created
+\hypersetup{
+	pdftitle={Play With Scala},
+    pdfauthor={Martin Zuber},
+    pdfsubject={Functional Programming in Scala},
+    pdfkeywords={functional programming, scala},
+    bookmarksnumbered=true,     
+    bookmarksopen=true,         
+    bookmarksopenlevel=1,       
+    colorlinks=true,            
+    pdfstartview=Fit,           
+    pdfpagemode=UseOutlines,
+    pdfpagelayout=TwoPageRight
+}
+
+%https://www.ctan.org/pkg/cleveref
+\usepackage{cleveref}
+
+\graphicspath{ {figures/} }
+
+%paragraph formatting from thesis guidelines
+\setlength{\textheight}{9in}
+\setlength{\textwidth}{6in}
+\setlength{\oddsidemargin}{.25in}
+\setlength{\topmargin}{-.5in}
+\setlength{\parindent}{2em}
+\setlength{\parskip}{1em}
+\setstretch{1.6667}
+\hyphenation{itself}
+
+\pagestyle{fancy}
+\fancyhf{}
+\rhead{Martin Zuber}
+\lhead{BSc in Computing}
+\cfoot{Page \thepage}
+
+\title{Play with Scala\\Functional Programming Course}
+\author{Martin Zuber, B00066378 \\ Project Supervisor:  Luke Raeside}
+\date{\today}
+
+\begin{document}
+
+\pagenumbering{roman}
+\maketitle
+\newpage
+
+\chapter*{Declaration}
+I hereby certify that this material, which I now submit for assessment on the programme of study leading to the award of Degree of Honours B.Sc. in Computer Science in the Institute of Technology Blanchardstown, is entirely my own work except where otherwise stated, and has not been submitted for assessment for an academic purpose at this or any other academic institution other than in partial fulfilment of the requirements of that stated above.
+
+\chapter*{Acknowledgements}
+In performing my assignment, I had to take the help and guideline of some respected persons, who deserve my greatest gratitude. The completion of this assignment gives me much Pleasure. I would like to show my gratitude to the project supervisor Dr Luke Raeside, Institute of Technology, Blanchardstown for giving me good guidelines for the thesis throughout numerous consultations. I would also like to expand my deepest gratitude to all those who have directly and indirectly guided me in writing this thesis, especially Dr Markus Hofmann.
+
+\chapter*{Abstract}
+This paper is dedicated to computer programming with the focus on programming styles found in modern application development. The idea for the project came to life when I, the author and computer science student realized there are programming styles other than imperative and object-oriented programming. Namely functional programming paradigm. The lack of a study material dedicated to the functional programming withing the ITB Computer Science course curriculum and my curiosity toward the subject I decided to research and to learn the paradigm. I decided to use the course final project as the vehicle for this endeavour.\par
+This paper is discussing functional programming paradigm with Scala programming language and web application development process using Play! Framework. The target audience is any computer science student with knowledge of a programming language such as Java and with an understanding of some of the object-oriented programming principles such as inheritance and polymorphisms.
+
+\listoffigures
+%\listoftables
+\tableofcontents{}
+
+\pagenumbering{arabic}
+
+\chapter{Introduction}
+\section{Introduction}
+In the world of multi-core processors, distributed systems and big data, we are witnessing a paradigm shift in the computational model used within application development industry. It's a shift from imperative programming style toward declarative programming and the rise of the functional programming languages \cite{1}. JVM ecosystem is no exception.
+  
+Even though Java being still most used JVM language and one of the most used programming languages overall, JVM languages such as Scala, Groovy and Clojure are getting more popular every day. Java itself with recent SE 8 update brought limited support for functional programming as well.
+  
+Scala programming language \cite{2} is getting a big momentum in the last few years \cite{3}. Companies such as Twitter or LinkedIn \cite{4} had switched to Scala for their web applications development. Scala is being a big player in the realm of Reactive programming, Distributed Systems and Big Data \cite{5}.
+
+\subsection{Some of the reasons for Scala success}
+\begin{itemize}
+\item Scala is elegant, scalable, purely object-oriented and fully functional programming language with the performance comparable to Java.
+\item Scala compiles to JVM byte code .class files which mean that Scala is fully compatible with existing Java libraries or frameworks and vice versa. Mixed Java / Scala projects are quite common.
+\item Existence of powerful, open source and award-winning frameworks \cite{6}, toolkits, platforms and build tools written in Scala, such as Akka, Spark, Play, SBT \cite{7}.
+\end{itemize}
+
+\section{Aims and Objectives}
+
+The idea is to develop a web application for a computer science student who would like to learn Scala programming language and functional programming paradigm. The application will be developed using MVC Play! Framework. I decided to work on this project for the following reasons:
+
+\begin{itemize}
+\item Strong personal interest in functional programming.
+\item Lack of modules dedicated to functional programming in ITB curriculum.
+\item Solid background in Java platform.
+\item Desire to pursue a Java / Scala development professional career.
+\end{itemize}
+
+\subsection{Web Application Proposed functionality}
+
+\begin{itemize}
+\item A student can register the account.
+\item The authenticated student will gain access to the functional programming with Scala lectures and exercises.
+\item The student will have access to Scala interpreter where he could carry out coding exercises.
+\item The student will be able to communicate with other users through a chat window or other messaging functionality.
+\item The student will be able to upload the files, for example an exercise solution.
+\end{itemize}
+
+\section{Main Research Questions}
+
+\begin{itemize}
+\item What exactly is functional programming and what benefits does it bring to application development?
+\item In what ways Scala supports the paradigm?
+\item What exactly is Play framework and what kind of applications we can develop with it?
+\item What are the advantages and disadvantages of Play framework in terms of productivity, performance and scalability and in comparison to other frameworks?
+\end{itemize}
+
+\section{Justifications / Benefits}
+
+As mentioned earlier, there is not a module dedicated to functional programming in ITB Computer Science course curriculum. I can actually claim that there is no mention of this programming style in any module overall and the paradigm is totally ignored by the curriculum. In comparison, there are 8 networking modules delivered to students over the course duration. In my opinion, this makes the course unbalanced and creates an ‘educational gap’ in the curriculum. Personally, I feel that the topic belongs to the course curriculum and it is the natural progression from object-oriented programming and design patterns which had strong coverage in the third year of the course.
+
+\textbullet \textbf{ Filling the 'educative gap' in the Computer Science course curriculum by creating learning web resource.}
+  
+The preliminary research on the current state of the application development industry is suggesting that fluency in a functional programming language is a really valuable skill for any developer to possess right now. Developers able to code using languages such as Scala, Clojure, F\# or Lisp dialects are in demand. Reasoning about the functional programs requires different ‘mind-set’ or ‘thought processes’ in comparison with object-oriented programming. Even if one would never use purely functional programming professionally, understanding of the concepts will make one a better programmer overall and give one deeper insight into other programming styles.
+
+\textbullet \textbf{ Acquiring valuable skills and deeper insides into different programming paradigms and design patterns.}
+
+Also, Scala seems to be very elegant language and takes the good design ideas from many other programming languages. The language was designed with the scalability of the syntax taken in the consideration, which allows the language to ‘shape-shift’ towards the needs of its users. In my opinion, the Scala programming language would be the right tool for me to learn functional programming paradigm.
+
+\textbullet \textbf{ Learning Scala programming language and Java Virtual Machine (JVM).}
+
+Even though learning functional programming with Scala is the main aim of this project, the additional work will be carried out by exploring Play framework and developing the web application. The preliminary research suggests the framework is a powerful tool for rapid web development. Play seems to be heavily inspired by Ruby on Rails. It supports reactive web application development and seems to be a cleaner alternative to legacy Java Enterprise stack \cite{8}.
+
+\textbullet \textbf{ Building valuable skill set in contemporary web application development.}
+
+\section{Feasibility}
+
+To carry out this project work the following requirements must be met:
+
+\begin{itemize}
+\item Access to relevant study material and tutorials dedicated to Scala programming language and Play. There is no material available in ITB library, but there is a number of books published and available over the internet. \textit{Estimated cost is 100 euros.}
+\item Access to personal computer. I’m the owner of the laptop computer, which should serve as the project workstation without too many constraints. Additional research must be done to decide on the operating system and other tools. Using free software is most desired.\textit{Estimated cost is 0 euros.}
+\item Access to the internet, deployment, DNS and versioning control services, printer and thesis binding.\textit{ Estimated cost is 300 euro.}
+\item At least 14 hours per week to carry out the project related work for the whole project duration. This estimation is based on personal experience I gained by working on two academic projects during my studies and on experience working on a research project as part of the summer internship.
+\end{itemize}
+
+In my opinion, all the requirements could be met to assure this project feasibility with the minimal cost associated. With proper planning, use of the personal assets and free software when possible, I should be able to meet the project goals within the given time scale.
+
+\section{Proposed Methodologies}
+
+\paragraph{Literature Review\\}
+The first step is to carry out the research on functional programming \cite{9}, Scala programming language \cite{10}, MVC design pattern and Play Framework \cite{11}. I’m planning to use dedicated books I acquired recently, plus online tutorials and blogs. I will analyze, summarize, and carry out the coding tutorials. The thorough literature review at the beginning should lay a foundation for following web application development. I will continue to research relevant materials for the whole duration of the project.
+
+\paragraph{The Web Application Development\\}
+The real challenge lies in the fact that I have a little experience developing web applications using an MVC framework and no skills in technologies I decided to use during this project. I have only general ideas how to design such an application. Only layers I can design reasonably well in advance are the database relations and user interface.\par
+Therefore, I must approach this problem using some kind of adaptive methodology and avoid ‘a big design in advance’ approach. I would argue that Prototyping SDLC is the best methodology to carry out the development. In this model, the developer basically re-analyses, re-designs, re-implements and re-test application prototype until the product is accepted by the client.
+
+\begin{figure}[!ht]
+	\centering
+		\includegraphics[width=0.5\textwidth, totalheight=3cm]{prototyping}
+	\caption{\textit{Prototyping SDLC diagram}}
+\end{figure}
+
+Instead of creating ‘a big design in advance’, prototyping methodology is allowing the developer to change the design with each iteration of the design / development / evaluation / refining circle. I should expect major changes in design based on my lack of experience in web development and technologies I decided to use. The prototyping methodology will allow me to have a simple, but functioning prototype reasonably early. As more insights are acquired from the research, the prototype can be re-designed to implement additional functionality or re-evaluate the design.
+
+\section{Project Plan}
+\subsection{Work Breakdown Structure (WBS)}
+
+\begin{enumerate}
+\item \textbf{Research.}
+	\begin{enumerate}
+	\item Research on Scala programming language design ideas and syntax, MVC design pattern, Play framework, user interface and database design.
+	\item Literature Review of papers dedicated to the functional programming paradigm and test driven rapid web application development with Play.
+	\item Building development platform.
+	\end{enumerate}
+\item \textbf{Front-End design.}
+	\begin{enumerate}
+	\item Creating wire-frame design for new view.
+	\item Constructing the view.
+	\end{enumerate}
+\item \textbf{Database Design.}
+	\begin{enumerate}
+	\item Adding the database entity for new view.
+	\item Designing the relationships with existing entities.
+	\end{enumerate}
+\item \textbf{Prototype Development.}
+	\begin{enumerate}
+	\item Creating the controller object.
+	\item Creating unit tests.
+	\item Implementing method bodies using test driven development methodology.
+	\item Repeating the steps 1, 2, 3 with additional functionality until the final product is build.
+	\end{enumerate}
+\item \textbf{Quality Assurance.}
+	\begin{enumerate}
+	\item Performing integration tests of the whole MVC pipeline.
+	\item Performing user tests.
+	\end{enumerate}
+\item \textbf{Post Implementation Maintenance.}
+	\begin{enumerate}
+	\item Making prototype production ready and deploying the prototype.
+	\item Monitoring deployed application and adding more content.
+	\item Adding content to the application.
+	\item Working on project Report.
+	\item Repeating steps 5.(a), 5.(b), 6.(a), 6.(b), 6.(c), 6.(d)
+	\item Report Binding.
+	\end{enumerate}
+\end{enumerate}
+ 
+\begin{figure}[!ht]
+	\centering
+		\includegraphics[width=0.7\textwidth,totalheight=7cm]{gaant}
+	\caption{\textit{Gaant Chart}}
+\end{figure}
+
+\section{Expected Results}
+The project would be considered successful if it would meet at least two following criteria and goals. In the case of three or more goals accomplished I would consider project outcome to be very successful.
+
+\begin{enumerate}
+\item The gain in Scala coding skills and creation of enough learning material content for Scala course web application.
+\item The comprehensive research on the functional programming paradigm and design patterns performed and gained the ability to code in the declarative style.
+\item The delivery of fully functioning prototype of Scala course learning web application.
+\item The acquisition of skill-set in rapid web development using Play framework.
+\end{enumerate}
+
+\section{Conclusion}
+At the end of this project, I will hopefully introduce some of Scala dedicated learning material in the form of an interactive web application. It can be used in a fictional course module for a fictional college. The application main purpose is to promote the interest in Scala programming language and functional programming paradigm. Especially on the personal level. After three years of my studies with ITB, I didn’t learn anything about functional programming. I chose this project so I can gain a knowledge and skills which are really missing in my skill-set and which could prove very useful in the future. I hope as a fourth year student I am ready to face this challenge.\par
+This research project will not contribute at all to the discipline area. Maybe only in a sense that it will hopefully bring one more student with the passion for programming languages to the functional programming paradigm. And maybe if other students or lecturers will see how elegant and declarative functional programming really is, the contribution could be a bit more significant.
+
+SPELL CHECK ENDS HERE!!!
+
+\chapter{Literature Review}
+\section{Introduction}
+Computer programming is a fascinating and vast subject to study. Programming languages began as
+an attempt to translate the human language and the way of human thinking into the language of a
+computer.
+
+The idea was to make it easier, more efficient for programmers to write the programs. With the evolution of computers, as the problems to solve became more complex, the programs became larger and more sophisticated. The programming languages quickly evolved into the forms commonly referred to as high-level programming languages. In these forms, the programming languages are hiding the internal hardware details and offer a higher level of abstractions allowing programmers to write the programs using familiar terms with an ability to model real life objects.
+
+The purpose of this paper is to review some of the studies dedicated to concepts and design ideas behind the high-level programming languages. The research done in this field is immense. It is out of the scope of this paper to cover every concept,paradigm, or language and rather study some of the most important concepts in general. Then I will continue to study research papers dedicated to two most popular paradigms - object-oriented and functional programming. I will try to identify and discuss their key concepts, strength, and weaknesses and outline their history in short. I chose reading materials with a secondary intention to lay down a foundation for further studies toward a deeper understanding of the paradigms and transitions between them.
+
+\section{General Concepts}
+In \cite{12} author defined a programming paradigm as an approach to a computer programming based on a coherent set of principles or a mathematical theory. The purpose for a paradigm existence is to solve a specific type of a problem. Each paradigm consists of a number of concepts. Any programming language can support one or more paradigms and the language which support more than one paradigm is called the multi-paradigm programming language. Different languages can interpret the concepts of a paradigm differently and often the implementations differ from language to language as well. The author listed around 30 useful programming paradigms implemented by modern programming languages.
+
+\begin{figure}[!ht]
+	\centering
+		\includegraphics[width=1\textwidth,totalheight=12cm]{taxonomyDiagram}
+	\caption{\textit{Taxonomy of programming paradigms (Van Roy, page 15)}}
+\end{figure}
+
+Author then identified the two most important properties which differentiate the programming paradigms:
+
+\begin{enumerate}
+\item \textit{Observable nondeterminism} is when a program is not completely determined by its specification. In other words with each execution the same program can produce different results. Observable nondeterminism is caused by the run-time scheduler and its usual effect is a race condition, which is often used as the synonym for Observable nondeterminism.
+\item \textit{Named state} is an ability of a program to store values in time. This ability is highly influenced by the paradigm it contains it.
+\end{enumerate}
+
+As mentioned before, the programming paradigms are based on a number of concepts. Author identified four most important programming concepts:
+
+\begin{enumerate}
+\item \textbf{Record} is a data-structure. Every programming language should be able to work with records. Arrays, lists, strings, trees and hash tables are derived from records.
+\item \textbf{Lexically scoped closure} is a record storing a function together with an environment referenced at the time of that function definition. Closure is a very powerful concept and constructs such as \textit{objects} or \textit{control structures} have been implemented with closures in many programming languages.
+\item \textbf{Independence} is when a program is constructed from independent parts. When parts don’t interact with each other we call them \textit{concurrent}. When an order of the execution is given, the parts are called sequential. The interaction between the parts is called communication. Author recognizes three levels of concurrency:
+    \begin{enumerate}
+    \item \textit{Distributed system,} where concurrent activities (parts) are computers.
+    \item \textit{Operating system,} where concurrent activities are processes. This level of concurrency is often called competitive concurrency because the processes are competing for access to system resources.
+    \item \textit{Inter Process,} where concurrent activities are threads. This level of concurrency is called \textit{cooperative concurrency} because the threads are cooperating to achieve the result of the process. There are two popular paradigms for inter process concurrency: \textit{Shared state concurrency}, where shared data are accessed by threads using control structures called \textit{monitors}. The second approach is \textit{message-passing concurrency}, where threads are communicating by sending messages to each other.
+    \end{enumerate}
+\item \textbf{Named State} Author showed how named state could be implemented with a help of internal memory (variables).
+\end{enumerate}
+
+\section{Specific Characteristics}
+\subsection{Object Oriented Programming}
+In \cite{13} authors argued that consensus on what key concepts of Object Oriented Programming still don’t exist. They argue that the most fundamental concepts behind the paradigm are as follows:
+
+\begin{enumerate}
+\item \textbf{Class} is a mechanism which group together attributes and methods with common properties. The class describes the run-time behavior of the objects instantiated from it. The well-designed class would have an immutable interface clients can use.
+\item \textbf{Abstraction} is a simplified view of reality. Presented to clients by class methods and attributes.
+\item \textbf{Inheritance} is a mechanism to create hierarchical class designs by creating a child class of the original class. A child class inherits the parent class behavior which can be then extended. Multiple inheritance allows for a class to inherit the behavior of multiple parent classes.
+\item \textbf{Encapsulation} is hiding implementation details within the class. Only the interface is presented to the
+clients.
+\item \textbf{Polymorphism} is allowing to similar looking structures to handle a variety of objects.
+\end{enumerate}
+
+Authors then discussed inheritance and polymorphism in detail. I will outline the important key points.
+
+\subsubsection{Inheritance}
+As mentioned earlier the inheritance brings the hierarchical relationship into the class model. Authors pointed out that many languages define the most generic class that is an ancestor for all the classes in the language. This applies that any class can be downcast to the pointer of that ancestor. Authors pointed out
+that inheritance provides the ability to represent an \textit{“is a”} relationship in software. This relationship can be violated if child class extends the inherited code the way which changes the code semantics. It is the reason for the inheritance to be used with caution. 
+
+Inheritance also allows to represent generalization /specialization relationships with method redefinition. This functionality is breaking the encapsulation because the child class has access to parent class hidden methods and attributes. This problem can be addressed by defining a well-defined interface for the descendants. Authors argued that literary every object-oriented language provides the ability for a child class to invoke parent class methods. Even those methods which were redefined in the child class. 
+
+Some of the languages support the feature which restrict method redefinition. A method is marked \textit{‘frozen’} or \textit{‘final’} and no child class can redefine this method. Authors warned that inheritance has also an adverse effect on synchronization requirements of a concurrent object. This problem is usually named \textit{‘inheritance anomaly’}. The problem
+arises when a class with concurrent code is derived. The careful redefinition of the inherited methods is necessitated to preserve the synchronization requirements. This necessity denies \textit{‘reuse’} benefits of inheritance. The multiple inheritance potential risks were then discussed in details. Authors explained various problems which could arise such as directed acyclic graph in a class hierarchy, method name collisions or repeated inheritance problem. 
+
+Authors outlined various solutions to deal with the problems and outlined the alternatives to multiple inheritance used by some of the object-oriented programming languages such as interfaces, mixins or delegation.
+
+\subsubsection{Polymorphism}
+As mentioned earlier, polymorphism allows programmers to write functions and classes which work uniformly with different types. Authors listed four distinct types of polymorphisms grouped into two categories. \textit{Ad-hoc Polymorphism} and \textit{Universal Polymorphism.} The difference between the categories is based on the fact that ad-hoc polymorphic functions execute code only for a small set of potentially unrelated types while universal polymorphic functions execute the same code for an infinite number of types. 
+
+Authors then defined the two types of ad-hoc polymorphism: The first type is \textit{Overloading Polymorphism}, where the polymorphic function has the same name, but a different signature. Within this type authors distinguished between a \textit{method} overloading and \textit{operator} overloading and discussed each in detail. 
+
+The second type of ad-hoc polymorphism is \textit{Coercion Polymorphism}. With coercion, the value of an argument can be converted to the value of another argument from the list of a method arguments. Authors pointed out that the difference between those two of ad-hoc polymorphism types is often blurry, especially in untyped and interpreted programming languages. The universal polymorphism is divided to two kinds as well. The first kind is \textit{Parametric Polymorphism} aka generic programming. Generic programming uses type parameters to determine the type of a method argument. Authors pointed out that parametric polymorphism is only relevant for statically typed languages because dynamically typed languages infer types at run-time and hence have generic programming built into them. The second kind is \textit{Inclusion Polymorphism}, which gives different classes the ability to handle the same functionality.
+
+Inclusion Polymorphism is what we call \textit{Inheritance} in object oriented programming. Inclusion polymorphism is implemented through \textit{dynamic binding} or sometimes called \textit{late binding} because a method is bind to the message at the run-time. It is relevant for situations when a child class has an overridden method of the parent class and it is not obvious which method is being invoked. The search for the right method is then performed by the compiler (interpreter) at run-time. The dynamic binding uses the most specific version of a method. 
+
+Authors mentioned that some of the languages implement static binding where methods are bind to messages at compile time and it will always bind to a base class method .version.
+
+\subsection{Functional Programming}
+In \cite{12} the author distinguished four key characteristics of modern functional programming languages.
+
+\subsubsection{Higher-Order Functions}
+In functional programming, the functions are treated as \textit{'first class values'}, which means that they can be stored in data structures, passed as other function arguments and returned as results. The author pointed out that the function is the primary abstraction mechanism over values. He showed with examples how to compose higher-order functions.
+
+\subsubsection{Lazy Evaluation}
+Often called Non-Strict Semantics or call-by-need. Its primary feature is that arguments in a function call are evaluated at most once. In some cases, it does no evaluation at all. The author
+explained with the help of an example how lazy evaluation frees a programmer from concerns about evaluation order and pointed out the ability of the lazy evaluation to compute with infinite
+data-structures.
+
+\subsubsection{Data Abstraction Mechanisms}
+The author pointed out that a data abstraction improves modularity, security and clarity of programs. He explained that modularity is improved because one can abstract away from
+implementation. Data abstractions prohibit interface violations which improves security and that programs are clearer because of the self-documenting quality of the data abstractions. He argues
+that \textit{strong static} typing eliminates type violations and run-time errors. He continued the discussion by describing \textit{algebraic} (concrete) data types, \textit{type synonyms}, and \textit{abstract data types}.
+
+\subsubsection{Pattern Matching}
+The lack of side-effects in functional programs allows to apply pattern matching or sometimes called equational reasoning. The author explained the basics behind the feature with the help of
+code examples and outlined some of pattern matching shortcomings.
+
+In (Hughes, 1984) author summarizes functional programming characteristics and advantages as they are usually used in the literature as follows:
+
+\begin{itemize}
+\item The functional program consists of functions.
+\item The functional program uses no mutable variables which, in general guarantee that program contains no side-effects. A program without side-effect is free of a major source of bugs.
+\item Since a function call produces no side-effects and for given arguments produces the same calculation result independently on when it is evaluated, the order of execution is irrelevant and functional programs are referentially transparent. This freedom makes functional programs easier to reason about.
+\end{itemize}
+
+The author argues that this often used list of strengths of functional programs is describing what functional programming is not (no assignments, no side-effects, no flow of control) and fails to emphasize what functional programming actually is. The list fails to emphasize the modularity as probably the most
+powerful characteristic and advantage of functional programs. He convincingly argues the ability of higher-order functions and lazy evaluation to increase the modularity by serving as a ‘glue’ for the program fragments. He provides a number of examples with code to support his claims.
+
+\section{Short History}
+First generally accepted object-oriented programming language is Simula (1967). With the introduction of Smalltalk (1962-1980) the paradigm gained some momentum. Most of the concepts of object-oriented programming were implemented in Smalltalk. In early 1980 the concepts were integrated into C programming language and resulting language was called C++. In the 1990s, the similar language was developed called Java by sun microsystems. Java became soon one of the most popular object-oriented languages. Then in 2000, Microsoft announced .NET platform and C\# programming language. C\# is in many respects similar to Java. \cite{13}
+
+Functional Programming is heavily influenced by lambda calculus invented by Alonzo Church in 1936. First of the programming languages implementing lambda calculus was Lisp specified in 1958. Next significant language in terms of contributions to functional paradigm was Iswim introduced by Peter Landin in 1966. Probably the first functional language which received wide-spread attention was FP specified in 1978. In mid 70’s several research projects related to functional programming emerged in the UK. Specifically the work of Gordon, Milner, and Wadsworth. They developed ML programming language which brought the invention of the type system (Hindley-Milner Type System). In early 80’s David Turner at the University of Kent developed three languages which most faithfully characterize “modern school” of functional programming: SASL, KRC and Miranda. \cite{12}
+
+In later 1990s and after 2000 the functional programming has gained a great momentum and penetrated mainstream programming. Haskell, F\#, Clojure, Scala are some of the examples of functional
+programming languages. Many object-oriented languages added functional features and become multi-paradigm languages. Java, Python, C\# are examples of such.
+
+\section{Interesting Ideas for Further Study}
+\subsection{A Definitive Programming Language}
+In \cite{16} the author is presenting four research projects, each trying to solve a very different problem, but all four project considered language design as a key factor to achieve success. Turned out that programming languages invented in each project have very similar structure supporting same paradigms: strict functional programming, declarative concurrency, asynchronous message passing and global named state. The invented languages are Erlang, E, Distributed Oz and Didactic Oz. One could infer ideas for a design of ‘perfect language’ and it could be quite interesting to study those four programming languages.
+
+\subsection{Artificial Intelligence}
+In \cite{14} the author of the paper is using examples of composing programs from lazy evaluated higher-order functions. The final example is the alpha-beta heuristic algorithm. This algorithm is often used in computer games to estimate how good a player position is in the game. The author used Miranda programming language syntax, but it would be very interesting to implement the algorithm in some other functional programming language such as Scala or Haskell.
+
+\subsection{LambdaFicator}
+Java 8 update brought a few functional programming features in the language. Namely functions as first class values, lambda expressions and closures. Also fluent Stream API which uses monads, lazy evaluation, and higher-order functions. In \cite{15} authors presented the analysis, design, implementation and evaluation of LAMBDAFICATOR, the automatic refactoring tool, which converts old-style code prior to Java 8 update into the functional style. Namely tool does two refactorings:
+
+\begin{itemize}
+\item Anonymous inner classes to lambda expressions
+\item External iterators to internal iterators (from \textit{for loops} to Stream API \textit{higher order function chains})
+\end{itemize}
+
+In the paper, authors discussed their motivations, outlined the implementation algorithm in the detail and determined the usefulness with a thorough evaluation. They applied the tool to four open source projects (ANTLRWorks, Apache Ivy, Junit, Hadoop) with very successful results. For example, the first type of
+refactoring reduced the number of source code lines by 2213 with 100 percent accuracy.
+
+The tool is open source and available for download and would be very interesting to study it deeper and implement it using some other programming language such as Scala or Haskell.
+
+\section{Functional Programming with Scala}
+In this section I wiil review in depth following books:
+\begin{itemize}
+\item Thomas Alexandre : Scala for Java Developers
+\item Runar Bjanrnason : Funcitional Programming in Scala
+\item Peter Hilton : Play for Scala
+\end{itemize}
+
+This research will be important for me to learh Scala and Play syntax and funcitional programming support in Scala. I will include code snippets examples.
+
+\section{Conclusion}
+The main purpose of this research was to study two most popular programming paradigms: object-oriented programming and functional programming. To identify and understand the key concepts and to
+find the similarities and differences. The first step was to understand general programming concepts such as record, closure, state and concurrency. Then I focused on studying characteristics of object-oriented programming languages. I learned that main building blocks of object-oriented programs are classes organized into hierarchies based on inheritance. I learned about polymorphism, the powerful feature of programming languages in general. Then I studied papers dedicated to functional programming and I found out that functional programs are built from functions, which are then composed together to modules and programs. I was shown the elegance of lazy evaluation and pattern matching. I learned that functional programs are trying to eliminate state and to stay referentially transparent.
+
+I will add conclusion on Scala books here.
+
+\chapter{Analysis and Design}
+\section{Introduction}
+In this section, I will outline the content of the current chapter in a single paragraph. I will include short overview of a web application design with a diagram
+
+\section{Proposed Methodology}
+I decided to use Prototyping methodology developing this web app, so I will discuss the reasons for the decision and will outline the development process.
+
+\section{Proposed Tools}
+In this section, I will list all the development tools and technologies I will use within this project.
+
+\section{Use Cases}
+This section will contain use case scenarios and UML use case diagrams.
+
+\section{Sequence Diagrams}
+This section will contain sequence diagrams for particular use cases.
+
+\section{User Interface Design}
+This section will contain proposed wireframes for user interface views of the web app.
+
+\section{Database Schema Design}
+In this section I will discuss the proposed database schema design with help of ERD diagram.
+
+\section{Back End (Play App) Design}
+This section will discuss the decision of using Scala and Play to develop this application, while identifying an advantages and disadvantages.
+
+\section{Conclusion}
+In this section I will conclude Analysis and Design chapter.
+
+\chapter{Implementation}
+\section{Introduction}
+In this section, I will outline the content of the current chapter.
+
+\section{Methodology}
+In this section I will document the development process in form of prototype snapshots.
+
+\subsection{Prototype v1.0}
+In this section, I will list and discuss all the functionality improvements and changes implemented in this prototype. With help of code snippets, tables and figures.
+
+\subsection{Prototype v2.0}
+In this section, I will list and discuss all the functionality improvements and changes implemented in this prototype. With help of code snippets, tables and figures.
+
+\subsection{Prototype ...and so on}
+In this section, I will list and discuss all the functionality improvements and changes implemented in this prototype. With help of code snippets, tables and figures.
+
+\section{Conclusion}
+In this section, I will conclude the Implementation Chapter.
+
+\chapter{Testing and Evaluation}
+\section{Introduction}
+In this section, I will outline the content of this chapter. I will also discuss the types of tests, test designs and testing frameworks and tools.
+
+\section{Back End Unit Tests}
+In this section, I will discuss unit test performed on server side code base with help of code snippets and figures.
+
+\section{User Interface Tests}
+In this section, I will discuss the automation testing of user interface.
+
+\section{Conclusion}
+In this section, I will conclude the Testing and Evaluation Chapter.
+
+\chapter{Conclusion and Further Work}
+\section{Introduction}
+In this section, I will outline the content of this chapter.
+
+\section{Achievements}
+Here I would summarize the project achievements.
+
+\section{Personal Gain}
+In this section, I will list all the experience and knowledge I have acquired by working on this project.
+
+\section{Further Work}
+This section content will be listing of all possible improvements and further work in terms of security, optimization and user interface design.
+
+\section{Conclusion}
+In this section, I will conclude current chapter.
+
+\appendix
+\chapter{The Project Diary}
+Here will go the project diary in a form of week by week work listings organized in table formats.
+
+\appendix
+\chapter{Code Listings}
+\section{Back-End}
+This section content will be all the server side Scala/Play code.
+
+\section{Front-End}
+This section content will be all the user views (web-pages) code.
+
+\clearpage
+\addcontentsline{toc}{section}{References}
+\bibliographystyle{plain}
+\begin{thebibliography}{99}
+\bibitem{1}
+Neil Ford,
+\emph{Functional thinking: Why functional programming is on the rise},\\
+\url{http://www.ibm.com/developerworks/library/j-ft20/}
+(2013-01-25)
+
+\bibitem{2}
+Typesafe,
+\emph{Scala, Object-Oriented Meets Functional},\\
+\url{http://www.scala-lang.org/},
+(2002-2015)
+	
+\bibitem{3}
+Typesafe,
+\emph{Scala in the Enterprise},\\
+\url{http://www.scala-lang.org/old/node/1658},
+(2012-01-19)
+
+\bibitem{4}
+Brikman, Yevgeniy,
+\emph{The Play Framework at LinkedIn: Productivity and Performance at Scale},\\
+\url{https://www.youtube.com/watch?v=8z3h4Uv9YbE&ab_channel=NewCircleTraining},
+(2013-06-26)
+
+\bibitem{5}
+Wampler, Dean,
+\emph{We Won! How Scala Conquered the Big Data World.},\\
+\url{https://www.youtube.com/watch?v=AHB6aJyhDSQ&ab_channel=NewCircleTraining},
+(2015-03-01)
+
+\bibitem{6}
+theotown,
+\emph{Akka wins 2015 JAX Award for Most Innovative Open Source Technology},
+\url{https://www.typesafe.com/blog/akka-wins-2015-jax-award-for-most-innovative-open-technology},
+(2015-03-23)
+	
+\bibitem{7}
+Wikipedia,
+\emph{Free software programmed in Scala},\\
+\url{https://en.wikipedia.org/wiki/Category:Free_software_programmed_in_Scala},
+(2015-01-05)
+	
+\bibitem{8}
+Wikipedia,
+\emph{Play Framework},\\
+\url{https://en.wikipedia.org/wiki/Play_framework},
+(2015-10-04)
+	
+\bibitem{9}
+Paul Chiusano,	Runar Bjarnason,
+\emph{Functional Programming in Scala.},\\
+Shelter Island, NY 11964,
+Manning Publications Co., 2015. ISBN 9781617290657.
+
+\bibitem{10}
+Dean Wampler, Alex Payne,
+\emph{Programming Scala, Second Edition.},\\
+1005 Gravenstein Highway North, Sebastopol, CA 95472,
+O’Reilly Media, Inc., 2015. ISBN: 978-1-491-94985-6.
+	
+\bibitem{11}
+Peter Hilton, Erik Bakker, Francisco Canedo,
+\emph{Play For Scala.},\\
+Shelter Island, NY 11964,
+Manning Publications Co., 2014. ISBN 9781617290794.
+
+\bibitem{12}
+Hudak, P.,
+\emph{The Conception, Evolution, and Application of Functional Programming Languages.},\\
+s.l.:Yale University Department of Computer Science,
+1989
+
+\bibitem{13}
+Hristakeva, M., Vuppala, R.,
+\emph{A Survey of Object Oriented Programming Languages.},\\
+Santa Cruz: Univ. of California.
+2009
+
+\bibitem{14}
+Hughes, J.,
+\emph{Why Functional Programming Matters.},\\
+Goteborg Institutionen for Datavetenskap,
+Chalmers Tekniska Hogskola, 1984
+
+
+\bibitem{15}
+Goyri, A., Franklin, L., Dig, D., Lahoda, J.,
+\emph{Crossing the Gap from Imperative to Functional, Programming through Refactoring.},\\
+Saint Petersburg: s.n.,
+2013
+
+\bibitem{16}
+Roy, P. V.,
+\emph{Programming Paradigms for Dummies: What Every Programmer Should Know.},\\
+s.l.:IRCAM/Delatour,
+2009
+
+\end{thebibliography}
+
+\end{document}
