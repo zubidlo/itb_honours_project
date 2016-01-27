@@ -1,67 +1,67 @@
-\contentsline {chapter}{\numberline {1}Introduction}{2}
-\contentsline {section}{\numberline {1.1}Introduction}{2}
-\contentsline {subsection}{\numberline {1.1.1}Some of the reasons for Scala success}{2}
-\contentsline {section}{\numberline {1.2}Aims and Objectives}{3}
-\contentsline {subsection}{\numberline {1.2.1}Web Application Proposed functionality}{3}
-\contentsline {section}{\numberline {1.3}Main Research Questions}{3}
-\contentsline {section}{\numberline {1.4}Justifications / Benefits}{4}
-\contentsline {section}{\numberline {1.5}Feasibility}{5}
-\contentsline {section}{\numberline {1.6}Proposed Methodologies}{5}
-\contentsline {paragraph}{Literature Review\\}{5}
-\contentsline {paragraph}{The Web Application Development\\}{6}
-\contentsline {section}{\numberline {1.7}Project Plan}{6}
-\contentsline {subsection}{\numberline {1.7.1}Work Breakdown Structure (WBS)}{6}
-\contentsline {section}{\numberline {1.8}Expected Results}{7}
-\contentsline {section}{\numberline {1.9}Conclusion}{8}
-\contentsline {chapter}{\numberline {2}Literature Review}{10}
-\contentsline {section}{\numberline {2.1}Introduction}{10}
-\contentsline {section}{\numberline {2.2}General Concepts}{11}
-\contentsline {section}{\numberline {2.3}Specific Characteristics}{13}
-\contentsline {subsection}{\numberline {2.3.1}Object Oriented Programming}{13}
-\contentsline {subsubsection}{Inheritance}{13}
-\contentsline {subsubsection}{Polymorphism}{14}
-\contentsline {subsection}{\numberline {2.3.2}Functional Programming}{15}
-\contentsline {subsubsection}{Higher-Order Functions}{15}
-\contentsline {subsubsection}{Lazy Evaluation}{15}
-\contentsline {subsubsection}{Data Abstraction Mechanisms}{16}
-\contentsline {subsubsection}{Pattern Matching}{16}
-\contentsline {section}{\numberline {2.4}Short History}{17}
-\contentsline {section}{\numberline {2.5}Interesting Ideas for Further Study}{17}
-\contentsline {subsection}{\numberline {2.5.1}A Definitive Programming Language}{17}
-\contentsline {subsection}{\numberline {2.5.2}Artificial Intelligence}{18}
-\contentsline {subsection}{\numberline {2.5.3}LambdaFicator}{18}
-\contentsline {section}{\numberline {2.6}Functional Programming with Scala}{18}
-\contentsline {section}{\numberline {2.7}Conclusion}{19}
-\contentsline {chapter}{\numberline {3}Analysis and Design}{20}
-\contentsline {section}{\numberline {3.1}Introduction}{20}
-\contentsline {section}{\numberline {3.2}Proposed Methodology}{20}
-\contentsline {section}{\numberline {3.3}Proposed Tools}{20}
-\contentsline {section}{\numberline {3.4}Use Cases}{20}
-\contentsline {section}{\numberline {3.5}Sequence Diagrams}{21}
-\contentsline {section}{\numberline {3.6}User Interface Design}{21}
-\contentsline {section}{\numberline {3.7}Database Schema Design}{21}
-\contentsline {section}{\numberline {3.8}Back End (Play App) Design}{21}
-\contentsline {section}{\numberline {3.9}Conclusion}{21}
-\contentsline {chapter}{\numberline {4}Implementation}{22}
-\contentsline {section}{\numberline {4.1}Introduction}{22}
-\contentsline {section}{\numberline {4.2}Methodology}{22}
-\contentsline {subsection}{\numberline {4.2.1}Prototype v1.0}{22}
-\contentsline {subsection}{\numberline {4.2.2}Prototype v2.0}{22}
-\contentsline {subsection}{\numberline {4.2.3}Prototype ...and so on}{23}
-\contentsline {section}{\numberline {4.3}Conclusion}{23}
-\contentsline {chapter}{\numberline {5}Testing and Evaluation}{24}
-\contentsline {section}{\numberline {5.1}Introduction}{24}
-\contentsline {section}{\numberline {5.2}Back End Unit Tests}{24}
-\contentsline {section}{\numberline {5.3}User Interface Tests}{24}
-\contentsline {section}{\numberline {5.4}Conclusion}{24}
-\contentsline {chapter}{\numberline {6}Conclusion and Further Work}{25}
-\contentsline {section}{\numberline {6.1}Introduction}{25}
-\contentsline {section}{\numberline {6.2}Achievements}{25}
-\contentsline {section}{\numberline {6.3}Personal Gain}{25}
-\contentsline {section}{\numberline {6.4}Further Work}{25}
-\contentsline {section}{\numberline {6.5}Conclusion}{26}
-\contentsline {chapter}{\numberline {A}The Project Diary}{27}
-\contentsline {chapter}{\numberline {A}Code Listings}{28}
-\contentsline {section}{\numberline {A.1}Back-End}{28}
-\contentsline {section}{\numberline {A.2}Front-End}{28}
-\contentsline {section}{References}{29}
+\contentsline {chapter}{\numberline {1}Introduction}{2}{chapter.1}
+\contentsline {section}{\numberline {1.1}Introduction}{2}{section.1.1}
+\contentsline {subsection}{\numberline {1.1.1}Some of the reasons for Scala success}{3}{subsection.1.1.1}
+\contentsline {section}{\numberline {1.2}Aims and Objectives}{3}{section.1.2}
+\contentsline {subsection}{\numberline {1.2.1}Web Application Proposed functionality}{4}{subsection.1.2.1}
+\contentsline {section}{\numberline {1.3}Main Research Questions}{4}{section.1.3}
+\contentsline {section}{\numberline {1.4}Justifications / Benefits}{5}{section.1.4}
+\contentsline {section}{\numberline {1.5}Feasibility}{6}{section.1.5}
+\contentsline {section}{\numberline {1.6}Proposed Methodologies}{7}{section.1.6}
+\contentsline {paragraph}{Literature Review\\}{7}{section*.6}
+\contentsline {paragraph}{The Web Application Development\\}{8}{section*.7}
+\contentsline {section}{\numberline {1.7}Project Plan}{9}{section.1.7}
+\contentsline {subsection}{\numberline {1.7.1}Work Breakdown Structure (WBS)}{9}{subsection.1.7.1}
+\contentsline {section}{\numberline {1.8}Expected Results}{10}{section.1.8}
+\contentsline {section}{\numberline {1.9}Conclusion}{11}{section.1.9}
+\contentsline {chapter}{\numberline {2}Literature Review}{13}{chapter.2}
+\contentsline {section}{\numberline {2.1}Introduction}{13}{section.2.1}
+\contentsline {section}{\numberline {2.2}General Concepts}{14}{section.2.2}
+\contentsline {section}{\numberline {2.3}Specific Characteristics}{17}{section.2.3}
+\contentsline {subsection}{\numberline {2.3.1}Object Oriented Programming}{17}{subsection.2.3.1}
+\contentsline {subsubsection}{Inheritance}{18}{section*.8}
+\contentsline {subsubsection}{Polymorphism}{19}{section*.9}
+\contentsline {subsection}{\numberline {2.3.2}Functional Programming}{20}{subsection.2.3.2}
+\contentsline {subsubsection}{Higher-Order Functions}{20}{section*.10}
+\contentsline {subsubsection}{Lazy Evaluation}{21}{section*.11}
+\contentsline {subsubsection}{Data Abstraction Mechanisms}{21}{section*.12}
+\contentsline {subsubsection}{Pattern Matching}{21}{section*.13}
+\contentsline {section}{\numberline {2.4}Short History}{22}{section.2.4}
+\contentsline {section}{\numberline {2.5}Interesting Ideas for Further Study}{23}{section.2.5}
+\contentsline {subsection}{\numberline {2.5.1}A Definitive Programming Language}{23}{subsection.2.5.1}
+\contentsline {subsection}{\numberline {2.5.2}Artificial Intelligence}{24}{subsection.2.5.2}
+\contentsline {subsection}{\numberline {2.5.3}LambdaFicator}{24}{subsection.2.5.3}
+\contentsline {section}{\numberline {2.6}Functional Programming with Scala}{25}{section.2.6}
+\contentsline {section}{\numberline {2.7}Conclusion}{26}{section.2.7}
+\contentsline {chapter}{\numberline {3}Analysis and Design}{27}{chapter.3}
+\contentsline {section}{\numberline {3.1}Introduction}{27}{section.3.1}
+\contentsline {section}{\numberline {3.2}Proposed Methodology}{27}{section.3.2}
+\contentsline {section}{\numberline {3.3}Proposed Tools}{27}{section.3.3}
+\contentsline {section}{\numberline {3.4}Use Cases}{28}{section.3.4}
+\contentsline {section}{\numberline {3.5}Sequence Diagrams}{28}{section.3.5}
+\contentsline {section}{\numberline {3.6}User Interface Design}{28}{section.3.6}
+\contentsline {section}{\numberline {3.7}Database Schema Design}{28}{section.3.7}
+\contentsline {section}{\numberline {3.8}Back End (Play App) Design}{28}{section.3.8}
+\contentsline {section}{\numberline {3.9}Conclusion}{29}{section.3.9}
+\contentsline {chapter}{\numberline {4}Implementation}{30}{chapter.4}
+\contentsline {section}{\numberline {4.1}Introduction}{30}{section.4.1}
+\contentsline {section}{\numberline {4.2}Methodology}{30}{section.4.2}
+\contentsline {subsection}{\numberline {4.2.1}Prototype v1.0}{30}{subsection.4.2.1}
+\contentsline {subsection}{\numberline {4.2.2}Prototype v2.0}{31}{subsection.4.2.2}
+\contentsline {subsection}{\numberline {4.2.3}Prototype ...and so on}{31}{subsection.4.2.3}
+\contentsline {section}{\numberline {4.3}Conclusion}{31}{section.4.3}
+\contentsline {chapter}{\numberline {5}Testing and Evaluation}{32}{chapter.5}
+\contentsline {section}{\numberline {5.1}Introduction}{32}{section.5.1}
+\contentsline {section}{\numberline {5.2}Back End Unit Tests}{32}{section.5.2}
+\contentsline {section}{\numberline {5.3}User Interface Tests}{32}{section.5.3}
+\contentsline {section}{\numberline {5.4}Conclusion}{33}{section.5.4}
+\contentsline {chapter}{\numberline {6}Conclusion and Further Work}{34}{chapter.6}
+\contentsline {section}{\numberline {6.1}Introduction}{34}{section.6.1}
+\contentsline {section}{\numberline {6.2}Achievements}{34}{section.6.2}
+\contentsline {section}{\numberline {6.3}Personal Gain}{34}{section.6.3}
+\contentsline {section}{\numberline {6.4}Further Work}{35}{section.6.4}
+\contentsline {section}{\numberline {6.5}Conclusion}{35}{section.6.5}
+\contentsline {chapter}{\numberline {A}The Project Diary}{36}{appendix.A}
+\contentsline {chapter}{\numberline {A}Code Listings}{37}{appendix.A}
+\contentsline {section}{\numberline {A.1}Back-End}{37}{section.A.1}
+\contentsline {section}{\numberline {A.2}Front-End}{37}{section.A.2}
+\contentsline {section}{References}{38}{section.A.2}
