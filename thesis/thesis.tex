@@ -118,24 +118,9 @@ This paper is dedicated to computer programming with the focus on programming st
 This paper is discussing functional programming paradigm with Scala programming language and web application development process using Play! Framework. The target audience is any computer science student with knowledge of a programming language such as Java and with an understanding of some of the object-oriented programming principles such as inheritance and polymorphisms.
 
 \listoffigures
-%\listoftables
+\listoftables
 \tableofcontents{}
 \pagenumbering{arabic}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 %_______________________________chapter_______________________________________
 \chapter{Introduction}\label{1}
@@ -262,25 +247,6 @@ The project would be considered successful if it would meet at least two followi
 At the end of this project, I will hopefully introduce some of Scala dedicated learning material in the form of an interactive web application. It can be used in a fictional course module for a fictional college. The application main purpose is to promote the interest in Scala programming language and functional programming paradigm. Especially on the personal level. After three years of my studies with ITB, I didn't learn anything about functional programming. I chose this project so I can gain a knowledge and skills which are really missing in my skill-set and which could prove very useful in the future. I hope as a fourth year student I am ready to face this challenge.\par
 This research project will not contribute at all to the discipline area. Maybe only in a sense that it will hopefully bring one more student with the passion for programming languages to the functional programming paradigm. And maybe if other students or lecturers will see how elegant and declarative functional programming really is, the contribution could be a bit more significant.
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 %_______________________________chapter_______________________________________
 \chapter{Literature Review}\label{2}
 \section{Introduction}\label{2.1}
@@ -377,18 +343,6 @@ The tool is open source and available for download and would be very interesting
 The main purpose of this research was to study two most popular programming paradigms: object-oriented and functional programming. To identify and understand the key concepts and to
 find the similarities and differences. The first step was to understand general programming concepts such as record, closure, state and concurrency. Then I focused on studying characteristics of object-oriented programming languages. I learned that main building blocks of object-oriented programs are classes organized into hierarchies based on inheritance. I learned about polymorphism, the powerful feature of programming languages in general. Then I studied papers dedicated to functional programming and I found out that functional programs are built from functions, which are then composed together to modules and programs. I was shown the elegance of lazy evaluation and pattern matching. I learned that functional programs are trying to eliminate state and to stay referentially transparent.
 
-
-
-
-
-
-
-
-
-
-
-
-
 %_______________________________chapter_______________________________________
 \chapter{Analysis and Design}\label{3}
 \section{Introduction}\label{3.1}
@@ -448,7 +402,41 @@ Play Framework has very good deployment model. The application doesn't require a
 \item \textbf{Azure:} Microsoft Azure Cloud supports Play applications deployment on a web server with \emph{Azure Toolkit for Eclipse}. Another option is to dedicate a Vitual Machine (VM) to the application. Azure has numerous Linux images available, Ubuntu Server 14.04 included. The deployment should be then a simple question of moving the packaged application to the VM after all the required technologies are installed on the VM, such as Java and Scala runtime and database server.\cite{27}
 \end{itemize}
 \section{Web Application Content Design}\label{3.4}
-//TODO
+In preparation for learning material writing, I collected some of the guidelines and recommendations of ways to structure the learning content with some tips on the writing style. Following material is only a short extract from the research conducted on numerous online resources dedicated to e-learning.
+\subsection{The Lecture Structure}\label{3.4.1}
+\begin{itemize}
+\item \textbf{Introduction}
+	\begin{itemize}
+	\item Title
+	\item Lecture content list
+	\item Requirements (previous work or expected level of knowledge)
+	\item Learning outcome
+	\item Expected time requirements
+	\end{itemize}
+\item \textbf{Ending}
+	\begin{itemize}
+	\item Summary of main points
+	\item Optional extra work
+	\end{itemize}
+\item \textbf{Signposts}
+	\begin{itemize}
+	\item Route the lecture by headings, which are related to objectives and emphasize the the structure of the lecture
+	\item Indicate beginning and ending
+	\item Emphasize important points
+	\item Show relationships within the subject matter
+	\end{itemize}
+\end{itemize}
+\subsection{Writing Style Tips}\label{3.4.2}
+\begin{itemize}
+\item Keep it simple
+\item Keep it short
+\item The 20 words per sentence is the maximum
+\item 5 - 7 lines per paragraph
+\item Maintain the variety in the writing style
+\item Use positive rather than negative expressions
+\item Use visuals and examples often
+\end{itemize}
+
 \section{Use Cases}\label{3.5}
 \subsection{Prototype 1.0}\label{3.5.1}
 //TODO
@@ -473,18 +461,6 @@ Play Framework has very good deployment model. The application doesn't require a
 \section{Conclusion}\label{3.10}
 //TODO
 
-
-
-
-
-
-
-
-
-
-
-
-
 %_______________________________chapter_______________________________________
 \chapter{Implementation}\label{4}
 \section{Introduction}\label{4.1}
@@ -493,17 +469,6 @@ Play Framework has very good deployment model. The application doesn't require a
 //TODO
 \section{Conclusion}\label{4.3}
 //TODO
-
-
-
-
-
-
-
-
-
-
-
 
 %_______________________________chapter_______________________________________
 \chapter{Testing and Evaluation}\label{5}
@@ -515,18 +480,6 @@ Play Framework has very good deployment model. The application doesn't require a
 //TODO
 \section{Conclusion}\label{5.4}
 //TODO
-
-
-
-
-
-
-
-
-
-
-
-
 
 %_______________________________chapter_______________________________________
 \chapter{Conclusion and Further Work}\label{6}
@@ -541,44 +494,10 @@ Play Framework has very good deployment model. The application doesn't require a
 \section{Conclusion}\label{6.5}
 //TODO
 
-
-
-
-
-
-
-
-
-
-
-%_______________________________appendix_______________________________________
-\appendix
-\chapter{The Learning Material}\label{A}
-\section{Scala Lectures}\label{A.1}
-//TODO
-\section{Functional Programming with Scala}\label{A.2}
-//TODO
-
-\clearpage
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 %_______________________________Bibliography_______________________________________
-\addcontentsline{toc}{section}{References}
+\addcontentsline{toc}{section}{Bibliography}
 \bibliographystyle{plain}
+\setstretch{1}
 \begin{thebibliography}{99}
 
 \bibitem{1}
@@ -758,4 +677,13 @@ The Interactive Build Tool,
 2015
 
 \end{thebibliography}
+
+%_______________________________appendix_______________________________________
+\appendix
+\chapter{The Learning Material}\label{A}
+\section{From Java To Scala}\label{A.1}
+//TODO
+\section{Functional Programming with Scala}\label{A.2}
+//TODO
+
 \end{document}

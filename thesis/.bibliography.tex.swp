@@ -1,0 +1,179 @@
+\begin{bibliography}{99}
+
+\bibitem{1}
+Neil Ford,
+\emph{Functional thinking: Why functional programming is on the rise},
+\url{http://www.ibm.com/developerworks/library/j-ft20/},
+(2013-01-25)
+
+\bibitem{2}
+Typesafe,
+\emph{Scala, Object-Oriented Meets Functional},
+\url{http://www.scala-lang.org/},
+(2002-2015)
+	
+\bibitem{3}
+Typesafe,
+\emph{Scala in the Enterprise},
+\url{http://www.scala-lang.org/old/node/1658},
+(2012-01-19)
+
+\bibitem{4}
+Brikman, Yevgeniy,
+\emph{The Play Framework at LinkedIn: Productivity and Performance at Scale},\\
+\url{https://www.youtube.com/watch?v=8z3h4Uv9YbE&ab_channel=NewCircleTraining},
+(2013-06-26)
+
+\bibitem{5}
+Wampler, Dean,
+\emph{We Won! How Scala Conquered the Big Data World.},
+\url{https://www.youtube.com/watch?v=AHB6aJyhDSQ&ab_channel=NewCircleTraining},
+(2015-03-01)
+
+\bibitem{6}
+theotown,
+\emph{Akka wins 2015 JAX Award for Most Innovative Open Source Technology},
+\url{https://www.typesafe.com/blog/akka-wins-2015-jax-award-for-most-innovative-open-technology},
+(2015-03-23)
+	
+\bibitem{7}
+Wikipedia,
+\emph{Free software programmed in Scala},
+\url{https://en.wikipedia.org/wiki/Category:Free_software_programmed_in_Scala},
+(2015-01-05)
+	
+\bibitem{8}
+Wikipedia,
+\emph{Play Framework},
+\url{https://en.wikipedia.org/wiki/Play_framework},
+(2015-10-04)
+	
+\bibitem{9}
+Paul Chiusano,	Runar Bjarnason,
+\emph{Functional Programming in Scala.},
+Shelter Island, NY 11964,
+Manning Publications Co., 2015. ISBN 9781617290657.
+
+\bibitem{10}
+Dean Wampler, Alex Payne,
+\emph{Programming Scala, Second Edition.},
+1005 Gravenstein Highway North, Sebastopol, CA 95472,
+O’Reilly Media, Inc., 2015. ISBN: 978-1-491-94985-6.
+	
+\bibitem{11}
+Peter Hilton, Erik Bakker, Francisco Canedo,
+\emph{Play For Scala.},
+Shelter Island, NY 11964,
+Manning Publications Co., 2014. ISBN 9781617290794.
+
+\bibitem{12}
+Hudak, P.,
+\emph{The Conception, Evolution, and Application of Functional Programming Languages.},
+s.l.:Yale University Department of Computer Science,
+1989
+
+\bibitem{13}
+Hristakeva, M., Vuppala, R.,
+\emph{A Survey of Object Oriented Programming Languages.},
+Santa Cruz: Univ. of California.
+2009
+
+\bibitem{14}
+Hughes, J.,
+\emph{Why Functional Programming Matters.},
+Goteborg Institutionen for Datavetenskap,
+Chalmers Tekniska Hogskola, 1984
+
+
+\bibitem{15}
+Goyri, A., Franklin, L., Dig, D., Lahoda, J.,
+\emph{Crossing the Gap from Imperative to Functional, Programming through Refactoring.},
+Saint Petersburg: s.n.,
+2013
+
+\bibitem{16}
+Roy, P. V.,
+\emph{Programming Paradigms for Dummies: What Every Programmer Should Know.},
+s.l.:IRCAM/Delatour,
+2009
+
+\bibitem{17}
+Odersky M., Altherr P., Cremet V., Dragos I., Dubochet G.,
+\emph{An Overview of the Scala Programming Language},
+s.l.:IRCAM/Delatour,
+Second Edition,
+2006
+
+\bibitem{18}
+Wikipedia,
+\emph{Read-Eval-Print Loop},
+\url{https://en.wikipedia.org/wiki/Read-eval-print_loop},
+(2015-11-21)
+
+\bibitem{19}
+Netty is an asynchronous event-driven network application framework ...,
+\emph{Netty Project},
+\url{http://netty.io/},
+2016
+
+\bibitem{20}
+Markdown,
+\emph{Daring Fireball},
+\url{https://daringfireball.net/projects/markdown/	},
+2002-2016
+
+\bibitem{21}
+Ubuntu 14.04.3 LTS,
+\emph{Canonical Ltd.},
+\url{http://www.ubuntu.com/download/desktop}
+2016
+
+\bibitem{22}
+Gummi, The Simple LaTeX editor,
+\emph{alexandervdm},
+\url{https://github.com/alexandervdm/gummi},
+2016
+
+\bibitem{23}
+Remarkable,
+\emph{Jamie McGowan},
+\url{http://remarkableapp.github.io/},
+2015
+
+\bibitem{24}
+Intellij IDEA,
+\emph{JetBrains s.r.o},
+\url{https://www.jetbrains.com/idea/},
+2000-2016
+
+\bibitem{25}
+Git,
+\emph{Linus Torvalds, Software Freedom Conservancy},
+\url{https://git-scm.com/},
+2005-2016
+
+\bibitem{26}
+Heroku Play Framework Support,
+\emph{Heroku.com},
+\url{https://devcenter.heroku.com/articles/play-support},
+2016-01-22
+
+\bibitem{27}
+Deploying Play Framework Apps with the Azure Toolkit for Eclipse,
+\emph{Kirk Evans[MSFT]},
+\url{https://blogs.msdn.microsoft.com/kaevans/2015/05/12/deploying-play-framework-apps-with-the-azure-toolkit-for-eclipse/},
+2015-05-12
+
+\bibitem{28}
+The High Velocity Web Framework For Java and Scala,
+\emph{Typesafe},
+\url{https://www.playframework.com},
+2016
+
+\bibitem{29}
+The Interactive Build Tool,
+\emph{Typesafe},
+\url{http://www.scala-sbt.org/},
+2015
+
+\end{bibliography}
