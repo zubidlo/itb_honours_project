@@ -502,6 +502,30 @@ As discussed in Proposed Methodologies for The Web Application Development \cref
 %_______________________________section_______________________________________
 \section{Proposed Tools}\label{3.3}
 
+\subsection{Hardware}\label{3.3.1}
+The project will be developed on DELL Latitude E5540 laptop machine lent to me by School of Computer Science, UCD where I work part-time as a research assistant. The laptop has following specification and should be sufficient to support this project development.\par
+\emph{Procesor:} Intel Core i5-4310 CPU 2.00GHz x 4\par
+\emph{Memory:} 8GB RAM\par
+\emph{Graphics:} Intel Haswell Mobile\par
+\emph{Hard Disk:} 463 GB\par
+
+\subsection{Software}\label{3.3.2}
+I decided to use an open source, or at least free software tools. The thesis report will be written in LaTeX instead of an office suite.  Learning material will be written using the Markdown format, which require just a simple text editor. For the web application development I will need Java and Scala Development Kits with an IDE Studio. Additional tools will be needed to draw diagrams, take and edit screen shots, CSS, JSON or XML parsers and validation tools. For that I can utilize the operating system tools or online tools.
+
+\emph{Operating System:} Ubuntu 14.04 LTS 64-bit\cite{21}\par
+\emph{Word Processing:} LaTeX suite witt Gummi simple LaTeX editor\cite{22}\par
+\emph{Markdown editor:} Remarkable\cite{23}\par
+\emph{IDE:} IntelliJ IDEA\cite{24}\par
+\emph{Distributed revision control system:} Git\cite{25}
+
+\subsection{Deployment}\label{3.3.3}
+Play Framework has very good deployment model. The application doesn't require a Java application server container, which greatly simplifies the deployment process in comparison to Java EE applications. There are various deployment options available, for example the application can be deployed as a standalone package and just copied to the deployment machine. Some of the cloud providers have built-in support for Play application deployment.
+
+\begin{itemize}
+\item \textbf{Heroku:} The Heroku Cedar stack natively supports Play framework applications. A Postgres database is automatically provisioned for Play framework applications.\cite{26}
+\item \textbf{Azure:} Microsoft Azure Cloud supports Play applications deployment on a web server with \emph{Azure Toolkit for Eclipse}. Another option is to dedicate a Vitual Machine (VM) to the application. Azure has numerous Linux images available, Ubuntu Server 14.04 included. The deployment should be then a simple question of moving the packaged application to the VM after all the required technologies are installed on the VM, such as Java and Scala runtime and database server.\cite{27}
+\end{itemize}
+
 %_______________________________section_______________________________________
 \section{Use Cases}\label{3.4}
 This section will contain use case scenarios and UML use case diagrams.
@@ -525,6 +549,7 @@ This section will discuss the decision of using Scala and Play to develop this a
 %_______________________________section_______________________________________
 \section{Conclusion}\label{3.9}
 In this section I will conclude Analysis and Design chapter.
+
 
 
 
@@ -755,6 +780,48 @@ Markdown,
 \emph{Daring Fireball},
 \url{https://daringfireball.net/projects/markdown/	},
 2002-2016
+
+\bibitem{21}
+Ubuntu 14.04.3 LTS,
+\emph{Canonical Ltd.},
+\url{http://www.ubuntu.com/download/desktop}
+2016
+
+\bibitem{22}
+Gummi, The Simple LaTeX editor,
+\emph{alexandervdm},
+\url{https://github.com/alexandervdm/gummi},
+2016
+
+\bibitem{23}
+Remarkable,
+\emph{Jamie McGowan},
+\url{http://remarkableapp.github.io/},
+2015
+
+\bibitem{24}
+Intellij IDEA,
+\emph{JetBrains s.r.o},
+\url{https://www.jetbrains.com/idea/},
+2000-2016
+
+\bibitem{25}
+Git,
+\emph{Linus Torvalds, Software Freedom Conservancy},
+\url{https://git-scm.com/},
+2005-2016
+
+\bibitem{26}
+Heroku Play Framework Support,
+\emph{Heroku.com},
+\url{https://devcenter.heroku.com/articles/play-support},
+2016-01-22
+
+\bibitem{27}
+Deploying Play Framework Apps with the Azure Toolkit for Eclipse,
+\emph{Kirk Evans[MSFT]},
+\url{https://blogs.msdn.microsoft.com/kaevans/2015/05/12/deploying-play-framework-apps-with-the-azure-toolkit-for-eclipse/},
+2015-05-12
 
 \end{thebibliography}
 \end{document}
