@@ -745,8 +745,8 @@ Well, pure function is any function with following properties:
  printf(string)
 \end{lstlisting}
 
-\emph{Sin(x)} and \emph{length(x)} are pure functions because they always return the same result for the same argument and do nothing else. Sin(0) is always 0 and length of the same list is always the same.\par
-\emph{Random(seed)} and \emph{printf(string)} are impure functions because random(1) will not always return the same result. It will return a random number from 0 to 1. Printf("hello world") will print the string literal to the console and return no result. Even that is not guaranteed. Sometimes it can throw an exception if the console is not available for example. Impure functions are called \emph{procedures} in computer science.
+Functions \emph{sin(x)} and \emph{length(list)} are pure functions because they always return the same result for the same argument and do nothing else. Function sin(0) is always 0 and length of the same list is always the same result.\par
+Functions \emph{random(seed)} and \emph{printf(string)} are impure functions because random(1) will not always return the same result. It will return a random number from 0 to 1. Function printf("hello world") will print the string literal to the console and return no result. Even that is not guaranteed. Sometimes it can throw an exception if the console is not available for example. Impure functions are called \emph{procedures} in computer science.
 
 \textbf{Example: Function definitions in Scala}
 \begin{lstlisting}
@@ -764,20 +764,16 @@ Well, pure function is any function with following properties:
 \item \emph{add2} defines exactly same function without \emph{return} word and \emph{semicolon}
 \item \emph{add3} is the same function with return type left out
 \item Line 5 is not a function definition statement, but assignment to an  
-immutable value named \emph{add4}. The value of an anonymous function described by \emph{(a: Int, b: Int) => a + b} was assigned to the name \emph{add4}. This form of function description is called a \emph{function literal} or \emph{lambda expression}. It's the same function with emphasis on it's type: \emph{(Int, Int) => Int}. It's a type of a function which takes 2 Int arguments and returns Int result. 
-\item \emph{add5} is again a value which holds a function literal. This time the type is omitted and the function is only expressed by lambda expression.
-\item \emph{add6} is again the same function but with it's arguments defined in \emph{curried form}, which I will discuss later.
-\item \emph{add7} is again the same function value, but with it's type \emph{Int => Int => Int} emphasizing the curried form and the fact that every function is a function which takes one argument and returns one result. I will discuss these ideas later as well.
+immutable value named \emph{add4}. The value of an anonymous function described by \emph{(a: Int, b: Int) => a + b} was assigned to the name \emph{add4}. This form of function description is called a \emph{function literal} or a \emph{lambda expression}. It's the same function with emphasis on it's type: \emph{(Int, Int) => Int}. It's a type of a function which takes 2 Int arguments and returns Int result. 
+\item \emph{add5} is again a value which holds a function literal. This time the type is omitted and the function is only expressed by the lambda expression.
+\item \emph{add6} is again the same function defined in \emph{curried form}, which we will discuss later.
+\item \emph{add7} is again the same function value, but with it's type \emph{Int => Int => Int} emphasizes the curried form and the fact that every function is a function which takes one argument and returns one result. We will discuss these ideas later as well.
 \end{enumerate}
+
 Here are the the function call statements where 4 and 5 were passed as arguments. All seven functions will return 9 as the result. 
 \begin{lstlisting}
-	add1(4,5)
-	add2(4,5)
-	add3(4,5)
-	add4(4,5)
-	add5(4,5)
-	add6(4)(5)
-	add7(4)(5)
+	add1(4,5); add2(4,5); add3(4,5); add4(4,5);	add5(4,5); 
+	add6(4)(5);	add7(4)(5);
 \end{lstlisting}
 
 Here are some important points to realize:
