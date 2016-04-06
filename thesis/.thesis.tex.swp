@@ -35,6 +35,34 @@
 %https://www.ctan.org/pkg/listings
 \usepackage{listings}
 
+\usepackage{color}
+ 
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2
+}
+ 
+\lstset{style=mystyle}
+
 %https://www.ctan.org/pkg/url?lang=en
 \usepackage{url}
 
@@ -691,6 +719,73 @@ The Interactive Build Tool,
 As a Computer Science student at ITB, I was introduced to computer programming through Java programming language. First, we learned the syntax of the language. Next, we have been introduced to the object-oriented approach to designing software and how to work with libraries such as Swing. Later in the third year, we learned the basics of concurrency and some design patterns for solving reoccurring problems. Around this time I crossed the initial steep part of the programming learning curve and I was comfortable enough with Java to learn some additional language features and Java Standard Edition platform libraries. Programming with Java became my hobby and I found a time to read additional material such as "Thinking in Java" from Bruce Eckel or "Effective Java" from Joshua Bloch.\par
 At the same time, Oracle introduced important update number 8 to Java platform which, among other things introduced the syntax for anonymous functions (lambdas) and a number of libraries dedicated to functional programming style, such as Stream API. I was interested in this new functionality and started to learn to implement these tools and ideas into my code. Playing with lambdas, streams, and optionals I started to realize the power and elegance behind and I got really curious about the theory behind the functional programming.\par
 Any student trying to learn about functional programming within JVM ecosystem will very soon become aware of programming language called Scala. The reason is that Scala has by design more richer support for functional programming than Java and hence is better suited as a vehicle for the study. At some point of the study one will become familiar with other programming languages such as Haskell or ML. There are various reasons for this, main being that these language's syntax is designed to emphasize the functional programming ideas.\par
-Following material is an overview of what I learned about functional programming in period of 2 semesters in time dedicated to honours degree final project and my own spare time. I used Scala syntax to communicate ideas with code.
+The following material is an overview of what I learned about functional programming in the period of 2 semesters in time dedicated to honors degree final project and my own spare time. I used Scala syntax to communicate ideas with code.
 
+\subsection{Pure vs Impure Functions}\label{A.4}
+Well, functional programming is a programming style where programs are constructed using only \emph{pure functions}. What are these pure functions you may ask? 
+
+Well, pure function is any function with following properties:
+\begin{enumerate}
+\item The function \emph{always} evaluates to the same result given the same argument. The word always is emphasized here. The pure function can return the same result for different arguments, but it can never return different results for the same argument.
+\item Evaluation of the result does not cause any semantically observable \emph{side effect}. Well, what are these side effects then? In Computer Science, a function or expression is said to have a side effect if it modifies some state or has an interaction with calling functions or the outside world. Basically, a function has a side effect if it does something else than returning a result. Some examples of side effects:
+\begin{itemize}
+\item Modifying a variable or a data structure in place
+\item Throwing an exception or halting with an error
+\item Writing to or reading from the console or a file
+\item Drawing on the screen, updating a database, printing on a printer
+\end{itemize}
+\end{enumerate}
+
+\textbf{Example: Common Pure and Impure Functions}
+
+\begin{lstlisting}
+ sin(x)
+ length(list)
+ random(seed)
+ printf(string)
+\end{lstlisting}
+
+\emph{Sin(x)} and \emph{length(x)} are pure functions because they always return the same result for the same argument and do nothing else. Sin(0) is always 0 and length of the same list is always the same.\par
+\emph{Random(seed)} and \emph{printf(string)} are impure functions because random(1) will not always return the same result. It will return a random number from 0 to 1. Printf("hello world") will print the string literal to the console and return no result. Even that is not guaranteed. Sometimes it can throw an exception if the console is not available for example. Impure functions are called \emph{procedures} in computer science.
+
+\textbf{Example: Function definitions in Scala}
+\begin{lstlisting}
+	def add1(a: Int, b: Int): Int = return a + b;
+	def add2(a: Int, b: Int): Int = a + b
+	def add3(a: Int, b: Int) = a + b
+	val add4: (Int,Int) => Int = (a: Int, b: Int) => a + b
+	val add5 = (a: Int, b: Int) => a + b
+	def add6(a: Int)(b: Int) = a + b
+	val add7 = Int => Int => Int = a => b => a + b
+\end{lstlisting}
+
+\begin{enumerate}
+\item On line 1 is a function definition where I defined a function \emph{add1} which takes two arguments of type Int and returns Int result which is just the addition of the arguments.
+\item \emph{add2} defines exactly same function without \emph{return} word and \emph{semicolon}
+\item \emph{add3} is the same function with return type left out
+\item Line 5 is not a function definition statement, but assignment to an  
+immutable value named \emph{add4}. The value of an anonymous function described by \emph{(a: Int, b: Int) => a + b} was assigned to the name \emph{add4}. This form of function description is called a \emph{function literal} or \emph{lambda expression}. It's the same function with emphasis on it's type: \emph{(Int, Int) => Int}. It's a type of a function which takes 2 Int arguments and returns Int result. 
+\item \emph{add5} is again a value which holds a function literal. This time the type is omitted and the function is only expressed by lambda expression.
+\item \emph{add6} is again the same function but with it's arguments defined in \emph{curried form}, which I will discuss later.
+\item \emph{add7} is again the same function value, but with it's type \emph{Int => Int => Int} emphasizing the curried form and the fact that every function is a function which takes one argument and returns one result. I will discuss these ideas later as well.
+\end{enumerate}
+Here are the the function call statements where 4 and 5 were passed as arguments. All seven functions will return 9 as the result. 
+\begin{lstlisting}
+	add1(4,5)
+	add2(4,5)
+	add3(4,5)
+	add4(4,5)
+	add5(4,5)
+	add6(4)(5)
+	add7(4)(5)
+\end{lstlisting}
+
+Here are some important points to realize:
+
+\begin{itemize}
+\item All seven functions represent the same function which adds two Int values and returns the result.
+\item This function is a pure function because it always returns the same value 9 for the same arguments 4, 5 and doesn't do any side effects.
+\item In Scala and functional programming in general, functions are values. The same way as objects are values. We can assign functions to variables, pass them as arguments to other functions, create them inside the functions and return them as results of function computations. Later we will see that as long as the functions are pure they hold other very useful characteristics we can utilize in our functional programs.
+\item The functions can be expressed as literals. The same way we can create anonymous objects or a string literal "hello world", we can create a function literal in a form of a lambda expression.
+\end{itemize}
 \end{document}
