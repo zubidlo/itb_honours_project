@@ -1,3 +1,7 @@
+> **Recap**
+> - In the last section, I tried to articulate my interest in functional programming and my reasons for working on this project.
+> - In this section, I will try to give you a reader a reason to continue to read these pages.
+
 ### Why Would I Read These?
 
 In my experience, writing software is fun. For a while at least. Let me explain.

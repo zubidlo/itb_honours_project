@@ -1,4 +1,9 @@
-### Pure vs Impure Functions
+
+**Recap**
+> - In the last section, I made a suggestion that there is a way to have fun while creating a software. I claimed that functional programming gives us a better way to design a software and reason about it.
+> - In the following sections, I will discuss functions, the building blocks of functional programs. We first must understand a what functions are, what characteristics they have, the rules they follow and how to work with them in the Scala programming language.
+
+### Functions Everywhere 1 - Pure Functions
 
 Well, functional programming is a programming style where programs are constructed using only **pure functions**. What are these pure functions you may ask?
 
