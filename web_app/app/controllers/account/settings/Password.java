@@ -9,11 +9,8 @@ import play.mvc.Controller;
 import play.mvc.Result;
 import play.mvc.Security;
 import views.html.account.settings.password;
-import play.libs.mailer.Email;
 import play.libs.mailer.MailerClient;
-
 import javax.inject.Inject;
-
 import java.net.MalformedURLException;
 
 @Security.Authenticated(Secured.class)
@@ -33,7 +30,6 @@ public class Password extends Controller {
             flash("success", Messages.get("resetpassword.mailsent"));
             return ok(password.render(user));
         } catch (MalformedURLException e) {
-            Logger.error("Cannot validate URL", e);
             flash("error", Messages.get("error.technical"));
         }
         return badRequest(password.render(user));

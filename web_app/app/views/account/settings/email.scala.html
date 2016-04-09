@@ -4,7 +4,7 @@
 
 @views.html.account.settings.index(user) {
 
-    @Messages("account.settings.email")
+    @Messages("account.settings.email.title")
 
     @wflash()
 
@@ -20,8 +20,7 @@
         </fieldset>
 
         <div class="form-actions">
-            <input type="submit" class="btn btn-primary" value="@Messages("validate")">
+            <input type="submit" class="btn btn-primary" value="@Messages("submit")">
         </div>
     }
-
 }

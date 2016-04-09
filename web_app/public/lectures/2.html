@@ -1,31 +1,30 @@
 <blockquote>
 <p>In the last section, I tried to articulate my interest in functional programming and my reasons for working on this project.</p>
-<p>In this section, I will try to give you a reader a reason to continue to read these pages.</p>
+<p>In this section, I will try to give you a reader some reasons to continue to read these pages.</p>
 </blockquote>
 <h3 id="why-would-i-read-these">Why Would I Read These?</h3>
 <hr>
-<p>In my experience, writing software is fun. For a while at least. Let me explain.</p>
-<p>You want to build a software, so you think about its design in advance. You think about abstractions you would create, about the data-structures you will hold them in and about algorithms which will manipulate the abstractions according to requirements. Then you start to write the code and you are excited. It's fun. You are transforming your ideas into a working program, it's a miracle! For a while...</p>
-<p>Very soon, though, you start to notice that this transformation of your ideas into a code is not all you have to do. It's not that simple. You must handle exceptions, null checks and other things not related to your design ideas. You will find yourself solving problems related to underlying computer and language instead of developing your ideas into working software very soon in the development process.</p>
-<p>But you are not going to give up so soon, you will make this work! So you fight back and your software project grows. And it grows like a monster, mutating away. Your ideas are scattered around null checks, nested try-catch blocks and other ceremony related to libraries you are using. Every time you add something somewhere, the program breaks in five other places. All is connected together, depends on each other. Complexity grows exponentially and your capability to reason about the program degrades exponentially. It's too many things to keep in mind and it's not fun anymore! It's hard and mundane!</p>
-<p>At this point, you ready to give up. You start to see that your initial design ideas must be adjusted to fit these problems, so you go back to the books. FAIL!!!</p>
+<p>In my experience, writing software is fun. For a while at least.</p>
+<p>Before I write a software, I think about the design. I would think how to represent data and how to manipulate them. Then I start to write the code and I'm excited. It's fun. I'm transforming my ideas into a working program!</p>
+<p>Very soon, though, I start to notice that not everything works well. I must handle exceptions, null checks and to deal with another problems not related to my design ideas. I find myself solving problems related to underlying computer and programming language.</p>
+<p>As the software grows it starts to reseble a monster. My beutiful design is scattered around null checks, buried inside nested try-catch blocks. Every time I add something new, the program breaks in five places. Everything seems to be connected, dependent. Complexity grows exponentially and my capability to reason about the program degrades. It's just so many things to keep in mind. It is not fun anymore! It's rather hard and mundane.</p>
+<p>At that point, I'm ready to give up.</p>
 <br>
-<h4 id="why-this-happened">Why this happened?</h4>
+<h4 id="why-this-happened">Why is this happening?</h4>
 <hr>
-<p>Well, we can talk about the reasons for hours, but let me try to give you just one reason I consider a root of the problem. I think that the failure is a direct result of having too much power too early. Let me explain.</p>
-<p>In imperative programming languages, the methods are too powerful with no constraints. They can do whatever they want. They can change objects in place, write to a file, put something on a screen. And they can lie. For example, consider some File. write method, it says it writes to a file. But it's not totally true. It can as well throw 4 different exceptions. There are methods which say they do something and return a result. But they can do something else in the process as well and hide this fact from you and return null at the end if they want.</p>
+<p>Well, in imperative programming languages, the methods are too powerful with no constraints. They can do whatever they want. They can change objects in place, write to a file, put something on a screen. They are liers too. For example, consider some <code>write(file)</code> method. She says she will write to a file. But instead she could throw 4 different exceptions. There are methods which say they do something and return a result. But they can do something else in the process and hide that fact from the programmer.</p>
 <blockquote>
-<p>Metaphorically it's similar to a situation when you get a powerful car which allows you to drive anywhere. You can try to reach your destination by straight line path driving through whatever. Forests, fields, somebody else garden. It looks like a great idea in the beginning until you end up in a ditch or a river with no way out.</p>
+<p>Metaphorically it is similar to a situation when one gets a powerful car which allows him to drive anywhere. The car can drive through fields for example. One could try to reach a destination by driving straight line path. It looks like a great idea in the beginning until one ends up in a ditch with no way out.</p>
 </blockquote>
 <br>
-<h4 id="whats-the-alternative">Whats the alternative?</h4>
+<h4 id="whats-the-alternative">Is there an alternative?</h4>
 <hr>
-<p>Functional Programming of course :-) !!!</p>
-<p>Functional programming is a programming with functions, not methods. Functions are much less powerful, they have various constraints, but in exchange, they get various very useful properties which make reasoning about them straight forward. Functions do what they say they do and never lie. They don't throw exceptions or return nulls. When they need to write to a file, they do it the way that the change in a file is encapsulated in the result they return to you.</p>
-<p>They are associative, pluggable and composable, the same way the Lego is. You build your software by composing simple functions the same way as you would build a house from Lego blocks. Your software complexity doesn't grow exponentially. Instead, it's just a function composed of other functions, which are all simple and replaceable by design. The capability to reason about the software stays constant.</p>
-<p>Also, the solution space is smaller. There is just a number of ideas you again compose to design your software. You just have to learn a few ideas and how to compose them together. There are design patterns, but it is not 40 of them.</p>
+<p>Functional Programming of course :-) !</p>
+<p>Functional programming is the programming with functions, not methods. Functions are much less powerful. They follow constraints. In exchange though, they have various very useful properties which make reasoning about them straight forward. Functions do what they say they do and never lie. They don't throw exceptions or return nulls.</p>
+<p>Functions are associative, pluggable and composable, the same way the <code>Lego</code> blocks are. One can build a software by composing simple functions the same way as one would build a house from Lego blocks. The software complexity doesn't grow exponentially neither. Instead, a program is just a function composed of another functions. The capability to reason about the software stays constant.</p>
+<p>Also, the solution space is smaller. One just need to learn a few ideas and how to compose them together. There are design patterns in functional programming of course, but there is not 40 of them.</p>
 <blockquote>
-<p>It's like to have a cap capable only of driving on the roads. You have much less power at the beginning, but you will reach your destination with a minimal effort and safely given that a road leads there.</p>
+<p>It is like to have a car capable of driving on the roads only. One has much less power at the beginning, but one will safely reach the destination following the roads.</p>
 </blockquote>
 <p>These methaphores were quoted from <a href="https://www.youtube.com/watch?v=hzf3hTUKk8U&amp;list=PLWLFcD9reEAqTBKnEPBD4hrN1kLi0xhb3&amp;index=10">Functional Programming is Terrible</a> talk presented by Runar Bjarnason.</p>
 <hr>
