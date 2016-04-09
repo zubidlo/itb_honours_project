@@ -8,15 +8,15 @@
     	<meta http-equiv="X-UA-Compatible" content="IE=edge">
     	<meta name="viewport" content="width=device-width, initial-scale=1">
         <title>@Messages("title")</title>
-        <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/bootstrap.min.css")">
-        <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/main.css")">
-        <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-    	<link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/ie10-viewport-bug-workaround.css")" rel="stylesheet">
         <link rel="shortcut icon" type="image/png" href="@routes.Assets.at("images/favicon.png")">
-        <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.3.0/styles/default.min.css">
-        <script src="@routes.Assets.at("javascripts/jquery-2.2.1.min.js")" type="text/javascript"></script>
-        <script src="@routes.Assets.at("javascripts/bootstrap.min.js")" type="text/javascript"></script>
-        <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.3.0/highlight.min.js"></script>
+        <link rel="stylesheet" href="@routes.Assets.at("stylesheets/bootstrap.min.css")">
+        <link rel="stylesheet" href="@routes.Assets.at("stylesheets/main.css")">
+    	<link rel="stylesheet" href="@routes.Assets.at("stylesheets/ie10-viewport-bug-workaround.css")">
+        <link rel="stylesheet" href="@routes.Assets.at("stylesheets/agate.css")">
+        <script src="@routes.Assets.at("javascripts/jquery-2.2.1.min.js")"></script>
+        <script src="@routes.Assets.at("javascripts/bootstrap.min.js")"></script>
+        <script src="@routes.Assets.at("javascripts/highlight.pack.js")"></script>
+        <script>hljs.initHighlightingOnLoad();</script>
         @scripts
     </head>
     <body>
@@ -38,10 +38,9 @@
             	@content
             </div>
         </section>
-        
         <footer class="container">
             <div class="nav navbar-default navbar-fixed-bottom">
-                <p class="text-center">Created by <strong>Martin Zuber</strong>, student number: <strong>B00066378</strong><p>
+                <!-- <p class="text-center">Created by <strong>Martin Zuber</strong>, student number: <strong>B00066378</strong><p> -->
             </div>
         </footer>
     </body>
