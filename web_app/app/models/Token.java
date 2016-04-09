@@ -119,9 +119,9 @@ public class Token extends Model {
         }
 
         Logger.debug("sendMailResetLink: url = " + url);
-        Mail.Envelop envelop = new Mail.Envelop(subject, message, toMail);
+        Mail.Envelope envelope = new Mail.Envelope(subject, message, toMail);
         Mail mailer = new Mail(mc);
-        mailer.sendMail(envelop);
+        mailer.sendMail(envelope);
     }
 
 }

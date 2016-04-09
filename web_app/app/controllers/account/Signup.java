@@ -12,7 +12,6 @@ import play.data.Form;
 import play.i18n.Messages;
 import play.mvc.Controller;
 import play.mvc.Result;
-import play.libs.mailer.Email;
 import play.libs.mailer.MailerClient;
 
 import javax.inject.Inject;
@@ -32,10 +31,6 @@ public class Signup extends Controller {
     MailerClient mailerClient;
 
     public Result create() {
-        return ok(create.render(form(Application.Register.class)));
-    }
-
-    public Result createFormOnly() {
         return ok(create.render(form(Application.Register.class)));
     }
 
@@ -91,9 +86,9 @@ public class Signup extends Controller {
         URL url = new URL(urlString); // validate the URL, will throw an exception if bad.
         String message = Messages.get("mail.confirm.message", url.toString());
 
-        Mail.Envelop envelop = new Mail.Envelop(subject, message, user.email);
+        Mail.Envelope envelope = new Mail.Envelope(subject, message, user.email);
         Mail mailer = new Mail(mailerClient);
-        mailer.sendMail(envelop);
+        mailer.sendMail(envelope);
     }
 
     public Result confirm(String token) {
@@ -131,8 +126,8 @@ public class Signup extends Controller {
     private void sendMailConfirmation(User user) throws EmailException {
         String subject = Messages.get("mail.welcome.subject");
         String message = Messages.get("mail.welcome.message");
-        Mail.Envelop envelop = new Mail.Envelop(subject, message, user.email);
+        Mail.Envelope envelope = new Mail.Envelope(subject, message, user.email);
         Mail mailer = new Mail(mailerClient);
-        mailer.sendMail(envelop);
+        mailer.sendMail(envelope);
     }
 }

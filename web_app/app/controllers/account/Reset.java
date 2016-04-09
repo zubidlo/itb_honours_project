@@ -12,7 +12,6 @@ import play.i18n.Messages;
 import play.mvc.Controller;
 import play.mvc.Result;
 import views.html.account.reset.ask;
-import play.libs.mailer.Email;
 import play.libs.mailer.MailerClient;
 
 import javax.inject.Inject;
@@ -79,9 +78,9 @@ public class Reset extends Controller {
         String subject = Messages.get("mail.reset.fail.subject");
         String message = Messages.get("mail.reset.fail.message", email);
 
-        Mail.Envelop envelop = new Mail.Envelop(subject, message, email);
+        Mail.Envelope envelope = new Mail.Envelope(subject, message, email);
         Mail mailer = new Mail(mailerClient);
-        mailer.sendMail(envelop);
+        mailer.sendMail(envelope);
 
     }
 
@@ -132,7 +131,7 @@ public class Reset extends Controller {
                 return badRequest(reset.render(resetForm, token));
             }
 
-            User user = User.find.byId(resetToken.userId);
+            User user = User.FIND.byId(resetToken.userId);
             if (user == null) {
                 flash("error", Messages.get("error.technical"));
                 return badRequest(reset.render(resetForm, token));
@@ -157,8 +156,8 @@ public class Reset extends Controller {
     private void sendPasswordChanged(User user) throws EmailException {
         String subject = Messages.get("mail.reset.confirm.subject");
         String message = Messages.get("mail.reset.confirm.message");
-        Mail.Envelop envelop = new Mail.Envelop(subject, message, user.email);
+        Mail.Envelope envelope = new Mail.Envelope(subject, message, user.email);
         Mail mailer = new Mail(mailerClient);
-        mailer.sendMail(envelop);
+        mailer.sendMail(envelope);
     }
 }

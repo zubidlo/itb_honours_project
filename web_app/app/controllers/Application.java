@@ -1,8 +1,6 @@
 package controllers;
 
 import models.User;
-import models.utils.AppException;
-import play.Logger;
 import play.data.Form;
 import play.data.validation.Constraints;
 import play.i18n.Messages;
@@ -14,26 +12,13 @@ import static play.data.Form.form;
 
 public class Application extends Controller {
 
-    public static Result GO_HOME = redirect(
-            routes.Application.index()
-    );
-
-    public static Result GO_DASHBOARD = redirect(
-            routes.Dashboard.index()
-    );
-
     public Result index() {
         String email = ctx().session().get("email");
         if (email != null) {
             User user = User.findByEmail(email);
-            if (user != null && user.validated) {
-                return GO_DASHBOARD;
-            } else {
-                Logger.debug("Clearing invalid session credentials");
-                session().clear();
-            }
+            if (user != null && user.validated) return redirect(routes.Dashboard.index());
+            session().clear();
         }
-
         return ok(index.render(form(Register.class), form(Login.class)));
     }
 
@@ -45,21 +30,11 @@ public class Application extends Controller {
         public String password;
 
         public String validate() {
-
-            User user = null;
-            try {
-                user = User.authenticate(email, password);
-            } catch (AppException e) {
-                return Messages.get("error.technical");
-            }
-            if (user == null) {
-                return Messages.get("invalid.user.or.password");
-            } else if (!user.validated) {
-                return Messages.get("account.not.validated.check.mail");
-            }
+            User user = User.authenticate(email, password);
+            if (user == null) return Messages.get("invalid.user.or.password");
+            else if (!user.validated) return Messages.get("account.not.validated.check.mail");
             return null;
         }
-
     }
 
     public static class Register {
@@ -74,43 +49,32 @@ public class Application extends Controller {
         public String inputPassword;
 
         public String validate() {
-            if (isBlank(email)) {
-                return "Email is required";
-            }
-
-            if (isBlank(fullname)) {
-                return "Full name is required";
-            }
-
-            if (isBlank(inputPassword)) {
-                return "Password is required";
-            }
-
+            if (isBlank(email)) return "Email is required";
+            if (isBlank(fullname)) return "Full name is required";
+            if (isBlank(inputPassword)) return "Password is required";
             return null;
         }
 
         private boolean isBlank(String input) {
-            return input == null || input.isEmpty() || input.trim().isEmpty();
+            return input == null ||
+                    input.isEmpty() ||
+                    input.trim().isEmpty();
         }
     }
 
     public Result authenticate() {
         Form<Login> loginForm = form(Login.class).bindFromRequest();
-
         Form<Register> registerForm = form(Register.class);
-
-        if (loginForm.hasErrors()) {
-            return badRequest(index.render(registerForm, loginForm));
-        } else {
+        if (loginForm.hasErrors()) return badRequest(index.render(registerForm, loginForm));
+        else {
             session("email", loginForm.get().email);
-            return GO_DASHBOARD;
+            return redirect(routes.Dashboard.index());
         }
     }
 
     public Result logout() {
         session().clear();
         flash("success", Messages.get("youve.been.logged.out"));
-        return GO_HOME;
+        return redirect(routes.Application.index());
     }
-
 }

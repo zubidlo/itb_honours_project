@@ -1,7 +1,6 @@
 package models.utils;
 
 import play.Configuration;
-import play.Logger;
 import play.libs.mailer.Email;
 import play.libs.mailer.MailerClient;
 
@@ -16,70 +15,59 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 public class Mail {
-    MailerClient mailerClient;
-
-    public Mail(MailerClient mailerClient) {
-        this.mailerClient = mailerClient;
-    }
+    private final MailerClient mailerClient;
     private static final int DELAY = 1;
 
-    public static class Envelop {
-        public String subject;
+    public Mail(MailerClient mc) {
+        mailerClient = mc;
+    }
+
+    public final static class Envelope {
+        String subject;
         public String message;
-        public List<String> toEmails;
+        final List<String> toEmails;
 
-        public Envelop(String subject, String message, List<String> toEmails) {
-            this.subject = subject;
-            this.message = message;
-            this.toEmails = toEmails;
+        public Envelope(String sub, String msg, List<String> te) {
+            subject = sub;
+            message = msg;
+            toEmails = te;
         }
 
-        public Envelop(String subject, String message, String email) {
-            this.message = message;
-            this.subject = subject;
-            this.toEmails = new ArrayList<String>();
-            this.toEmails.add(email);
+        public Envelope(String sub, String msg, String email) {
+            message = msg;
+            subject = sub;
+            toEmails = new ArrayList();
+            toEmails.add(email);
         }
     }
 
-    public void sendMail(Mail.Envelop envelop) {
-        EnvelopJob envelopJob = new EnvelopJob(envelop, mailerClient);
+    public void sendMail(Envelope envelope) {
+        final Job job = new Job(envelope, mailerClient);
         final FiniteDuration delay = Duration.create(DELAY, TimeUnit.SECONDS);
-        Akka.system().scheduler().scheduleOnce(delay, envelopJob, Akka.system().dispatcher());
+        Akka.system().scheduler().scheduleOnce(delay, job, Akka.system().dispatcher());
     }
 
-    static class EnvelopJob implements Runnable {
-        MailerClient mailerClient;
-        Mail.Envelop envelop;
+    private static final class Job implements Runnable {
+        final MailerClient mailerClient;
+        final Envelope envelope;
 
         @Inject
-        public EnvelopJob(Mail.Envelop envelop, MailerClient mailerClient) {
-            this.envelop = envelop;
-            this.mailerClient = mailerClient;
+        public Job(Envelope env, MailerClient mc) {
+            envelope = env;
+            mailerClient = mc;
         }
 
         public void run() {
-            Email email = new Email();
-
-            final Configuration root = Configuration.root();
-            final String mailFrom = root.getString("mail.from");
-            final String mailSign = root.getString("mail.sign");
-
-            email.setFrom(mailFrom);
-            email.setSubject(envelop.subject);
-            email.setBodyText(envelop.message + "\n\n " + mailSign);
-            email.setBodyHtml(envelop.message + "<br><br>--<br>" + mailSign);
-            for (String toEmail : envelop.toEmails) {
-                email.addTo(toEmail);
-                Logger.debug("Mail.sendMail: Mail will be sent to " + toEmail);
-            }
+            final String mailFrom = Configuration.root().getString("mail.from");
+            final String mailSign = Configuration.root().getString("mail.sign");
+            final Email email = new Email()
+                    .setFrom(mailFrom)
+                    .setSubject(envelope.subject)
+                    .setBodyText(envelope.message + "\n\n " + mailSign)
+                    .setBodyHtml(envelope.message + "<br><br>--<br>" + mailSign)
+                    .setTo(envelope.toEmails);
 
             mailerClient.send(email);
-            Logger.debug("Mail sent - SMTP:" + root.getString("smtp.host")
-                    + ":" + root.getString("smtp.port")
-                    + " SSL:" + root.getString("smtp.ssl")
-                    + " user:" + root.getString("smtp.user")
-                    + " password:" + root.getString("smtp.password"));
         }
     }
 }

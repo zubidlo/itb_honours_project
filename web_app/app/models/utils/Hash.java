@@ -2,7 +2,7 @@ package models.utils;
 
 import org.mindrot.jbcrypt.BCrypt;
 
-public class Hash {
+public final class Hash {
 
     public static String createPassword(String clearString) throws AppException {
         if (clearString == null) throw new AppException("No password defined!");

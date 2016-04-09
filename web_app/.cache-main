@@ -163,8 +163,8 @@ class names:
 /home/martin/workspace/web_app/app/models/utils/ExceptionFactory.java -> models.utils.ExceptionFactory
 /home/martin/workspace/web_app/app/models/utils/Hash.java -> models.utils.Hash
 /home/martin/workspace/web_app/app/models/utils/Mail.java -> models.utils.Mail
-/home/martin/workspace/web_app/app/models/utils/Mail.java -> models.utils.Mail$Envelop
-/home/martin/workspace/web_app/app/models/utils/Mail.java -> models.utils.Mail$EnvelopJob
+/home/martin/workspace/web_app/app/models/utils/Mail.java -> models.utils.Mail$Envelope
+/home/martin/workspace/web_app/app/models/utils/Mail.java -> models.utils.Mail$Job
 used names:
 0 items
 product stamps:

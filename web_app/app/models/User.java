@@ -39,34 +39,25 @@ public class User extends Model {
     @Formats.NonEmpty
     public Boolean validated = false;
 
-    public static Model.Finder<Long, User> find = new Model.Finder<Long, User>(Long.class, User.class);
+    public static final Model.Finder<Long, User> FIND = new Model.Finder(User.class);
 
     public static User findByEmail(String email) {
-        return find.where().eq("email", email).findUnique();
-    }
-
-    public static User findByFullname(String fullname) {
-        return find.where().eq("fullname", fullname).findUnique();
+        return FIND.where().eq("email", email).findUnique();
     }
 
     public static User findByConfirmationToken(String token) {
-        return find.where().eq("confirmationToken", token).findUnique();
+        return FIND.where().eq("confirmationToken", token).findUnique();
     }
 
-    public static User authenticate(String email, String clearPassword) throws AppException {
-
-        User user = find.where().eq("email", email).findUnique();
-        if (user != null) {
-            if (Hash.checkPassword(clearPassword, user.passwordHash)) {
-                return user;
-            }
-        }
+    public static User authenticate(String email, String clearPassword) {
+        User user = FIND.where().eq("email", email).findUnique();
+        if (user != null && Hash.checkPassword(clearPassword, user.passwordHash)) return user;
         return null;
     }
 
     public void changePassword(String password) throws AppException {
-        this.passwordHash = Hash.createPassword(password);
-        this.save();
+        passwordHash = Hash.createPassword(password);
+        save();
     }
 
     public static boolean confirm(User user) throws AppException {
