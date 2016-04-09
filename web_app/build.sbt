@@ -23,3 +23,6 @@ routesGenerator := InjectedRoutesGenerator
 
 lazy val root = (project in file(".")).enablePlugins(play.PlayJava, PlayEbean)
 
+
+
+fork in run := true
