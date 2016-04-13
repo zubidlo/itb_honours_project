@@ -641,8 +641,19 @@ With the help of UML, I outlined proposed design for web application prototype v
 \chapter{Implementation}\label{4}
 \section{Introduction}\label{4.1}
 //TODO
-\section{Prototype 1.0}\label{4.2}
+
+\section{User Interface (Views)}\label{4.2}
+\subsection{Prototype 1.0}\label{4.2.1}
 //TODO
+
+\section{Data Models}\label{4.3}
+\subsection{Prototype 1.0}\label{4.3.1}
+//TODO
+
+\section{Business Logic (Controllers)}\label{4.3}
+\subsection{Prototype 1.0}\label{4.3.1}
+//TODO
+
 \section{Conclusion}\label{4.3}
 //TODO
 
@@ -650,23 +661,31 @@ With the help of UML, I outlined proposed design for web application prototype v
 \chapter{Testing and Evaluation}\label{5}
 \section{Introduction}\label{5.1}
 //TODO
-\section{Back End Unit Tests}\label{5.2}
-//TODO
+
 \section{User Interface Tests}\label{5.3}
 //TODO
+
+\section{Unit Tests}\label{5.2}
+//TODO
+
 \section{Conclusion}\label{5.4}
 //TODO
 
 %_______________________________chapter_______________________________________
 \chapter{Conclusion and Further Work}\label{6}
+
 \section{Introduction}\label{6.1}
 //TODO
+
 \section{Achievements}\label{6.2}
 //TODO
+
 \section{Personal Gain}\label{6.3}
 //TODO
+
 \section{Further Work}\label{6.4}
 //TODO
+
 \section{Conclusion}\label{6.5}
 //TODO
 
