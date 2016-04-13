@@ -590,10 +590,48 @@ For the prototype 1.0 functionality, I will need the entity which will represent
 	\caption{\textit{Prototype 1.0: Entity Relations Diagram}}
 	\label{f3.8.1}
 \end{figure}
+
 \section{Back End Design}\label{3.9}
 \subsection{Prototype 1.0}\label{3.9.1}
-//TODO
-\section{Conclusion}\label{3.10}
+In Play! Framework the user interfaces are represented by views. The view consists of HTML, Javascript and embedded Scala\cite{30} code. The views are compiled to Scala classes and stored in /views folder. The views are rendered on demand by the server.
+
+The user interacting with the views creates the requests to the resources. The incoming requests are handled by controllers. Each request is routed to the one controller method. Controller methods are processing the request and returning responses which in turn render the views. Controllers are stored in /controllers folder.
+
+The requests are routed to the controllers by rules stored in /conf/routes file. In this file, the mappings form URIs to controller methods are defined. Play Framework uses REST like approach to routing. The /conf directory serves as a storage for all configuration files.
+
+\begin{figure}[!ht]
+	\centering
+		\includegraphics[width=0.8\textwidth, totalheight=7cm]
+		{play_flowchart}
+	\caption{\textit{View -> Request -> Controller -> Response -> View Diagram}}
+	\label{f3.9.2}
+\end{figure}
+
+Play Framework is persistence agnostic, but it provides Java Ebeans ER mapper and H2 in memory database by default. H2 can be changed for other database implementation for the production mode and any other ER mapping framework can used instead of Ebeans. In Ebeans, the each entity is represented by a POJO annotated class called model. Models are stored in /models directory.
+
+The layout of a Play application is standardized to keep things as simple as possible. After a first successful compile, a Play application looks like this:
+
+\begin{figure}[!ht]
+	\centering
+		\includegraphics[width=1\textwidth, totalheight=9cm]
+		{play_framework_project_anatomy}
+	\caption{\textit{Play Framework Project Anatomy}}
+	\label{f3.9.1}
+\end{figure}
+
+\section{Project Repository Design}\label{3.10}
+Project repository will be hosted on GitHub page: \url{https://github.com/zubidlo/itb_honours_project}.
+I propose following directory structure:
+
+\begin{figure}[!ht]
+	\centering
+		\includegraphics[width=0.4\textwidth, totalheight=4cm]
+		{github_repo_anatomy}
+	\caption{\textit{GitHub Repository Anatomy}}
+	\label{f3.10}
+\end{figure}
+
+\section{Conclusion}\label{3.11}
 //TODO
 
 %_______________________________chapter_______________________________________
@@ -810,6 +848,18 @@ The Interactive Build Tool,
 \emph{Typesafe},
 \url{http://www.scala-sbt.org/},
 2015
+
+\bibitem{30}
+Scala Twirl Engine,
+\emph{Play Framework},
+\url{https://github.com/playframework/twirl},
+2016
+
+\bibitem{31}
+Ebean ORM for Java/Kotlin,
+\emph{Avaje},
+\url{http://ebean-orm.github.io/},
+2016
 
 \end{thebibliography}
 
