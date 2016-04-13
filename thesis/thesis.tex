@@ -580,7 +580,16 @@ On the account setting page, the user can change the password or the email addre
 
 \section{Database Schema Design}\label{3.8}
 \subsection{Prototype 1.0}\label{3.8.1}
-//TODO
+
+For the prototype 1.0 functionality, I will need the entity which will represent the user and the entity which will represent a random token. I will generate a token and associate it with the user every time a user requests registration, password change or email change. These tokens will then be embedded into an URL which will be sent to user's email. It's basically a way of identifying the user actions. The user then must click the URL to validate (confirm) the action. There should be a general expiration period associated with each token. Let's say one day. If the user doesn't confirm the requested action the action will be cancelled. For this functionality, I will need to save the token creation time-stamp as well.
+
+\begin{figure}[!ht]
+	\centering
+		\includegraphics[width=0.6\textwidth, totalheight=4.5cm]
+		{entity_relations_diagram1}
+	\caption{\textit{Prototype 1.0: Entity Relations Diagram}}
+	\label{f3.8.1}
+\end{figure}
 \section{Back End Design}\label{3.9}
 \subsection{Prototype 1.0}\label{3.9.1}
 //TODO
