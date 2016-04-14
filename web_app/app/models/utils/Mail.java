@@ -36,7 +36,7 @@ public class Mail {
         public Envelope(String sub, String msg, String email) {
             message = msg;
             subject = sub;
-            toEmails = new ArrayList();
+            toEmails = new ArrayList<String>();
             toEmails.add(email);
         }
     }

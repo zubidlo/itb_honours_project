@@ -83,7 +83,7 @@ public class Signup extends Controller {
 
         String urlString = "http://" + Configuration.root().getString("server.hostname");
         urlString += "/confirm/" + user.confirmationToken;
-        URL url = new URL(urlString); // validate the URL, will throw an exception if bad.
+        URL url = new URL(urlString);
         String message = Messages.get("mail.confirm.message", url.toString());
 
         Mail.Envelope envelope = new Mail.Envelope(subject, message, user.email);
