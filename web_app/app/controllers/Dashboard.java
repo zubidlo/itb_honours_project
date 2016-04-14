@@ -2,12 +2,9 @@ package controllers;
 
 import static play.data.Form.form;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.io.*;
+import java.nio.file.*;
+import java.net.*;
 
 import controllers.Application.Login;
 import controllers.Application.Register;
@@ -15,6 +12,8 @@ import models.User;
 import models.utils.AppException;
 import play.Logger;
 import play.Play;
+import play.Environment;
+import play.Application;
 import play.mvc.Controller;
 import play.mvc.Result;
 import play.mvc.Security;
@@ -39,8 +38,8 @@ public class Dashboard extends Controller {
     	
     	User user = User.findByEmail(email);
     	String path = "public/lectures/" + file;
-    	File f = Play.application().getFile(path);
-    	BufferedReader br = new BufferedReader(new FileReader(f));
+        InputStream in = Play.application().classloader().getResourceAsStream(path);
+        BufferedReader br = new BufferedReader(new InputStreamReader(in));
         StringBuffer fileContents = new StringBuffer();
         String line = br.readLine();
         while (line != null) {
