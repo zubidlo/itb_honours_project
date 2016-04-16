@@ -650,26 +650,39 @@ In this section, I will discuss some of the web application implementation detai
 	\label{f4.1}
 \end{figure}
 
-The rest of the Play infrastructure is working in "the background" to make sure that views are returned to user filled with appropriate data. The router routes the requests such as an HTML form POST action to a controller method which will process the form. For example, log-in form POST request will be routed to the appropriate controller method, which will first validate the form. Next, the user data will be fetched from the model and compare to the data in the form. If there is a match, the controller method will render the dashboard view and send it back to the user.
+The rest of the Play infrastructure is working in "the background" to make sure that views are returned to user filled with appropriate data. The router routes the requests such as an HTML form POST action to a controller method which will process the form. For example, log-in form POST request will be routed to the appropriate controller method, which will first validate the form. Next, the user data will be fetched from the model and compare to the data in the form. If there is a match, the controller method will render the dashboard view and send it back to the user. Also, the server will maintain the session during the user interaction with the views as long as the user is logged-in.
 
 The application will be developed locally on a laptop and deployed on a live internet server. I chose Microsoft Azure Cloud for the deployment.  The reason is that I already have the access to the Azure and I'm familiar with the service management console.
 
-\section{User Interface (Views)}\label{4.2}
-\subsection{Prototype 1.0}\label{4.2.1}
-//TODO
+\section{Development Set-Up}\label{4.2}
+The Play Framework is the part of Lightbend Reactive Platform\cite{32}. The platform uses Lightbend Activator User Interface for the development. The user installs the activator locally and starts the service. The user interface is spawned in the browser (figure \ref{f4.2}) in which user can create new web application or develop, build, run and test existing web application. I used activator and eclipse for the application development.
 
-\section{Data Models}\label{4.3}
+The new application development doesn't start from scratch, but user rather creates a new application by choosing one of 400 templates. These templates are scaffolds consisting of standardized Play project directory structure and already imported libraries required for chosen type of the web application. Also, the templates serve the role of tutorials for the beginners, which is very useful to me. I created the new application from a template tutorial showcasing the user log-in and imported additional Javascript libraries for user interface enhancement such as Scala code highlighting.
+
+\begin{figure}[!ht]
+	\centering
+		\includegraphics[width=0.9\textwidth, totalheight=8cm]
+		{activator}
+	\caption{\textit{Lightbend Activator}}
+	\label{f4.2}
+\end{figure}
+
+\section{User Interfaces (Views)}\label{4.3}
 \subsection{Prototype 1.0}\label{4.3.1}
 //TODO
 
-\section{Business Logic (Controllers)}\label{4.4}
+\section{Data Models}\label{4.4}
 \subsection{Prototype 1.0}\label{4.4.1}
 //TODO
 
-\section{Deployment}\label{4.5}
+\section{Business Logic (Controllers)}\label{4.5}
+\subsection{Prototype 1.0}\label{4.5.1}
 //TODO
 
-\section{Conclusion}\label{4.3}
+\section{Deployment Set-Up}\label{4.6}
+//TODO
+
+\section{Conclusion}\label{4.7}
 //TODO
 
 %_______________________________chapter_______________________________________
@@ -896,6 +909,12 @@ Scala Twirl Engine,
 Ebean ORM for Java/Kotlin,
 \emph{Avaje},
 \url{http://ebean-orm.github.io/},
+2016
+
+\bibitem{32}
+LightBend Reactive Platform,
+\emph{Typesafe},
+\url{https://www.lightbend.com/products/lightbend-reactive-platform},
 2016
 
 \end{thebibliography}
