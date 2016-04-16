@@ -652,7 +652,9 @@ In this section, I will discuss some of the web application implementation detai
 
 The rest of the Play infrastructure is working in "the background" to make sure that views are returned to user filled with appropriate data. The router routes the requests such as an HTML form POST action to a controller method which will process the form. For example, log-in form POST request will be routed to the appropriate controller method, which will first validate the form. Next, the user data will be fetched from the model and compare to the data in the form. If there is a match, the controller method will render the dashboard view and send it back to the user.
 
-The application will be developed locally on a laptop and deployed on a live internet server. I chose Microsoft Azure Cloud for the deployment.  The reason is that I already have the access to the Azure and I'm familiar with the service management console.
+The application will be developed locally on a laptop and deployed on a live internet server. I chose Microsoft Azure Cloud Service for the deployment. 
+
+
 
 \section{User Interface (Views)}\label{4.2}
 \subsection{Prototype 1.0}\label{4.2.1}
