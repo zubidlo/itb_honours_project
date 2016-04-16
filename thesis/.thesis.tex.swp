@@ -147,7 +147,7 @@ This paper is discussing functional programming paradigm with Scala programming 
 Please keep in mind that I had no knowledge of a functional programming, Scala programming language or Play! framework prior to this endeavour. This document is basically a report of a student learning basics of these concepts and tools. I can only hope that I would be able to communicate clearly what I learn and in this document's usefulness.
 
 \listoffigures
-\listoftables
+%\listoftables
 \tableofcontents{}
 \pagenumbering{arabic}
 
@@ -668,7 +668,7 @@ The new application development doesn't start from scratch, but user rather crea
 \end{figure}
 
 \section{User Interfaces (Views)}\label{4.3}
-The views are developed with usage of Scala templates. Each view is compiled to the Scala object and the HTML can be then rendered by calling the render() method on the given view object. This action is usually done in a controller method as the last step before the rendered HTML is inserted in the response. The view can be arbitrary nested, allowing for creating common layouts (header, footer) just once. The views can carry state-full information as well, such as references to some useful values existing outside the views. This can be used to maintain the session state for example. Every view must have a reference to a user object, which gets created when a user successfully logs in. In the case the user object is not available, a view will redirect to the index page. This way only the logged-in user would get an access to certain views.
+The user interface is contained in package "views". The views are developed with usage of Scala templates. Each view is compiled to the Scala object and the HTML can be then rendered by calling the render() method on the given view object. This action is usually done in a controller method as the last step before the rendered HTML is inserted in the response. The view can be arbitrary nested, allowing for creating common layouts (header, footer) just once. The views can carry state-full information as well, such as references to some useful values existing outside the views. This can be used to maintain the session state for example. Every view must have a reference to a user object, which gets created when a user successfully logs in. In the case the user object is not available, a view will redirect to the index page. This way only the logged-in user would get an access to certain views.
 
 \subsection{Prototype 1.0}\label{4.3.1}
 \subsubsection{Main Layout View}\label{4.3.1.1}
@@ -696,21 +696,103 @@ The figure \ref{f4.3.1.3} is a snapshot of the rendered main page.
 
 \begin{figure}[!ht]
 	\centering
-		\includegraphics[width=0.89\textwidth, totalheight=8cm]
+		\includegraphics[width=0.9\textwidth, totalheight=8cm]
 		{main_page_view}
 	\caption{\textit{Main Page}}
 	\label{f4.3.1.3}
 \end{figure}
 
-All the user interface implementations in Prototype 1.0 are following this pattern. The layout view is a container in which appropriate views are inserted on required places. This nested structure is then turned into HTML and added to the HTML response.
+All the user interface implementations in Prototype 1.0 are following this pattern. The layout view is a container in which appropriate views are inserted in. This nested view is then rendered into HTML.
 
-\section{Data Models}\label{4.4}
+\section{Data And Helper Classes (Models)}\label{4.4}
+The model package consist of Ebean entities and some useful utility helper classes. Ebean framework supports common JPA annotations for entities and simple fluent API for handling database updates.
+
+\begin{lstlisting}
+	FIND.where()
+		.eq("email", email)
+		.findUnique();
+\end{lstlisting}
+
+In this example the chained call will return the user with given address or null. FIND is a reference to model.Finder class which handles User entity.
+
 \subsection{Prototype 1.0}\label{4.4.1}
-//TODO
+The model package in this prototype iteration consist of following classes:
+\begin{itemize}
+	\item User
+	\item Token
+	\item package utils
+	\begin{enumerate}
+	\item AppException
+	\item Hash
+	\item Mail
+	\end{enumerate}
+\end{itemize}
+\subsubsection{User}
+The User class is annotated JPA Entity which directly maps to User database table. The class has a set of static methods which allow to find a user by email or by the confirmation token, authenticate the user, change user password and confirm the user.
+
+\subsubsection{Token}
+The Token is annotated JPA Entity which directly maps to the Token database table. Token functionality allows to create a new token and to find already existing token. Email creation and handling is also part of the token functionality because the only reason the tokens are created is that the user confirms them in emails.
+
+\subsubsection{AppException}
+The AppException class is just a simple exception class, which allows me to create custom exceptions.
+\subsubsection{Hash}
+The Hash is a collection of two static methods which org.mindrot.jbcrypt library to encrypt and decrypt the passwords.
+
+\subsubsection{Mail}
+The Mail class is the implementation of email client using Play built-in email support library. The emails are build and send from a separate thread one second after the thread is started. Play includes very powerful support for concurrency in the form of Akka toolkit.\cite{33} Akka is an award winning open source project for building highly concurrent,
+distributed, and resilient message-driven applications on the JVM based on Scala Actors threading model. Akka is capable of handling 50 million msg/sec on a single machine with a small memory footprint with ~2.5 million actors per GB of the heap.
 
 \section{Business Logic (Controllers)}\label{4.5}
+As outlined in section \ref{4.1} the user requests are routed to the controller methods. These methods consist all the business logic of the application. Each method is processing the request and creating the response which usually contains a new HTML page rendered from a view. The mappings from HTTP requests to the controller methods are stored in routes file.
+
+\begin{lstlisting}
+	POST    /login     		controllers.Application.authenticate()
+\end{lstlisting}
+
+In the example above is the route from log-in form action to the corresponding controller method. When user triggers the log-in form action (POST) by clicking on Login button, the Application::authenticate method is invoked.
+
+\begin{lstlisting}
+	public Result authenticate() {
+        Form<Login> loginForm = form(Login.class).bindFromRequest();
+        Form<Register> registerForm = form(Register.class);
+        if (loginForm.hasErrors()) return badRequest(index.render(registerForm, loginForm));
+        else {
+            session("email", loginForm.get().email);
+            return redirect(routes.Dashboard.index());
+        }
+    }
+\end{lstlisting}
+
+The authenticate method fetches data from the POST request body and bind them to the POJO class representing the form data (email, password). Because the index page has both forms, also an empty registration form is bound to it's POJO representation. The log-in form is then validated against the User model and if it contains errors the index page is rendered and send back to browser inside the badRequest response (code 400). From the user point of view, the index page is reloaded with error message included.
+
+\begin{figure}[!ht]
+	\centering
+		\includegraphics[width=1\textwidth, totalheight=8cm]
+		{invalid_user_or_password_view}
+	\caption{\textit{Unsuccessful Log-in Response}}
+	\label{f4.5.1}
+\end{figure}
+
+In the case, the user log-in form contained valid email and password, the user's email is saved in the session storage and the user interface is redirected to dashboard view. The dashboard view can be only accessed as long as the session storage contains an email of a registered user or the session is not expired. Actually, every view which requires logged user is checking the session storage for valid email matching the existing user row in the database. In the case the session is empty the views redirect back to index page.
+
 \subsection{Prototype 1.0}\label{4.5.1}
-//TODO
+
+Figure \ref{f4.5.1.1} is a screenshot of all the routes in prototype 1.0 implementation. Special case is the last line:
+\begin{lstlisting} 
+	GET /assets/*file controllers. Assets. at (path="/public", file)
+\end{lstlisting} 
+which handles location of static assets such as CSS styles and script files stored in /public directory of the applications. These files must be handled as Java resources because in a production environment the application will be deployed as \textbf{.jar} archive.
+\begin{figure}[!ht]
+	\centering
+		\includegraphics[width=1\textwidth, totalheight=9cm]
+		{routes}
+	\caption{\textit{Routes}}
+	\label{f4.5.1.1}
+\end{figure}
+
+Controller classes are implemented in the Java programming language in this prototype iteration. The reason for this decision was purely pragmatic. Being Scala and Play beginner, I planned to learn the Play Framework in the first prototype implementation. In later iterations, I have planned to refactor all the Java code to Scala as soon as I would become comfortable enough with the new language. Scala is often referred to as the most evolved programming language on the planet and I soon found out that Play uses advanced Scala features such as \emph{imlicits}.
+
+There has been enough complexity involved just with a study of Play Framework alone. After all, the main point of prototyping approach to a software development is to be able to have a working prototype as soon as possible.
 
 \section{Deployment Set-Up}\label{4.6}
 //TODO
@@ -948,6 +1030,12 @@ Ebean ORM for Java/Kotlin,
 LightBend Reactive Platform,
 \emph{Typesafe},
 \url{https://www.lightbend.com/products/lightbend-reactive-platform},
+2016
+
+\bibitem{33}
+Akka,
+\emph{Lightbend Inc},
+\url{http://akka.io},
 2016
 
 \end{thebibliography}
