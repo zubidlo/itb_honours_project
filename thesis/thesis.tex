@@ -901,7 +901,7 @@ The model package in this prototype iteration consist of following classes:
 	\item User
 	\item Token
 	\item package utils
-	\begin{enumerate}
+	\begin{enumerate}\itemsep1pt \parskip0pt \parsep0pt
 	\item AppException
 	\item Hash
 	\item Mail
@@ -1003,15 +1003,46 @@ There has been enough complexity involved just with a study of Play Framework al
 \section{Deployment}\label{4.6}
 The application is deployed on Azure Cloud Virtual Machine \url{http://martinzuber.cloudapp.net/}. Play Framework doesn't require an application server for deployment. Play includes its own HTTP server and is deployed as the standalone application. Activator creates distribution version.zip archive which contains the startup script. This archive can be then copied to live server, unpacked and run.
 
-\subsubsection{Required Steps for Deployment Set-Up}
+\subsection{Required Steps for Deployment Set-Up}\label{4.6.1}
 
-\begin{enumerate}\itemsep1pt \parskip0pt \parsep0pt
-\item Create virtual machine with Linux image.
-\item Install and configure all required software.
-\item Set endpoint mappings.
-\item Create web app distribution build and copy it to the machine.
-\item Configure distribution build and create Upstart script.
-\end{enumerate}
+\subsubsection{1. Create a virtual machine.}
+Azure cloud offers classic virtual machines. The user chooses data centre location, a number of processor cores, memory size, disk size, and bandwidth. The selection will dictate the price per month. Virtual machine specifications can be adjusted dynamically later if the requirements change. For example, the machine can be migrated to a different geographical location, cores, memory can be added and so on. Microsoft offers a wide range of pre-configured operating system images to be installed automatically during the machine creation. The user can choose from quite a rich selection of Linux distribution images and specialized appliances are available as well. All images come with configured SSH server.
+
+Deployment Virtual Machine Specifications:
+\begin{itemize}\itemsep1pt \parskip0pt \parsep0pt
+\item Type: Basic A1 (1 Core, 1.75 GB memory)
+\item OS: Ubuntu Server 14.04 LTS
+\item Location: Europe North (Dublin West Data Centre)
+\item DNS name: martinzuber.cloudapp.net
+\item Public Virtual IP: 40.85.129.158
+\end{itemize}
+
+\subsubsection{2. Install and configure all required software}
+To be able to deploy Play web application I need to install following software:
+\begin{itemize}\itemsep1pt \parskip0pt \parsep0pt
+\item Java SE Platform
+\item MySQL database
+All the Play distribution build needs is installed Java SE Platform. Netty server and all the dependencies are included in the build. The H2 in-memory database will be replaced by MySQL in production when the application is fully developed.
+\end{itemize}
+
+\subsubsection{3. Configure Endpoints.}
+Endpoints are mappings from Azure internet facing ports to internal ports on the virtual machine. For example, to be able to connect to the machine with SSH protocol, the following endpoint must be created:
+\begin{lstlisting} 
+	name: SSH, protocol: TCP, public port: 22, private port: 22
+\end{lstlisting}
+This endpoint would make virtual machine port 22 available from the outside the cloud. I configured the following endpoints:
+
+\begin{figure}[!ht]
+	\centering
+		\includegraphics[width=1\textwidth, totalheight=4cm]
+		{endpoints}
+	\caption{\textit{Virtual Machine Endpoints}}
+	\label{f4.5.1}
+\end{figure}
+
+\subsubsection{4. Create web app distribution build and copy it to the virtual machine.}
+
+\subsubsection{5. Configure distribution build and create Upstart script.}
 
 %____________________________section____________________________
 \section{Conclusion}\label{4.7}
