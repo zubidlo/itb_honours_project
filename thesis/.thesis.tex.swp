@@ -924,17 +924,26 @@ The Hash is a collection of two static methods which org.mindrot.jbcrypt library
 The Mail class is the implementation of email client using Play built-in email support library. The emails are build and send from a separate thread one second after the thread is started. Play includes very powerful support for concurrency in the form of Akka toolkit.\cite{33} Akka is an award winning open source project for building highly concurrent,
 distributed, and resilient message-driven applications on the JVM based on Scala Actors threading model. Akka is capable of handling 50 million msg/sec on a single machine with a small memory footprint with ~2.5 million actors per GB of the heap.
 
-The Mail client uses my personal Google Mail account to send the emails. The connection is done through SMTP protocol over SSL with and port number 456.
+The Mail client uses dedicated email account at \url{functional.scala@gmail.com} to send emails to users. The connection is done through SMTP protocol over SSL with and port number 456.
 
 In the case of a user registration processing the Signup:: sendMailAskForConfirmation controller method creates a new random token and assigns it to the new user. The email message is then constructed which includes a link such as \url{ HTTP://localhost:9000/confirm/5ef75942-86ba-4841-a413-70126f9d8e65}. Clicking on this link will resolve in route to the \emph{controllers.account.Signup.confirm(confirmToken: String)} controller method which will validate the new user account and send the confirmation email.
 
 \begin{figure}[!ht]
 	\centering
-		\includegraphics[width=0.7\textwidth, totalheight=4cm]
+		\includegraphics[width=0.9\textwidth, totalheight=4cm]
 		{register_confirmation_email}
 	\caption{\textit{Validate New Account E-mail}}
 	\label{f4.4.1.1}
 \end{figure}
+
+\begin{figure}[!ht]
+	\centering
+		\includegraphics[width=0.9\textwidth, totalheight=4cm]
+		{register_notification_email}
+	\caption{\textit{Validate New Account E-mail}}
+	\label{f4.4.1.2}
+\end{figure}
+
 
 %____________________________section____________________________
 \section{Business Logic (Controllers)}\label{4.5}
