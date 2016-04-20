@@ -1,0 +1,5 @@
+Project Title: Play With Scala, Functional Programming Course
+
+Introduction:
+
+In the current world of multi-core processor computers, distributed systems, and big data, we witness a paradigm shift in the computational model. The industry is slowly moving from imperative programming and object orientation toward the more declarative functional programming paradigm. The lack of any module dedicated to functional programming in ITB curriculum inspired me to study the paradigm and Scala programming language. This project intent is to develop lecture prototypes for a fictional "functional programming" module. The secondary aim is to deliver the lectures to potential students by means of simple web application developed using Play! Framework.
