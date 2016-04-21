@@ -245,7 +245,7 @@ As mentioned earlier, the functional programming is totally ignored by ITB Compu
 
 \textbullet \textbf{ Filling the 'educational gap' in the Computer Science course curriculum by creating learning web resource.}
 
-The preliminary research on the current state of the application development industry is suggesting that fluency in a functional programming language is a really valuable skill for any developer to possess right now. Developers able to code using languages such as Scala, Clojure, F\# or Lisp dialects are in demand. Reasoning about the functional programs requires different ‘mind-set’ or ‘thought processes’ in comparison with object-oriented programming. Even if one would never use purely functional programming professionally, understanding of the concepts will make one a better programmer overall.
+The preliminary research on the current state of the application development industry is suggesting that fluency in a functional programming language is a really valuable skill for any developer to possess. Developers able to code using languages such as Scala, Clojure, F\# or Lisp dialects are in high demand. Reasoning about the functional programs requires different ‘mind-set’ or ‘thought process’ in comparison with object-oriented programming. Even if one would never use purely functional programming professionally, understanding of the concepts will make one a better programmer overall.
 
 \textbullet \textbf{ Acquiring valuable skills and deeper insides into different programming paradigms and design patterns.}
 
@@ -1055,13 +1055,96 @@ This endpoint would make virtual machine port 22 available from the outside the 
 	\label{f4.5.1}
 \end{figure}
 
-\subsubsection{4. Create web app distribution build and copy it to the virtual machine.}
+\subsubsection{4. Create and configure web app distribution build.}
+Even though to create the production build in Play is a question of one activator command, the necessary changes have to be made in the production build configuration:
+\begin{enumerate}\itemsep1pt \parskip0pt \parsep0pt
+\item The web application is sending emails consisting of a URL to validate user actions such as account registration as I discussed in the section \ref{4.4.1}. When the application is deployed its domain name changes and so must the URL in those emails. The domain name is therefore not hard-coded, but rather stored in the \emph{conf/application.conf} file and referenced from the code by name.
+\begin{lstlisting} 
+	server.hostname="martinzuber.cloudapp.net"
+\end{lstlisting} 
+\item Java Ebean ORM supports the database evolutions. This functionality allows having different database schema for each prototype or build. The schemas are stored in \emph{conf/evolutions/} directory and with each restart of the application, the developer is asked to choose an appropriate schema. This functionality is not allowed in the production mode and the database must be configured with the default schema at application start-up:
+\begin{lstlisting} 
+	/path/to/web_app/app -Dplay.evolutions.db.default.autoApply=true
+\end{lstlisting} 
+or turned off in \emph{conf/application.conf} file:
+\begin{lstlisting} 
+	evolutions=disabled
+\end{lstlisting} 
+\item Application in production mode requires a private secret key. The key is used for signing session cookies, CSRF tokens and in built-in encryption utilities. Anyone with the access to the secret key can generate any session they please, effectively allowing them to log into the app. Therefore is highly recommended to store the key only on the production server and not to check the secret to source control. Also, if there are more instances of the application deployed the secret key must be the same for each instance. The secret key can be created in activator console with:
+\begin{lstlisting} 
+	playGenerateSecret
+\end{lstlisting}
+and stored in \emph{conf/application.conf} by:
+\begin{lstlisting} 
+	play.crypto.secret="</N_v`W4xv8GY^c7e=UCDYF]vXSguUvABIHoi[JNm1j@lf2C6S9TL[?FNM?ImDd;"
+\end{lstlisting}
+\item In the development mode, the Play application uses H2 in-memory database, which only store data for the application runtime and schemes are deleted with each restart. The H2 driver configured in \emph{conf/application.conf} by:
+\begin{lstlisting} 
+	db.default.driver=org.h2.Driver
+	db.default.url="jdbc:h2:mem:play"
+\end{lstlisting}
+In the production mode, MySQL server could used instead so the data are truly persistent.
+\begin{lstlisting}
+	db.default.driver=com.mysql.jdbc.Driver
+	db.default.url="jdbc:mysql://localhost/playdb"
+	db.default.username=playdbuser
+	db.default.password="a strong password"
+\end{lstlisting}
+\item As seen in steps 1-4, the production build differs from development in configuration of multiple items. For these cases Play provides an option to specify different configuration file for the production environment in the form of a command line argument:
+\begin{lstlisting} 
+	/path/to/web_app/app -Dconfig.file=/full/path/to/conf/application-prod.conf
+\end{lstlisting}
+\end{enumerate}
 
-\subsubsection{5. Configure distribution build and create Upstart script.}
+\subsubsection{5. Create Upstart service.}
+In Ubuntu 14.04, Upstart is a replacement for traditional \emph{init daemon} and it is responsible for bringing the computer into a normal running state after the boot-up. Upstart handles the starting, stopping and monitoring processes while the operating system is running. For each process to be managed by the Upstart daemon the .conf script must be created and stored in \emph{/etc/init/} directory. Processes defined by these scripts are called services.
+
+I wrote following Upstart script \emph{/etc/init/play.conf} which turned the web app into a service daemon. The service is  started automatically at server startup as soon as the file system and network interface are alive. Also, running Play application stores its process id (PID) in a file which has to be deleted before the application can be restarted.
+
+\begin{lstlisting} 
+	description "My Play Application"
+
+	env USER=martin
+	env GROUP=martin
+	env APP_HOME=/home/martin/web_app-1.0-SNAPSHOT
+	env APP_NAME=web_app               
+ 
+	env EXTRA=""
+ 
+	start on (filesystem and net-device-up IFACE=eth0)
+	stop on runlevel [!2345]
+ 
+	respawn
+	respawn limit 30 10
+	umask 022
+	expect daemon
+ 
+	pre-start script
+    	#If improper shutdown and the PID file is left on disk delete it so we can start again
+    	if [ -f $APP_HOME/RUNNING_PID ] && ! ps -p `cat $APP_HOME/RUNNING_PID` > /dev/null ; then
+        	rm $APP_HOME/RUNNING_PID ;
+    	fi
+	end script
+ 
+	exec start-stop-daemon --pidfile ${APP_HOME}/RUNNING_PID --chdir ${APP_HOME} --chuid $USER:$GROUP --exec ${APP_HOME}/bin/$APP_NAME --background --start -- -Dplay.evolutions.db.default.autoApply=true $EXTRA
+\end{lstlisting}
+The Upstart script syntax validity can be checked with:
+\begin{lstlisting} 
+$ init-checkconf /etc/init/play.conf
+\end{lstlisting}
+The Play web application can be managed from terminal with commands:
+\begin{lstlisting} 
+$ service start | stop | restart | status
+\end{lstlisting}
+
 
 %____________________________section____________________________
 \section{Conclusion}\label{4.7}
-//TODO
+In implementation chapter, I started with the description of a general structure of every Play application and how the pipeline from user interface toward the persistence storage is designed in the framework. In the comparison with multi-layered Java EE platform, the Lightbend Reactive Platform feels lightweight but more powerful.
+
+Scala Twirl templates are closer to .NET Razor templates then to Java Server Faces. The templates are compiled to Scala object and therefore type-safe with the support of all the language features. On the other hand, they should handle only simple tasks and all the business logic is placed in the controller actions.
+
+I continued to showcase the implementation of prototype 1.0 functionality again in the context of the pipeline workflow. The last section of the implementation chapter was dedicated to the application deployment in a lot of detail. The reason for such a detailed description was to document the process for a future reference. Overall, I have quite positive experience using Azure cloud services.
 
 
 
@@ -1274,7 +1357,7 @@ Wikipedia,
 (2015-10-04)
 	
 \bibitem{9}
-Paul Chiusano,	Runar Bjarnason,
+Paul Chiusano, Runar Bjarnason,
 \emph{Functional Programming in Scala.},
 Shelter Island, NY 11964,
 Manning Publications Co., 2015. ISBN 9781617290657.
@@ -1402,28 +1485,34 @@ The Interactive Build Tool,
 2015
 
 \bibitem{30}
-Scala Twirl Engine,
-\emph{Play Framework},
+Play Framework,
+\emph{Scala Twirl Engine},
 \url{https://github.com/playframework/twirl},
 2016
 
 \bibitem{31}
-Ebean ORM for Java/Kotlin,
-\emph{Avaje},
+Avaje,
+\emph{Ebean ORM for Java/Kotlin},
 \url{http://ebean-orm.github.io/},
 2016
 
 \bibitem{32}
-LightBend Reactive Platform,
-\emph{Typesafe},
+LightBend Inc,
+\emph{LightBend Reactive Platform},
 \url{https://www.lightbend.com/products/lightbend-reactive-platform},
 2016
 
 \bibitem{33}
-Akka,
-\emph{Lightbend Inc},
+Lightbend Inc,
+\emph{Akka},
 \url{http://akka.io},
 2016
+
+\bibitem{34}
+W. Richard Stevens, Stephen A. Rago
+\emph{Advanced Programming in the UNIX Environment, Third Edition},
+Addison-Wesley
+2013 May, ISBN-13: 978-0-321-63773-4
 
 \end{thebibliography}
 \end{document}
