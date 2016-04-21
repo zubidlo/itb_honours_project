@@ -4,7 +4,10 @@ import models.Token;
 import models.User;
 import models.utils.AppException;
 import models.utils.Mail;
+
 import org.apache.commons.mail.EmailException;
+
+import controllers.routes;
 import play.Logger;
 import play.data.Form;
 import play.data.validation.Constraints;
@@ -12,6 +15,7 @@ import play.i18n.Messages;
 import play.mvc.Controller;
 import play.mvc.Result;
 import views.html.account.reset.ask;
+import views.html.account.settings.*;
 import play.libs.mailer.MailerClient;
 
 import javax.inject.Inject;
@@ -142,7 +146,7 @@ public class Reset extends Controller {
 
             sendPasswordChanged(user);
             flash("success", Messages.get("resetpassword.success"));
-            return ok(reset.render(resetForm, token));
+            return redirect(routes.Dashboard.index());
         } catch (AppException e) {
             flash("error", Messages.get("error.technical"));
             return badRequest(reset.render(resetForm, token));

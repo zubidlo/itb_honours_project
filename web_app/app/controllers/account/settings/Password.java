@@ -13,20 +13,21 @@ import play.libs.mailer.MailerClient;
 import javax.inject.Inject;
 import java.net.MalformedURLException;
 
-@Security.Authenticated(Secured.class)
 public class Password extends Controller {
     @Inject
     MailerClient mailerClient;
 
+    @Security.Authenticated(Secured.class)
     public Result index() {
         return ok(password.render(User.findByEmail(request().username())));
     }
 
+    @Security.Authenticated(Secured.class)
     public Result runPassword() {
         User user = User.findByEmail(request().username());
         try {
             Token t = new Token();
-            t.sendMailResetPassword(user,mailerClient);
+            t.sendMailResetPassword(user, mailerClient);
             flash("success", Messages.get("resetpassword.mailsent"));
             return ok(password.render(user));
         } catch (MalformedURLException e) {

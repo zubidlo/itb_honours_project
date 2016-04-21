@@ -19,7 +19,6 @@ import java.net.MalformedURLException;
 
 import static play.data.Form.form;
 
-@Security.Authenticated(Secured.class)
 public class Email extends Controller {
     @Inject
     MailerClient mailerClient;
@@ -36,6 +35,7 @@ public class Email extends Controller {
         }
     }
 
+    @Security.Authenticated(Secured.class)
     public Result index() {
         User user = User.findByEmail(request().username());
         Form<AskForm> askForm = form(AskForm.class);
@@ -43,6 +43,7 @@ public class Email extends Controller {
         return ok(email.render(User.findByEmail(request().username()), askForm));
     }
 
+    @Security.Authenticated(Secured.class)
     public Result runEmail() {
         Form<AskForm> askForm = form(AskForm.class).bindFromRequest();
         User user = User.findByEmail(request().username());
@@ -65,6 +66,7 @@ public class Email extends Controller {
         return badRequest(email.render(user, askForm));
     }
 
+    @Security.Authenticated(Secured.class)
     public Result validateEmail(String token) {
         User user = User.findByEmail(request().username());
 

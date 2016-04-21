@@ -67,6 +67,7 @@ public class Application extends Controller {
         Form<Register> registerForm = form(Register.class);
         if (loginForm.hasErrors()) return badRequest(index.render(registerForm, loginForm));
         else {
+        	session().clear();
             session("email", loginForm.get().email);
             return redirect(routes.Dashboard.index());
         }

@@ -22,13 +22,14 @@ import views.html.index;
 import views.html.dashboard.create;
 import views.html.dashboard.lecture;
 
-@Security.Authenticated(Secured.class)
 public class Dashboard extends Controller {
 
+	@Security.Authenticated(Secured.class)
     public Result index() {
         return ok(create.render(User.findByEmail(request().username())));
     }
     
+	@Security.Authenticated(Secured.class)
     public Result lecture(String file) throws Exception {
     	String email = ctx().session().get("email");
     	if (email == null) {

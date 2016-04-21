@@ -4,11 +4,13 @@ import models.utils.AppException;
 import models.utils.Hash;
 import play.data.format.Formats;
 import play.data.validation.Constraints;
+
 import com.avaje.ebean.Model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+
 import java.util.Date;
 
 @Entity
@@ -39,7 +41,7 @@ public class User extends Model {
     @Formats.NonEmpty
     public Boolean validated = false;
 
-    public static final Model.Finder<Long, User> FIND = new Model.Finder(User.class);
+    public static final Model.Finder<Long, User> FIND = new Model.Finder<Long, User>(User.class);
 
     public static User findByEmail(String email) {
         return FIND.where().eq("email", email).findUnique();
