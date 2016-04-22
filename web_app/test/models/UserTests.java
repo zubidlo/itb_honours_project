@@ -16,6 +16,7 @@ public class UserTests extends WithApplication {
 	
 	private String token;
 	private User user;
+	
     @Before
     public void setUp() throws AppException {
         start(fakeApplication(inMemoryDatabase()));
@@ -30,10 +31,12 @@ public class UserTests extends WithApplication {
     	User martin = User.findByEmail("martin@gmail.com");
         assertNotNull(martin);
         assertEquals("Martin Zuber", martin.fullname);
+        assertNotNull(martin.dateCreation);
         
         martin = User.findByConfirmationToken(token);
         assertNotNull(martin);
         assertEquals("Martin Zuber", martin.fullname);
+        assertNotNull(martin.dateCreation);
     }
     
     @Test
@@ -47,6 +50,7 @@ public class UserTests extends WithApplication {
     	user.changePassword("password2");
     	User martin = User.findByEmail("martin@gmail.com");
     	assertNotNull(martin);
+    	assertNotNull(martin.dateCreation);
     	assertNotNull(User.authenticate("martin@gmail.com", "password2"));
     }
 }

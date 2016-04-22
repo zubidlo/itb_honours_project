@@ -23,20 +23,18 @@ public class Mail {
     }
 
     public final static class Envelope {
-        String subject;
+        public String subject;
         public String message;
-        final List<String> toEmails;
-
+        public List<String> toEmails;
+        
         public Envelope(String sub, String msg, List<String> te) {
-            subject = sub;
+        	subject = sub;
             message = msg;
             toEmails = te;
         }
 
         public Envelope(String sub, String msg, String email) {
-            message = msg;
-            subject = sub;
-            toEmails = new ArrayList<String>();
+            this(sub, msg, new ArrayList<String>());
             toEmails.add(email);
         }
     }

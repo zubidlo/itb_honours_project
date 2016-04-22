@@ -9,13 +9,13 @@ public class HashTest {
     @Test
     public void getHashString() throws AppException {
         
-    	String password = Hash.createPassword("fooTest");
+    	String password = Hash.createPassword("hello world");
         Assert.assertNotNull(password);
 
-        boolean matches = Hash.checkPassword("fooTest", password);
-        Assert.assertTrue("Password does not match but should match", matches);
+        boolean matches = Hash.checkPassword("hello world", password);
+        Assert.assertTrue(matches);
 
-        boolean badPassword = Hash.checkPassword("badPassword", password);
-        Assert.assertFalse("Password matches but should not match", badPassword);
+        boolean badPassword = Hash.checkPassword("some other password", password);
+        Assert.assertFalse(badPassword);
     }
 }

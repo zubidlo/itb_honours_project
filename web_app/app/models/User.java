@@ -11,6 +11,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
+import java.util.Calendar;
 import java.util.Date;
 
 @Entity
@@ -48,6 +49,7 @@ public class User extends Model {
     	fullname = n;
     	passwordHash = h;
     	confirmationToken = t;
+    	dateCreation = Calendar.getInstance().getTime();
     }
 
     //tested

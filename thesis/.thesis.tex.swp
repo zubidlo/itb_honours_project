@@ -35,6 +35,17 @@
 %https://www.ctan.org/pkg/listings
 \usepackage{listings}
 
+\lstset{ %
+  backgroundcolor=\color{white},   % choose the background color
+  basicstyle=\footnotesize,        % size of fonts used for the code
+  breaklines=true,                 % automatic line breaking only at whitespace
+  captionpos=b,                    % sets the caption-position to bottom
+  commentstyle=\color{mygreen},    % comment style
+  escapeinside={\%*}{*)},          % if you want to add LaTeX within your code
+  keywordstyle=\color{blue},       % keyword style
+  stringstyle=\color{mymauve},     % string literal style
+}
+
 \usepackage{color}
  
 \definecolor{codegreen}{rgb}{0,0.6,0}
@@ -908,17 +919,17 @@ Each form which contains the password input field is enhanced with animated succ
 \subsubsection{Internationalization}\label{4.3.1.4}
 
 Play follows the common I18N scheme to address the internationalization. The developer specifies the languages using language tags, such as "en" for English. These are defined in \emph{conf/application.conf} file by:
-\begin{lstlisting}
+\begin{lstlisting}[language=java]
 	play.i18n.langs = [ "en", "en-US", "fr" ]
 \end{lstlisting}
 
 The text is externalized to text files \emph{conf/messages.en}, \emph{conf/messages.fr} and so on. The message text file consists of simple mappings:
-\begin{lstlisting}
+\begin{lstlisting}[language=java]
 	title=Functional Programming with Scala
 	files.summary=The disk {1} contains {0} file(s).
 \end{lstlisting}
 which are referenced from Java by:
-\begin{lstlisting}
+\begin{lstlisting}[language=java]
 	Messages.get("title")
 	Messages.get("files.summary", d.files.length, d.name)
 \end{lstlisting}
@@ -935,7 +946,7 @@ The current language is found by looking at the \emph{lang} field in the current
 \section{Data And Helper Classes (Models)}\label{4.4}
 The model package consist of Ebean entities and some useful utility helper classes. Ebean framework supports common JPA annotations for entities and simple fluent API for handling database updates.
 
-\begin{lstlisting}
+\begin{lstlisting}[language=java]
 	FIND.where()
 		.eq("email", email)
 		.findUnique();
@@ -967,12 +978,12 @@ The Token is annotated JPA Entity which directly maps to the Token database tabl
 \begin{enumerate}\itemsep1pt \parskip0pt \parsep0pt
 
 \item User clicks on "Reset" button beside "Password" label in the account settings view. This button is "submitting" empty form with POST action which matches \emph{runPassword() of Password} controller method.
-	\begin{lstlisting}
+	\begin{lstlisting}[language=java]
 	POST    /settings/password   controllers.account.settings.Password.runPassword()
 	\end{lstlisting}
 	
 	\item Method runPassword () will check if there is \emph{email} stored in the current session and if so the user with this email address will be fetched from the database, the new genuine token will be created and associated with the user and email with the confirmation link will be sent to the email address.
-\begin{lstlisting}
+\begin{lstlisting}[language=java]
 	@Security.Authenticated(Secured.class)
     public Result runPassword() {
         User user = User.findByEmail(request().username());
@@ -990,7 +1001,7 @@ The Token is annotated JPA Entity which directly maps to the Token database tabl
 \textbf{Notice:} Play Framework is binding every request to the Request object. The request object can be retrieved by calling Controller:: request () method. The Request object represents an HTTP request with header and body, but it has an additional \emph{username} field, which can be set at any time. This field serves as an authentication mechanism. In this application design the \emph{@Security.Authenticator} controller injects the \emph{email} address from the current session into the request.username field assuming that during an user log-in his email address was stored in the session. This way Play allows me to identify each request with a logged-in user.
 
 \item The user receives the email asking him to click on \url{ http://localhost:9000/reset/61ec0e88-9db6-4103-bf9d-d299ba03f9f8} to reset the password. This link includes the immutable universally unique identifier (UUID) of the created token and matches following route:
-\begin{lstlisting}
+\begin{lstlisting}[language=java]
  GET   /reset/:token   controllers.account.Reset.reset(token: String)
 \end{lstlisting}
 When user clicks on the link the Reset::reset(String token) controller method will be invoked.
@@ -998,7 +1009,7 @@ When user clicks on the link the Reset::reset(String token) controller method wi
 \item The reset() method will check if given token exists, if it is of token type used for resetting passwords and if the token is not expired. The tokens expire in one day. If everything is right, the password reset view is rendered and reset form and the token is passed to it.
 
 \item In the reset view the user input his new password in the form and on the form submission the form post matches:
-\begin{lstlisting}
+\begin{lstlisting}[language=java]
  POST   /reset/:token   controllers.account.Reset.runReset(token: String)
 \end{lstlisting}
 and Reset::runReset(String token) controller method is invoked with token as the argument.
@@ -1012,7 +1023,7 @@ The AppException is just a simple exception class, which allows me to create cus
 \subsubsection{Hash}
 The Hash is a collection of two static methods which uses org.mindrot.jbcrypt\cite{35} library to encrypt and decrypt the passwords.
 
-\begin{lstlisting}
+\begin{lstlisting}[language=java]
  package models.utils;
 
 import org.mindrot.jbcrypt.BCrypt;
@@ -1062,13 +1073,13 @@ In the case of a user registration processing the Signup:: sendMailAskForConfirm
 \section{Business Logic (Controllers)}\label{4.5}
 As outlined in section \ref{4.1} the user requests are routed to the controller methods. These methods consist all the business logic of the application. Each method is processing the request and creating the response which usually contains a new HTML page rendered from a view. The mappings from HTTP requests to the controller methods are stored in routes file.
 
-\begin{lstlisting}
+\begin{lstlisting}[language=java]
 	POST    /login     		controllers.Application.authenticate()
 \end{lstlisting}
 
 In the example above is the route from log-in form action to the corresponding controller method. When user triggers the log-in form action (POST) by clicking on Login button, the Application::authenticate method is invoked.
 
-\begin{lstlisting}
+\begin{lstlisting}[language=java]
 	public Result authenticate() {
         Form<Login> loginForm = form(Login.class).bindFromRequest();
         Form<Register> registerForm = form(Register.class);
@@ -1095,7 +1106,7 @@ In the case, the user log-in form contained valid email and password, the user's
 \subsection{Prototype 1.0}\label{4.5.1}
 
 Figure \ref{f4.5.1.1} is a screenshot of all the routes in prototype 1.0 implementation. Special case is the last line:
-\begin{lstlisting} 
+\begin{lstlisting} [language=java]
 	GET /assets/*file controllers. Assets. at (path="/public", file)
 \end{lstlisting} 
 which handles location of static assets such as CSS styles and script files stored in /public directory of the applications. These files must be handled as Java resources because in a production environment the application will be deployed as \textbf{.jar} archive.
@@ -1140,7 +1151,7 @@ All the Play distribution build needs is installed Java SE Platform. Netty serve
 
 \subsubsection{3. Configure Endpoints.}
 Endpoints are mappings from Azure internet facing ports to internal ports on the virtual machine. For example, to be able to connect to the machine with SSH protocol, the following endpoint must be created:
-\begin{lstlisting} 
+\begin{lstlisting} [language=bash]
 	name: SSH, protocol: TCP, public port: 22, private port: 22
 \end{lstlisting}
 This endpoint would make virtual machine port 22 available from the outside the cloud. I configured the following endpoints:
@@ -1157,39 +1168,39 @@ This endpoint would make virtual machine port 22 available from the outside the 
 Even though to create the production build in Play is a question of one activator command, the necessary changes have to be made in the production build configuration:
 \begin{enumerate}\itemsep1pt \parskip0pt \parsep0pt
 \item The web application is sending emails consisting of a URL to validate user actions such as account registration as I discussed in the section \ref{4.4.1}. When the application is deployed its domain name changes and so must the URL in those emails. The domain name is therefore not hard-coded, but rather stored in the \emph{conf/application.conf} file and referenced from the code by name.
-\begin{lstlisting} 
+\begin{lstlisting} [language=java]
 	server.hostname="martinzuber.cloudapp.net"
 \end{lstlisting} 
 \item Java Ebean ORM supports the database evolutions. This functionality allows having different database schema for each prototype or build. The schemas are stored in \emph{conf/evolutions/} directory and with each restart of the application, the developer is asked to choose an appropriate schema. This functionality is not allowed in the production mode and the database must be configured with the default schema at application start-up:
-\begin{lstlisting} 
+\begin{lstlisting} [language=bash]
 	/path/to/web_app/app -Dplay.evolutions.db.default.autoApply=true
 \end{lstlisting} 
 or turned off in \emph{conf/application.conf} file:
-\begin{lstlisting} 
+\begin{lstlisting} [language=java]
 	evolutions=disabled
 \end{lstlisting} 
 \item Application in production mode requires a private secret key. The key is used for signing session cookies, CSRF tokens and in built-in encryption utilities. Anyone with the access to the secret key can generate any session they please, effectively allowing them to log into the app. Therefore is highly recommended to store the key only on the production server and not to check the secret to source control. Also, if there are more instances of the application deployed the secret key must be the same for each instance. The secret key can be created in activator console with:
-\begin{lstlisting} 
+\begin{lstlisting} [language=bash]
 	playGenerateSecret
 \end{lstlisting}
 and stored in \emph{conf/application.conf} by:
-\begin{lstlisting} 
+\begin{lstlisting} [language=java]
 	play.crypto.secret="</N_v`W4xv8GY^c7e=UCDYF]vXSguUvABIHoi[JNm1j@lf2C6S9TL[?FNM?ImDd;"
 \end{lstlisting}
 \item In the development mode, the Play application uses H2 in-memory database, which only store data for the application runtime and schemes are deleted with each restart. The H2 driver configured in \emph{conf/application.conf} by:
-\begin{lstlisting} 
+\begin{lstlisting} [language=java]
 	db.default.driver=org.h2.Driver
 	db.default.url="jdbc:h2:mem:play"
 \end{lstlisting}
 In the production mode, MySQL server could used instead so the data are truly persistent.
-\begin{lstlisting}
+\begin{lstlisting}[language=java]
 	db.default.driver=com.mysql.jdbc.Driver
 	db.default.url="jdbc:mysql://localhost/playdb"
 	db.default.username=playdbuser
 	db.default.password="a strong password"
 \end{lstlisting}
 \item As seen in steps 1-4, the production build differs from development in configuration of multiple items. For these cases Play provides an option to specify different configuration file for the production environment in the form of a command line argument:
-\begin{lstlisting} 
+\begin{lstlisting} [language=bash]
 	/path/to/web_app/app -Dconfig.file=/full/path/to/conf/application-prod.conf
 \end{lstlisting}
 \end{enumerate}
@@ -1199,7 +1210,7 @@ In Ubuntu 14.04, Upstart is a replacement for traditional \emph{init daemon} and
 
 I wrote following Upstart script \emph{/etc/init/play.conf} which turned the web app into a service daemon. The service is  started automatically at server startup as soon as the file system and network interface are alive. Also, running Play application stores its process id (PID) in a file which has to be deleted before the application can be restarted.
 
-\begin{lstlisting} 
+\begin{lstlisting} [language=bash]
 	description "My Play Application"
 
 	env USER=martin
@@ -1227,11 +1238,11 @@ I wrote following Upstart script \emph{/etc/init/play.conf} which turned the web
 	exec start-stop-daemon --pidfile ${APP_HOME}/RUNNING_PID --chdir ${APP_HOME} --chuid $USER:$GROUP --exec ${APP_HOME}/bin/$APP_NAME --background --start -- -Dplay.evolutions.db.default.autoApply=true $EXTRA
 \end{lstlisting}
 The Upstart script syntax validity can be checked with:
-\begin{lstlisting} 
+\begin{lstlisting} [language=bash]
 $ init-checkconf /etc/init/play.conf
 \end{lstlisting}
 The Play web application can be managed from terminal with commands:
-\begin{lstlisting} 
+\begin{lstlisting} [language=bash]
 $ service start | stop | restart | status
 \end{lstlisting}
 
@@ -1282,19 +1293,107 @@ The Play Framework comes with automated testing capabilities powered by the sbt 
 
 The Play Framework supports various test frameworks out of the box with the additional functionality of so called test helpers. Test helpers help to create mock instances of various Play components such as application, router or controller to make possible to test a component in isolation. Play comes with JUnit, WebDriver, ScalaTest support, but any testing framework can be used if needed.
 
-In my test suite I will concentrate to unit test the application models and utilities with JUnit test tool and to test the user interface with Selenium IDE. In following sections I will document discuss every found bug.
+In my test suite, I will concentrate to unit test the application models and utilities with JUnit test tool and test the user interface with Selenium IDE. In the following sections I will outline my approach to testing and discuss every found bug.
 
 %____________________________section____________________________
-\section{Unit Tests of Models}\label{5.2}
+\section{Unit Tests of Models and Utilities}\label{5.2}
+Test are stored in \emph{/test/models} directory of the web application project. All test for an unit will be contained in one class.
 
-\subsection{Hash}\label{5.2.1}
+\subsection{Prototype 1.0}\label{5.2.1}
+\subsubsection{Hash}\label{5.2.1.1}
+\begin{lstlisting}[language=java]
+@Test
+public void getHashString() throws AppException {
+        
+    String password = Hash.createPassword("hello world");
+    Assert.assertNotNull(password);
 
-\subsection{User}\label{5.2.2}
+    boolean matches = Hash.checkPassword("hello world", password);
+    Assert.assertTrue(matches);
 
-\subsection{Token}\label{5.2.3}
+    boolean badPassword = Hash.checkPassword("some other password", password);
+    Assert.assertFalse(badPassword);
+}
+\end{lstlisting}
+
+\subsubsection{User}\label{5.2.1.2}
+
+\begin{lstlisting}[language=java]
+public class UserTests extends WithApplication {
+	private String token;
+	private User user;
+    @Before
+    public void setUp() throws AppException {
+        start(fakeApplication(inMemoryDatabase()));
+        String hash = Hash.createPassword("password1");
+    	token = UUID.randomUUID().toString();
+    	user = new User("martin@gmail.com", "Martin Zuber", hash, token);
+    	user.save();
+    }
+    
+    @Test
+    public void createAndRetrieveUser() {
+    	User martin = User.findByEmail("martin@gmail.com");
+        assertNotNull(martin);
+        assertEquals("Martin Zuber", martin.fullname);
+        
+        martin = User.findByConfirmationToken(token);
+        assertNotNull(martin);
+        assertEquals("Martin Zuber", martin.fullname);
+    }
+    
+    @Test
+    public void tryAuthenticateUser() {
+       	assertNotNull(User.authenticate("martin@gmail.com", "password1"));
+        assertNull(User.authenticate("bob@gmail.com", "badpassword"));
+    }
+    
+    @Test
+    public void tryChangePassword() throws AppException {
+    	user.changePassword("password2");
+    	User martin = User.findByEmail("martin@gmail.com");
+    	assertNotNull(martin);
+    	assertNotNull(User.authenticate("martin@gmail.com", "password2"));
+    }
+}
+\end{lstlisting}
+
+In User tests I tested all the User model methods with the mock application anda
+ database with one user created in UserTests::setUp() method annotated with \emph{@Before}. All the tests passed.
+
+\subsubsection{Token}\label{5.2.1.3}
+
+\begin{lstlisting}[language=java]
+private String token, token1;
+private User user;
+private String email;
+		
+@Before public void setUp() throws AppException {
+	start(fakeApplication(inMemoryDatabase()));
+    String hash = Hash.createPassword("password1");
+    token = UUID.randomUUID().toString();
+    token1 = UUID.randomUUID().toString();
+    email = "martin@gmail.com";
+    user = new User(email, "Martin Zuber", hash, token);
+    user.save();
+    new Token(token, user.id, Token.TypeToken.password, email).save();
+    new Token(token1, user.id, Token.TypeToken.email, email).save();
+}
+\end{lstlisting}
+In listing above the Token::setUp() method creates the user, password reset token and email change token.
+
+\begin{lstlisting}[language=java]
+@Test public void tryIsExpired() {
+	Token t1 = Token.findByTokenAndType(token, Token.TypeToken.password);
+	assertNotNull(t1);
+	assertNotNull(t1.dateCreation);
+	}
+\end{lstlisting}
+The test above was successful and revealed the bug: \textbf{dateCreation is never assigned a value.} The User model test was then adjusted to test if \emph{dateCreated} is not null on a user fetched from database and the same bug was found. The rest of the tests passed.
+
 
 %____________________________section____________________________
-\section{Acceptance Tests}\label{5.3}
+\section{Acceptance Tests (Selenium IDE tests}\label{5.3}
 
 %____________________________section____________________________
 \section{Conclusion}\label{5.4}

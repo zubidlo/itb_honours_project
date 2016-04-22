@@ -2,7 +2,7 @@ package models;
 
 import models.utils.Mail;
 import play.Configuration;
-import play.Logger;
+
 import play.data.format.Formats;
 import play.data.validation.Constraints;
 
@@ -12,16 +12,9 @@ import play.i18n.Messages;
 import play.libs.mailer.MailerClient;
 
 import javax.annotation.Nullable;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.Id;
+import javax.persistence.*;
 
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.UUID;
+import java.util.*;
 
 @Entity
 public class Token extends Model {
@@ -31,11 +24,8 @@ public class Token extends Model {
     public enum TypeToken {
         password("reset"), 
         email("email");
-        private String urlPath;
-
-        private TypeToken(String path) {
-            urlPath = path;
-        }
+        private final String urlPath;
+        private TypeToken(String path) { urlPath = path; }
     }
 
     @Id
@@ -56,25 +46,31 @@ public class Token extends Model {
     @Formats.NonEmpty
     public String email;
 
-    public static Model.Finder<String, Token> find = new Finder<String, Token>(Token.class);
+    public static final Model.Finder<String, Token> FIND = new Finder<String, Token>(Token.class);
 
+    //tested
     public static Token findByTokenAndType(String token, TypeToken type) {
-        return find.where().eq("token", token).eq("type", type).findUnique();
-    }
-
-    public boolean isExpired() {
-        return dateCreation != null && dateCreation.before(expirationTime());
+        return FIND.where().eq("token", token).eq("type", type).findUnique();
     }
     
-    public Token() {}
+    public Token() {
+    	dateCreation = Calendar.getInstance().getTime();
+    }
     
     public Token(String t, Long uid, TypeToken tt, String e) {
+    	this();
     	token = t;
     	userId = uid;
     	type = tt;
     	email = e;
     }
 
+    //tested
+    public boolean isExpired() {
+        return dateCreation.before(expirationTime());
+    }
+ 
+    //tested
     private Date expirationTime() {
         Calendar cal = Calendar.getInstance();
         cal.set(Calendar.DATE, -EXPIRATION_DAYS);
@@ -98,7 +94,7 @@ public class Token extends Model {
         String subject = null;
         String message = null;
         String toMail = null;
-           
+        
         switch (type) {
             case password:
                 subject = Messages.get("mail.reset.ask.subject");
