@@ -67,15 +67,9 @@ public class Reset extends Controller {
 
         Logger.debug("Sending password reset link to user " + user);
 
-        try {
-            Token t = new Token();
-            t.sendMailResetPassword(user,mailerClient);
-            return ok(runAsk.render());
-        } catch (MalformedURLException e) {
-            Logger.error("Cannot validate URL", e);
-            flash("error", Messages.get("error.technical"));
-        }
-        return badRequest(ask.render(askForm));
+        Token t = new Token();
+        t.sendMailResetPassword(user,mailerClient);
+        return ok(runAsk.render());
     }
 
     private void sendFailedPasswordResetAttempt(String email) {

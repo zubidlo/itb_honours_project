@@ -25,14 +25,10 @@ public class Password extends Controller {
     @Security.Authenticated(Secured.class)
     public Result runPassword() {
         User user = User.findByEmail(request().username());
-        try {
-            Token t = new Token();
-            t.sendMailResetPassword(user, mailerClient);
-            flash("success", Messages.get("resetpassword.mailsent"));
-            return ok(password.render(user));
-        } catch (MalformedURLException e) {
-            flash("error", Messages.get("error.technical"));
-        }
-        return badRequest(password.render(user));
+        Token t = new Token();
+        t.sendMailResetPassword(user, mailerClient);
+        flash("success", Messages.get("resetpassword.mailsent"));
+        return ok(password.render(user));
+        
     }
 }

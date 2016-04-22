@@ -1261,13 +1261,43 @@ The last section of the implementation chapter was dedicated to the application 
 
 %____________________________section____________________________
 \section{Introduction}\label{5.1}
-//TODO
+Testing is an imperative part of any software development project. Eradicating errors and bugs is vital to the user experience. The successful test on one which identifies the bug in the application. There are various testing strategies to be performed:
+\begin{itemize}\itemsep1pt \parskip0pt \parsep0pt
+\item Unit testing – testing of a single function, procedure. The test subject is treated as a "black box" meaning that we test the subject functionality not the underlying implementation.
+Integration testing – checks that units tested in isolation work properly when put together.
+\item System testing – the emphasis is to ensure that the whole system can cope with real data, monitor system performance, test the system’s error handling and recovery.
+\item Regression Testing – checks that the system preserves its functionality after maintenance and/or evolution tasks.
+\item Acceptance Testing – checks if the overall system is functioning as required. It is usually performed by the end user on working application prototype.
+\end{itemize}
+
+The Play Framework comes with automated testing capabilities powered by the sbt build tool. Test classes are to be located in \emph{/test} directory and every method annotated with @Test will be included in the test run. The test can be run with "\emph{\$ activator test}" command or performed in the activator user interface.
+
+\begin{figure}[!ht]
+	\centering
+		\includegraphics[width=1\textwidth, totalheight=9cm]
+		{activator_test_run}
+	\caption{\textit{Activator test run}}
+	\label{f4.1.1}
+\end{figure}
+
+The Play Framework supports various test frameworks out of the box with the additional functionality of so called test helpers. Test helpers help to create mock instances of various Play components such as application, router or controller to make possible to test a component in isolation. Play comes with JUnit, WebDriver, ScalaTest support, but any testing framework can be used if needed.
+
+In my test suite, I will concentrate to unit test the application models and utilities with JUnit test tool and test the user interface with Selenium IDE. In the following sections I will document and discuss every found bug.
 
 %____________________________section____________________________
-\section{User Interface Tests}\label{5.2}
+\section{Unit Tests of Models}\label{5.2}
+
+\subsection{Hash}\label{5.2.1}
+
+\subsection{User}\label{5.2.2}
+
+\subsection{Token}\label{5.2.3}
 
 %____________________________section____________________________
-\section{Conclusion}\label{5.10}
+\section{Acceptance Tests}\label{5.3}
+
+%____________________________section____________________________
+\section{Conclusion}\label{5.4}
 //TODO
 
 

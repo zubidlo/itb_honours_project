@@ -40,7 +40,7 @@ public class Email extends Controller {
         User user = User.findByEmail(request().username());
         Form<AskForm> askForm = form(AskForm.class);
         askForm = askForm.fill(new AskForm(user.email));
-        return ok(email.render(User.findByEmail(request().username()), askForm));
+        return ok(email.render(user, askForm));
     }
 
     @Security.Authenticated(Secured.class)
@@ -53,21 +53,16 @@ public class Email extends Controller {
             return badRequest(email.render(user, askForm));
         }
 
-        try {
-            String mail = askForm.get().email;
-            Token t = new Token();
-            t.sendMailChangeMail(user, mail,mailerClient);
-            flash("success", Messages.get("changemail.mailsent"));
-            return ok(email.render(user, askForm));
-        } catch (MalformedURLException e) {
-            Logger.error("Cannot validate URL", e);
-            flash("error", Messages.get("error.technical"));
-        }
-        return badRequest(email.render(user, askForm));
+        String mail = askForm.get().email;
+        Token t = new Token();
+        t.sendMailChangeMail(user, mail,mailerClient);
+        flash("success", Messages.get("changemail.mailsent"));
+        return ok(email.render(user, askForm));
     }
 
     @Security.Authenticated(Secured.class)
     public Result validateEmail(String token) {
+    	
         User user = User.findByEmail(request().username());
 
         if (token == null) {
@@ -89,11 +84,8 @@ public class Email extends Controller {
 
         user.email = resetToken.email;
         user.save();
-
         session("email", resetToken.email);
-
         flash("success", Messages.get("account.settings.email.successful", user.email));
-
         return ok(emailValidate.render(user));
     }
 }

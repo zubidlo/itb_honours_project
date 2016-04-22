@@ -52,23 +52,24 @@ public class User extends Model {
 
     //tested
     public static User findByEmail(String email) {
-        return FIND.where().eq("email", email).findUnique();
+        return email == null ? null : FIND.where().eq("email", email).findUnique();
     }
 
     //tested
     public static User findByConfirmationToken(String token) {
-        return FIND.where().eq("confirmationToken", token).findUnique();
+        return token == null ? null : FIND.where().eq("confirmationToken", token).findUnique();
     }
 
     //tested
     public static User authenticate(String email, String passw) {
+    	if (email == null || passw == null) return null;
         User user = findByEmail(email);
         if (user != null && Hash.checkPassword(passw, user.passwordHash)) return user;
         return null;
     }
 
     //tested
-    public void changePassword(String password) throws AppException {
+    public void changePassword(String password) throws AppException{
         passwordHash = Hash.createPassword(password);
         save();
     }

@@ -33,7 +33,7 @@ public class Token extends Model {
         email("email");
         private String urlPath;
 
-        TypeToken(String path) {
+        private TypeToken(String path) {
             urlPath = path;
         }
     }
@@ -65,6 +65,15 @@ public class Token extends Model {
     public boolean isExpired() {
         return dateCreation != null && dateCreation.before(expirationTime());
     }
+    
+    public Token() {}
+    
+    public Token(String t, Long uid, TypeToken tt, String e) {
+    	token = t;
+    	userId = uid;
+    	type = tt;
+    	email = e;
+    }
 
     private Date expirationTime() {
         Calendar cal = Calendar.getInstance();
@@ -72,29 +81,24 @@ public class Token extends Model {
         return cal.getTime();
     }
 
-    public void sendMailResetPassword(User user, MailerClient mc) throws MalformedURLException {
+    public void sendMailResetPassword(User user, MailerClient mc) {
         sendMail(user, TypeToken.password, null, mc);
     }
 
-    public void sendMailChangeMail(User user, @Nullable String email,MailerClient mc) throws MalformedURLException {
-        sendMail(user, TypeToken.email, email,mc );
+    public void sendMailChangeMail(User user, @Nullable String email,MailerClient mc){
+        sendMail(user, TypeToken.email, email, mc );
     }
 
-    private void sendMail(User user, TypeToken type, String email, MailerClient mc) throws MalformedURLException {
+    private void sendMail(User user, TypeToken type, String email, MailerClient mc) {
 
-        Token token = new Token();
-        token.token = UUID.randomUUID().toString();
-        token.userId = user.id;
-        token.type = type;
-        token.email = email;
-        token.save();
-        String externalServer = Configuration.root().getString("server.hostname");
+    	String token = UUID.randomUUID().toString();
+        new Token(token, user.id, type, email).save();
+        
+        String urlString = "http://" + Configuration.root().getString("server.hostname") + "/" + type.urlPath + "/" + token;
         String subject = null;
         String message = null;
         String toMail = null;
-
-        String urlString = "http://" + externalServer + "/" + type.urlPath + "/" + token.token;
-        
+           
         switch (type) {
             case password:
                 subject = Messages.get("mail.reset.ask.subject");
@@ -104,7 +108,7 @@ public class Token extends Model {
             case email:
                 subject = Messages.get("mail.change.ask.subject");
                 message = Messages.get("mail.change.ask.message", urlString);
-                toMail = token.email;
+                toMail = email;
         }
 
         Mail.Envelope envelope = new Mail.Envelope(subject, message, toMail);
