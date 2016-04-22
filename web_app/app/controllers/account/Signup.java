@@ -34,7 +34,7 @@ public class Signup extends Controller {
         return ok(create.render(form(Application.Register.class)));
     }
 
-    public Result save() {
+    public Result save() throws AppException {
         Form<Application.Register> registerForm = form(Application.Register.class).bindFromRequest();
 
         if (registerForm.hasErrors()) {
@@ -42,57 +42,26 @@ public class Signup extends Controller {
         }
 
         Application.Register register = registerForm.get();
-        Result resultError = checkBeforeSave(registerForm, register.email);
-
-        if (resultError != null) {
-            return resultError;
-        }
-
-        try {
-            User user = new User();
-            user.email = register.email;
-            user.fullname = register.fullname;
-            user.passwordHash = Hash.createPassword(register.inputPassword);
-            user.confirmationToken = UUID.randomUUID().toString();
-
-            user.save();
-            sendMailAskForConfirmation(user);
-
-            return ok(created.render());
-        } catch (EmailException e) {
-            Logger.debug("Signup.save Cannot send email", e);
-            flash("error", Messages.get("error.sending.email"));
-        } catch (Exception e) {
-            Logger.error("Signup.save error", e);
-            flash("error", Messages.get("error.technical"));
-        }
-        return badRequest(create.render(registerForm));
-    }
-
-    private Result checkBeforeSave(Form<Application.Register> registerForm, String email) {
-        if (User.findByEmail(email) != null) {
+                
+        if (User.findByEmail(register.email) != null) {
             flash("error", Messages.get("error.email.already.exist"));
             return badRequest(create.render(registerForm));
         }
 
-        return null;
-    }
-
-    private void sendMailAskForConfirmation(User user) throws EmailException, MalformedURLException {
+        User user = new User(register.email, register.fullname, Hash.createPassword(register.inputPassword), UUID.randomUUID().toString());
+        user.save();
         String subject = Messages.get("mail.confirm.subject");
-
-        String urlString = "http://" + Configuration.root().getString("server.hostname");
-        urlString += "/confirm/" + user.confirmationToken;
-        URL url = new URL(urlString);
-        String message = Messages.get("mail.confirm.message", url.toString());
-
+        String urlString = "http://" + Configuration.root().getString("server.hostname") + "/confirm/" + user.confirmationToken;
+        String message = Messages.get("mail.confirm.message", urlString);
         Mail.Envelope envelope = new Mail.Envelope(subject, message, user.email);
         Mail mailer = new Mail(mailerClient);
         mailer.sendMail(envelope);
+        return ok(created.render());
     }
 
     public Result confirm(String token) {
         User user = User.findByConfirmationToken(token);
+        
         if (user == null) {
             flash("error", Messages.get("error.unknown.email"));
             return badRequest(confirm.render());
@@ -103,31 +72,15 @@ public class Signup extends Controller {
             return badRequest(confirm.render());
         }
 
-        try {
-            if (User.confirm(user)) {
-                sendMailConfirmation(user);
-                flash("success", Messages.get("account.successfully.validated"));
-                return ok(confirm.render());
-            } else {
-                Logger.debug("Signup.confirm cannot confirm user");
-                flash("error", Messages.get("error.confirm"));
-                return badRequest(confirm.render());
-            }
-        } catch (AppException e) {
-            Logger.error("Cannot signup", e);
-            flash("error", Messages.get("error.technical"));
-        } catch (EmailException e) {
-            Logger.debug("Cannot send email", e);
-            flash("error", Messages.get("error.sending.confirm.email"));
-        }
-        return badRequest(confirm.render());
-    }
-
-    private void sendMailConfirmation(User user) throws EmailException {
+     	user.confirmationToken = null;
+        user.validated = true;
+        user.save();
         String subject = Messages.get("mail.welcome.subject");
         String message = Messages.get("mail.welcome.message");
         Mail.Envelope envelope = new Mail.Envelope(subject, message, user.email);
         Mail mailer = new Mail(mailerClient);
         mailer.sendMail(envelope);
+        flash("success", Messages.get("account.successfully.validated"));
+        return ok(confirm.render());
     }
 }
