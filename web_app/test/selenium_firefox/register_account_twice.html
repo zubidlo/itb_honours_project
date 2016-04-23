@@ -4,12 +4,12 @@
 <head profile="http://selenium-ide.openqa.org/profiles/test-case">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <link rel="selenium.base" href="http://localhost:9000/" />
-<title>login_bad_email</title>
+<title>register_twice</title>
 </head>
 <body>
 <table cellpadding="1" cellspacing="1" border="1">
 <thead>
-<tr><td rowspan="1" colspan="3">login_bad_email</td></tr>
+<tr><td rowspan="1" colspan="3">register_twice</td></tr>
 </thead><tbody>
 <tr>
 	<td>open</td>
@@ -18,43 +18,53 @@
 </tr>
 <tr>
 	<td>type</td>
-	<td>id=email</td>
-	<td>fsdfds@fdfdsf.com</td>
+	<td>xpath=(//input[@id='email'])[2]</td>
+	<td>zubidlo@gmail.com</td>
 </tr>
 <tr>
 	<td>type</td>
-	<td>id=password</td>
-	<td>fdsfdsfds</td>
+	<td>id=inputPassword</td>
+	<td>Rapidshare1</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=fullname</td>
+	<td>Martin Zuber</td>
 </tr>
 <tr>
 	<td>clickAndWait</td>
-	<td>css=input.btn.btn-primary</td>
+	<td>//input[@value='Sign Up']</td>
 	<td></td>
-</tr>
-<tr>
-	<td>assertText</td>
-	<td>css=span.label.label-danger</td>
-	<td>Invalid user or password</td>
-</tr>
-<tr>
-	<td>type</td>
-	<td>id=password</td>
-	<td>fdsfdsfsdfd</td>
-</tr>
-<tr>
-	<td>type</td>
-	<td>id=email</td>
-	<td>sdfsdfds@fdfds.com</td>
 </tr>
 <tr>
 	<td>clickAndWait</td>
-	<td>css=input.btn.btn-primary</td>
+	<td>link=Go Back</td>
 	<td></td>
 </tr>
 <tr>
-	<td>assertText</td>
-	<td>css=span.label.label-danger</td>
-	<td>Invalid user or password</td>
+	<td>type</td>
+	<td>xpath=(//input[@id='email'])[2]</td>
+	<td>zubidlo@gmail.com</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=inputPassword</td>
+	<td>Rapidshare1</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=fullname</td>
+	<td>Martin Zuber</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=inputPassword</td>
+	<td>Rapidshare2</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>//input[@value='Sign Up']</td>
+	<td></td>
 </tr>
 </tbody></table>
 </body>
