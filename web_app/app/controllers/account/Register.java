@@ -15,10 +15,7 @@ import play.mvc.Result;
 import play.libs.mailer.MailerClient;
 
 import javax.inject.Inject;
-
-import views.html.account.signup.confirm;
-import views.html.account.signup.create;
-import views.html.account.signup.created;
+import views.html.account.register.*;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -26,26 +23,26 @@ import java.util.UUID;
 
 import static play.data.Form.form;
 
-public class Signup extends Controller {
+public class Register extends Controller {
     @Inject
     MailerClient mailerClient;
 
-    public Result create() {
-        return ok(create.render(form(Application.Register.class)));
+    public Result index() {
+        return ok(index.render(form(Application.Register.class)));
     }
 
     public Result save() throws AppException {
         Form<Application.Register> registerForm = form(Application.Register.class).bindFromRequest();
 
         if (registerForm.hasErrors()) {
-            return badRequest(create.render(registerForm));
+            return badRequest(index.render(registerForm));
         }
 
         Application.Register register = registerForm.get();
                 
         if (User.findByEmail(register.email) != null) {
             flash("error", Messages.get("error.email.already.exist"));
-            return badRequest(create.render(registerForm));
+            return badRequest(index.render(registerForm));
         }
 
         User user = new User(register.email, register.fullname, Hash.createPassword(register.inputPassword), UUID.randomUUID().toString());
@@ -56,7 +53,7 @@ public class Signup extends Controller {
         Mail.Envelope envelope = new Mail.Envelope(subject, message, user.email);
         Mail mailer = new Mail(mailerClient);
         mailer.sendMail(envelope);
-        return ok(created.render());
+        return ok(registered.render());
     }
 
     public Result confirm(String token) {

@@ -1,4 +1,4 @@
-@(signupForm: Form[Application.Register], loginForm: Form[Application.Login])
+@(registerForm: Form[Application.Register], loginForm: Form[Application.Login])
 
 @layout(null) {
 
@@ -9,6 +9,6 @@
     </div>
 
     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-6 col-lg-offset-3 col-md-offset-2 col-sm-offset-1 col-xs-offset-0">
-      @views.html.account.signup.createFormOnly(signupForm)
+      @views.html.account.register.createFormOnly(registerForm)
     </div>
 }
