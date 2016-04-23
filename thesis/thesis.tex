@@ -1425,10 +1425,16 @@ clicks register. The page will redirect to the account registered page which wil
 
 %____________________________section____________________________
 \section{Conclusion}\label{5.4}
-//TODO
 
+In the test phase I applied following test strategies:
+\begin{enumerate} \item Unit tests of the models.
+\item User Interface acceptance tests.
+\end{enumerate}
+Even though Play application supports the test of the whole application stack, I left out the testing of view rendering and controllers. The reason was that I could not make supplied test helpers work. Tutorials referring to the Play 2.2 version does not reflect the 2.5 version of the testing framework.
 
+I found various bugs in the application, especially in the user interface which have inconsistent behaviour, not in compliance with the application specifications. After each bug fix, the regression tests were performed not the re-factored code.
 
+In conclusion, the Play Framework has rich support for testing the web applications with some migration issues.
 
 
 
