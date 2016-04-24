@@ -1671,7 +1671,7 @@ val add = (a: Int, b: Int) => a + b
 
 The compiler will \emph{infer} that \emph{add} can only return \emph{Int} value. In a specific cases we will be able to omit the arguments types as well and just write: \emph{add = (a, b) => a + b}. This form of function description is called a \emph{lambda expression}. It is basically an anonymous function, a function without name. We can read \emph{val add = (a: Int, b: Int) => a + b} as: \emph{Immutable value add is anonymous function which takes a,b and returns a + b.}
 
-\textbf{Notice:}
+\textbf{Note:}
 \begin{lstlisting}
 In Scala and functional programming languages in general, functions are values. The same way the objects are values. We can assign functions to variables, pass them as arguments to other functions, create them inside the functions and return them as results of function computations. 
 \end{lstlisting}
@@ -1728,11 +1728,123 @@ i: Int = 1
 
 The \emph{stringToInt} is only defined for domain: \emph{{"1", "2", "3"}} and for any other value it would throw \emph{scala.NotImplementedError: an implementation is missing} error.
 
-\textbf{Notice:}
+\textbf{Note:}
 \begin{lstlisting}
 Any function can be defined as a table lookup. We can think of common data structures as partial functions as well. Map ("1" => 1, "2" => 2, "3" => 3) is the same partial function as `stringToInt` and in Scala every Map inherits the PartialFunction trait. Every Scala Map is a function from its keys to its values. If fact, Many Scala data structures are partial functions.
 \end{lstlisting}
 
+
+%_______________________________________________________________________
+\section{Higher Order Functions.}\label{6.5}
+\begin{lstlisting}
+In this section, I will continue to talk about functions, especially the
+higher order functions.
+\end{lstlisting}
+
+\subsection{Tail Recursion and Inner Function}\label{6.5.1}
+
+We already saw how to sum the list of numbers with a recursive function:
+\begin{lstlisting}[language=python]
+def sumOfNumbers(numbers: List[Int]): Int = numbers match {
+  case Nil => 0
+  case head :: tail => head + sumOfNumbers(tail)
+}
+\end{lstlisting}
+
+And we saw how this function application will sum the numbers by building the call stack. But this function has a flow. The calls stack in Java Virtual Machine is not infinite. If we apply \emph{sumOfNumbers} to a very long list, our program will crash with \emph{java. Lang. StackOverflowError}:
+\begin{lstlisting}[language=python]
+var numbers = Range(1,10000).toList  
+val sum = sumOfNumbers(numbers)
+ 
+//Result:
+java.lang.StackOverflowError
+at scala.collection.immutable.Nil$.equals(List.scala:424)...
+\end{lstlisting}
+
+The reason for this is that recursive call is not in \textbf{tail position} meaning that when \emph{head + sumOfNumbers (tail)} is evaluated, it first applies \emph{sumOfNumbers (tail)} for each subsequent call and then adds heads. Therefore, each call stack frame must be maintained because it stores each \emph{head}. When all the recursive calls are done, only then the stack is folded and all the heads are added. There is a way around this call stack build-up by designing a recursive function differently.
+\begin{lstlisting}[language=python]
+def sumOfNumbers(numbers: List[Int]): BigInt = {
+    def loop(accumulator: BigInt, numbers: List[Int]): BigInt = numbers match {
+        case Nil => accumulator
+        case head :: tail => loop(accumulator + head, tail)
+    }
+    loop(0, numbers)
+}
+  
+var numbers = Range(1,10000).toList
+val sum = sumOfNumbers(Range(1,10000).toList)
+
+//Result:
+sumOfNumbers: (numbers: List[Int])BigInt
+numbers  : List[Int] = List(1, 2, 3...
+sum: BigInt = 49995000
+\end{lstlisting}
+
+The \emph{sumOfNumbers} function application will in effect build following call stack:
+\begin{lstlisting}[language=python]
+(loop(0, List(1,2,3,4...))
+(loop(0 + 1, List(2,3,4...))
+(loop(1 + 2, List(3,4...))
+(loop(3 + 3, List(4...))
+...
+(loop(accumulator + 10000, Nil)
+\end{lstlisting}
+
+The last call will return the \emph{accumulator} which will be already calculated as 49995000. Notice there is no stack build up and each function application differs on by its arguments. This fact can be used in the optimization technique called \textbf{tail call elimination} and a clever compiler can evaluate this kind of function application with just a one stack frame. Scala supports this type of optimizations. You can even mark your recursive function with \emph{@tailrec} annotation and the function will not compile until is not tail recursive.
+
+\textbf{Note:}
+\begin{lstlisting}
+The point of this exercise was to demonstrate that loop function is defined inside sumOfNumbers function. This is common practice in functional programming languages. Functions are first class values and to define an inner function is nothing stranger than to define a new variable inside a function.
+\end{lstlisting}
+
+\subsection{Functions as arguments}\label{6.5.2}
+
+The higher order function is defined as any function which:
+\begin{enumerate}\itemsep1pt \parskip0pt \parsep0pt
+\item takes one or more functions as arguments
+\item returns a function as its result
+\end{enumerate}
+
+The simplest possible example of a function which takes a function as an argument would be:
+\begin{lstlisting}[language=python]
+def apply(a: Int, function: Int => Int): Int = function(a)
+val result = apply(5, a => a * a)
+
+//Result:
+apply: (a: Int, function: Int => Int)Int
+result: Int = 25
+\end{lstlisting}
+The \emph{apply} function \emph{(Int, Int => Int) => Int} takes an \emph{Int} and function \emph{Int => Int} and returns an \emph{Int}. In our case the function just applies the \emph{Int} argument to \emph{Int => Int} function. Think of it as a delegation. Give me an integer and a function which takes an integer and I will apply that integer to given function.
+With \emph{apply(5, a => a * a)} we applied 5 to the anonymous function \emph{a => a * a} which just multiplies the argument \emph{a} by itself.
+
+\subsection{Functions as results}\label{6.5.3}
+
+Let's define function \emph{adder}:
+\begin{lstlisting}[language=python]
+def adder(a: Int): Int => Int = b => b + a
+val addOne = adder(1)
+val addFive = adder(5)
+
+val eleven = addOne(10) + addFive(10)
+
+//Result:
+adder: (a: Int)Int => Int
+addOne: Int => Int = <function1>
+addFive: Int => Int = <function1>
+eleven: Int = 26
+\end{lstlisting}
+
+\begin{enumerate}\itemsep1pt \parskip0pt \parsep0pt
+\item \emph{adder} is a function \emph{Int => (Int => Int)} which takes an \emph{Int} and returns a function \emph{Int => Int}
+\item \emph{addOne} is a function \emph{Int => Int} which takes \emph{adder} function applied to 1 and returns a function \emph{b => b + 1}
+\item \emph{addFive} is a function \emph{Int => Int} which takes \emph{adder} function applied to 5 and returns a function \emph{b => b + 5}
+\item \emph{eleven} is the result value of \emph{addOne(10) + addFive(10)} and equals 11 + 15, hence 26
+\end{enumerate}
+
+\textbf{Note:}
+\begin{lstlisting}
+The higher order function is a very powerful concept, which allows us to construct elegant programs using function compositions. There are whole libraries of predefined higher order functions in every functional programming language. For example Clojure programming language comes with around 500 predefined functions in its core library. Scala comes with rich interfaces full of useful higher order functions as well. I will show some examples of functions defined on sequences in the next section.
+\end{lstlisting}
 
 
 

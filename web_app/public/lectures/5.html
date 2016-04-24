@@ -1,0 +1,85 @@
+<blockquote>
+<p>In the last section, I discussed functions with more detail. I defined what is a pure function and how it can be defined in Scala programming language. I described partial and total functions and various ways to think about functions. I also explained that functions are first class values.</p>
+</blockquote>
+<blockquote>
+<p>In this section, I will continue to talk about functions, especially the higher order functions.</p>
+</blockquote>
+<h3 id="higher-order-functions.">Higher Order Functions.</h3>
+<hr />
+<h4 id="tail-recursion-and-inner-function">Tail Recursion and Inner Function</h4>
+<p>We already saw how to sum the list of numbers with a recursive function:</p>
+<pre><code class="sourceCode scala">
+def sumOfNumbers(numbers: List[Int]): Int = numbers match {<br>
+  case Nil =&gt; 0<br>
+  case head :: tail =&gt; head + sumOfNumbers(tail)<br>
+}<br>
+</code></pre>
+<p>And we saw how this function application will sum the numbers by building the call stack. But this function has a flow. The calls stack in Java Virtual Machine is not infinite. If we apply <code>sumOfNumbers</code> to a very long list, our program will crash with <code>java. Lang. StackOverflowError</code>:</p>
+<pre><code class="sourceCode scala">
+val numbers = Range(1,10000).toList<br>
+val sum = sumOfNumbers(numbers)<br>
+<br>
+//Result:<br>
+java.lang.StackOverflowError at scala.collection.immutable.Nil$.equals(List.scala:424)...<br>
+</code></pre>
+The reason for this is that recursive call is not in **tail position** meaning that when `head + sumOfNumbers (tail)` is evaluated, it first applies `sumOfNumbers (tail)` for each subsequent call and then adds heads. Therefore, each call stack frame must be maintained because it stores each `head`. When all the recursive calls are done, only then the stack is folded and all the heads are added. There is a way around this call stack build-up by designing a recursive function differently.
+<pre><code class="sourceCode scala">
+def sumOfNumbers(numbers: List[Int]): BigInt = {<br>
+  def loop(accumulator: BigInt, numbers: List[Int]): BigInt = numbers match {<br>
+    case Nil =&gt; accumulator<br>
+    case head :: tail =&gt; loop(accumulator + head, tail)<br>
+  }<br>
+  loop(0, numbers)<br>
+}<br>
+var numbers = Range(1,10000).toList<br>
+val sum = sumOfNumbers(Range(1,10000).toList)<br>
+<br>
+//Result:<br>
+sumOfNumbers: (numbers: List[Int])BigInt<br>
+numbers : List[Int] = List(1, 2, 3...<br>
+sum: BigInt = 49995000<br>
+</code></pre>
+<p>The <code>sumOfNumbers</code> function application will in effect build following call stack:</p>
+<pre><code class="sourceCode scala">
+(<span class="fu">loop</span>(<span class="dv">0</span>, List(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>...))<br>
+(<span class="fu">loop</span>(<span class="dv">0</span> + <span class="dv">1</span>, List(<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>...))<br>
+(<span class="fu">loop</span>(<span class="dv">1</span> + <span class="dv">2</span>, List(<span class="dv">3</span>,<span class="dv">4</span>...))<br>
+(<span class="fu">loop</span>(<span class="dv">3</span> + <span class="dv">3</span>, List(<span class="dv">4</span>...))<br>
+...<br>
+(<span class="fu">loop</span>(accumulator + <span class="dv">10000</span>, Nil)<br></code></pre>
+<p>The last call will return the <code>accumulator</code> which will be already calculated as 49995000. Notice there is no stack build up and each function application differs on by its arguments. This fact can be used in the optimization technique called <strong>tail call elimination</strong> and a clever compiler can evaluate this kind of function application with just a one stack frame. Scala supports this type of optimizations. You can even mark your recursive function with '<span class="citation">@tailrec</span>' annotation and the function will not compile until is not tail recursive.</p>
+<p><strong>Note:</strong> &gt; The point of this exercise was to demonstrate that <code>loop</code> function is defined inside <code>sumOfNumbers</code> function. This is common practice in functional programming languages. Functions are first class values and to define an inner function is nothing stranger than to define a new variable inside a function.</p>
+<h4 id="functions-as-arguments">Functions as arguments</h4>
+<p>The higher order function is defined as any function which: - takes one or more functions as arguments - returns a function as its result</p>
+<p>The simplest possible example of a function which takes a function as an argument would be:</p>
+<pre class="sourceCode scala"><code class="sourceCode scala">
+<span class="kw">def</span> <span class="fu">apply</span>(a: Int, function: Int =&gt; Int): Int = <span class="fu">function</span>(a)<br>
+<span class="kw">val</span> result = <span class="fu">apply</span>(<span class="dv">5</span>, a =&gt; a * a)<br>
+<br>
+<span class="co">//Result:</span><br>
+apply: (a: Int, function: Int =&gt; Int)Int<br>
+result: Int = <span class="dv">25</span><br>
+</code></pre>
+<p>The <code>apply</code> function <code>(Int, Int =&gt; Int) =&gt; Int</code> takes an <code>Int</code> and function <code>Int =&gt; Int</code> and returns an <code>Int</code>. In our case the function just applies the <code>Int</code> argument to <code>Int =&gt; Int</code> function. Think of it as a delegation. Give me an integer and a function which takes an integer and I will apply that integer to given function. With <code>apply(5, a =&gt; a * a)</code> we applied 5 to the anonymous function <code>a =&gt; a * a</code> which just multiplies the argument <code>a</code> by itself.</p>
+<h4 id="functions-as-results">Functions as results</h4>
+<p>Let's define function <code>adder</code>:</p>
+<pre class="sourceCode scala"><code class="sourceCode scala">
+<span class="kw">def</span> <span class="fu">adder</span>(a: Int): Int =&gt; Int = b =&gt; b + a<br>
+<span class="kw">val</span> addOne = <span class="fu">adder</span>(<span class="dv">1</span>)<br>
+<span class="kw">val</span> addFive = <span class="fu">adder</span>(<span class="dv">5</span>)<br>
+<br>
+<span class="kw">val</span> eleven = <span class="fu">addOne</span>(<span class="dv">10</span>) + <span class="fu">addFive</span>(<span class="dv">10</span>)<br>
+<br>
+<span class="co">//Result:</span><br>
+adder: (a: Int)Int =&gt; Int<br>
+addOne: Int =&gt; Int = &lt;function1&gt;<br>
+addFive: Int =&gt; Int = &lt;function1&gt;<br>
+eleven: Int = <span class="dv">26</span><br>
+</code></pre>
+<ul>
+<li><code>adder</code> is a function <code>Int =&gt; (Int =&gt; Int)</code> which takes an <code>Int</code> and returns a function <code>Int =&gt; Int</code></li>
+<li><code>addOne</code> is a function <code>Int =&gt; Int</code> which takes <code>adder</code> function applied to 1 and returns a function <code>b =&gt; b + 1</code></li>
+<li><code>addFive</code> is a function <code>Int =&gt; Int</code> which takes <code>adder</code> function applied to 5 and returns a function <code>b =&gt; b + 5</code></li>
+<li><code>eleven</code> is the result value of <code>addOne(10) + addFive(10)</code> and equals 11 + 15, hence 26</li>
+</ul>
+<p><strong>Note:</strong> &gt; The higher order function is a very powerful concept, which allows us to construct elegant programs using function compositions. There are whole libraries of predefined higher order functions in every functional programming language. For example <code>Clojure</code> programming language comes with around 500 predefined functions in its core library. Scala comes with rich interfaces full of useful higher order functions as well. I will show some examples of functions defined on sequences in the next section.</p>
