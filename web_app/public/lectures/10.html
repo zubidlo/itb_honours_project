@@ -1,0 +1,55 @@
+<blockquote>
+	<p>In the last section, I made a suggestion that there is a way to have fun while creating a software. I claimed that functional programming gives us a better way to design a software and reason about it.</p>
+	<p>In the following sections, I will discuss functions, the building blocks of functional programs. We first must understand a what functions are, what characteristics they have, the rules they follow and how to work with them in the Scala programming language.</p>
+</blockquote>
+<br>
+<h3 id="functions-everywhere-1---pure-functions">Functions Everywhere 1 - Pure Functions</h3>
+<hr>
+<p>Well, functional programming is a programming style where programs are constructed using only <strong>pure functions</strong>. What are these pure functions you may ask?</p>
+<p>Well, pure function is any function with following properties:</p>
+<ol style="list-style-type: decimal">
+<li><p>The function <strong>always</strong> evaluates to the same result given the same argument. The word always is emphasized here. The pure function can return the same result for different arguments, but it can never return different results for the same argument.</p></li>
+<li><p>Evaluation of the result does not cause any semantically observable <strong>side effect</strong>. Well, what are these side effects then? In Computer Science, a function or expression is said to have a side effect if it modifies some state or has an interaction with calling functions or the outside world. Basically, a function has a side effect if it does something else than returning a result. Some examples of side effects:</p>
+<ul>
+<li><p>Modifying a variable or a data structure in place</p></li>
+<li><p>Throwing an exception or halting with an error</p></li>
+<li><p>Writing to or reading from the console or a file</p></li>
+<li><p>Drawing on the screen, updating a database, printing on a printer</p></li>
+</ul></li>
+</ol>
+<br>
+<p><strong>Example:</strong> Common Pure and Impure Functions</p>
+<pre><code class="scala">
+sin(x)<br>
+length(list)<br>
+random(seed)<br>
+printf(string)<br>
+</code></pre>
+<p>Functions <code>sin(x)</code> and <code>length(list)</code> are pure functions because they always return the same result for the same argument and do nothing else. Funciton <code>sin(0)</code> returns always 0 and <code>length</code> of the same list is always the same result.</p>
+<p>Functions <code>random(seed)</code> and <code>printf(string)</code> are impure functions because <code>random(1)</code> will not always return the same result. It will return a random number from 0 to 1. Function <code>printf(string)</code> will print the string to the console and return no result. Even that is not guaranteed. Sometimes it can throw an exception if the console is not available for example. Impure functions are called <strong>procedures</strong> in computer science.</p>
+<p><strong>Example:</strong> Function definitions in Scala</p>
+<pre>
+	<code class="scala"><span class="kw">def</span> <span class="fu">add1</span>(a: Int, b: Int): Int = <span class="kw">return</span> a + b;<br><span class="kw">def</span> <span class="fu">add2</span>(a: Int, b: Int): Int = a + b<br><span class="kw">def</span> <span class="fu">add3</span>(a: Int, b: Int) = a + b<br><span class="kw">val</span> add4: (Int,Int) =&gt; Int = (a: Int, b: Int) =&gt; a + b<br><span class="kw">val</span> add5 = (a: Int, b: Int) =&gt; a + b<br><span class="kw">def</span> <span class="fu">add6</span>(a: Int)(b: Int) = a + b<br><span class="kw">val</span> add7 = Int =&gt; Int =&gt; Int = a =&gt; b =&gt; a + b<br>
+	</code>
+</pre>
+<ol style="list-style-type: decimal">
+<li><p>On line 1 is a function definition where I defined a function <code>add1</code> which takes two arguments of type <code>Int</code> and returns <code>Int</code> result which is just the addition of the arguments.</p></li>
+<li><p><code>add2</code> defines exactly same function without <code>return</code> word and <code>semicolon</code></p></li>
+<li><p><code>add3</code> is the same function with return type left out</p></li>
+<li><p>Line 5 is not a function definition statement, but assignment to an immutable value named <code>add4</code>. The value of an anonymous function described by <code>(a: Int, b: Int) =&gt; a + b</code> was assigned to the name <code>add4</code>. This form of function description is called a <strong>function literal</strong> or a <strong>lambda expression</strong>. It’s the same function with emphasis on it’s type: <code>(Int, Int) =&gt; Int</code>. It’s a type of a function which takes 2 <code>Int</code> arguments and returns <code>Int</code> result.</p></li>
+<li><p><code>add5</code> is again a value which holds a function literal. This time the type is omitted and the function is only expressed by the lambda expression.</p></li>
+<li><p><code>add6</code> is again the same function defined in a <strong>curried form</strong>, which we will discuss later.</p></li>
+<li><p><code>add7</code> is again the same function value, but with it’s type <code>Int =&gt; Int =&gt; Int</code> emphasizes the curried form and the fact that <strong>every function is a function which takes one argument and returns one result</strong>. We will discuss these ideas later as well.</p></li>
+</ol>
+<p>Here are the the function call statements where 4 and 5 were passed as arguments. All seven functions will return 9 as the result.</p>
+<pre>
+	<code class="scala"><span class="fu">add1</span>(<span class="dv">4</span>,<span class="dv">5</span>); <span class="fu">add2</span>(<span class="dv">4</span>,<span class="dv">5</span>); <span class="fu">add3</span>(<span class="dv">4</span>,<span class="dv">5</span>); <span class="fu">add4</span>(<span class="dv">4</span>,<span class="dv">5</span>); <span class="fu">add5</span>(<span class="dv">4</span>,<span class="dv">5</span>);<br><span class="fu">add6</span>(<span class="dv">4</span>)(<span class="dv">5</span>); <span class="fu">add7</span>(<span class="dv">4</span>)(<span class="dv">5</span>);</code>
+</pre>
+<p>Here are some important points to realize:</p>
+<ul>
+<li><p>All seven functions represent the same function which adds two Int values and returns the result.</p></li>
+<li><p>This function is a pure function because it always returns the same value 9 for the same arguments 4, 5 and doesn’t do any side effects.</p></li>
+<li><p>In Scala and functional programming in general, functions are values. The same way as objects are values. We can assign functions to variables, pass them as arguments to other functions, create them inside the functions and return them as results of function computations. Later we will see that as long as the functions are pure they hold other very useful characteristics we can utilize in our functional programs.</p></li>
+<li><p>The functions can be expressed as literals. The same way we can create anonymous objects or a string literal <code>“hello world”</code>, we can create a function literal in a form of a lambda expression.</p></li>
+</ul>
+<hr>

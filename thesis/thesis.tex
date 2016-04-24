@@ -1447,101 +1447,167 @@ In conclusion, the Play Framework has rich support for testing the web applicati
 
 %____________________________section____________________________
 \section{Introduction}\label{6.1}
-//TODO
+
+As a Computer Science student at ITB, I was introduced to computer
+programming through Java programming language. First, we learned the
+syntax of the language. Next, we have been introduced to the
+object-oriented approach to designing software and how to work with
+libraries such as Swing. Later in the third year, we learned the basics
+of concurrency and some design patterns for solving reoccurring
+problems.
+
+Around this time I crossed the initial steep part of the programming
+learning curve and I was comfortable enough with Java to learn some
+additional language features and Java Standard Edition platform
+libraries. Programming with Java became my hobby and I found a time to
+read additional material such as \emph{Thinking in Java} from Bruce Eckel or
+\emph{Effective Java} from Joshua Bloch.
+
+At the same time, Oracle introduced important update 8 to Java Standard
+Edition platform which, among other things introduced the syntax for
+anonymous functions (lambdas) and a number of libraries dedicated to
+functional programming style. I was interested in this new functionality
+and started to learn to implement it into my code. By playing with
+\emph{lambdas}, \emph{streams}, and \emph{optionals} I got really curious about the
+functional programming and wanted to learn more.
+
+Any student who tries to learn functional programming within JVM
+ecosystem will very soon become aware of \emph{Scala} programming language.
+The reason is that Scala has more richer support for functional
+programming than Java and hence is better suited as a vehicle for the
+study.
+
+The following material is an overview of what I learned about functional
+programming in the period of 2 semesters. I uses Scala syntax to
+communicate ideas with code.
 
 %____________________________section____________________________
-\section{Preface}\label{6.2}
-As a Computer Science student at ITB, I was introduced to computer programming through Java programming language. First, we learned the syntax of the language. Next, we have been introduced to the object-oriented approach to designing software and how to work with libraries such as Swing. Later in the third year, we learned the basics of concurrency and some design patterns for solving reoccurring problems. Around this time I crossed the initial steep part of the programming learning curve and I was comfortable enough with Java to learn some additional language features and Java Standard Edition platform libraries. Programming with Java became my hobby and I found a time to read additional material such as "Thinking in Java" from Bruce Eckel or "Effective Java" from Joshua Bloch.
+\section{Why Would You Read These?}\label{6.2}
 
-At the same time, Oracle introduced important update number 8 to Java platform which, among other things introduced the syntax for anonymous functions (lambdas) and a number of libraries dedicated to functional programming style, such as Stream API. I was interested in this new functionality and started to learn to implement these tools and ideas into my code. Playing with lambdas, streams, and optionals I started to realize the power and elegance behind and I got really curious about the theory behind the functional programming.
+\begin{lstlisting}
+In the last section, I tried to articulate my interest in functional programming and my reasons for working on this project.
 
-Any student trying to learn about functional programming within JVM ecosystem will very soon become aware of programming language called Scala. The reason is that Scala has by design more richer support for functional programming than Java and hence is better suited as a vehicle for the study. At some point of the study one will become familiar with other programming languages such as Haskell or ML. There are various reasons for this, main being that these language's syntax is designed to emphasize the functional programming ideas.
+In this section, I will try to give you a reader some reasons to continue to read these pages.
+\end{lstlisting}
 
-The following material is an overview of what I learned about functional programming in the period of 2 semesters in time dedicated to honors degree final project and my own spare time. I used Scala syntax to communicate ideas with code.
+In my experience, writing software is fun. For a while at least.
+
+Before I write a software, I think about the design. I would think how to represent data and how to manipulate them. Then I start to write the code and I'm excited. It's fun. I'm transforming my ideas into a working program!
+
+Very soon, though, I start to notice that not everything works well. I must handle exceptions, null checks and to deal with another problems not related to my design ideas. I find myself solving problems related to underlying computer and programming language.
+
+As the software grows it starts to resemble a monster. My beautiful design is scattered around null checks, buried inside nested try-catch blocks. Every time I add something new, the program breaks in five places. Everything seems to be connected, dependent. Complexity grows exponentially and my capability to reason about the program degrades. It's just so many things to keep in mind. It is not fun any more! It's rather hard and mundane.
+
+At that point, I'm ready to give up.
+
+Well, in imperative programming languages, the methods are too powerful with no constraints. They can do whatever they want. They can change objects in place, write to a file, put something on a screen. They are liars too. For example, consider some `write(file)` method. She says she will write to a file. But instead she could throw 4 different exceptions. There are methods which say they do something and return a
+result. But they can do something else in the process and hide that fact from the programmer.
+
+\emph{Metaphorically it is similar to a situation when one gets a powerful car which allows him to drive anywhere. The car can drive through fields for example. One could try to reach a destination by driving straight line path. It looks like a great idea in the beginning until one ends up in a ditch with no way out.}
+
+\subsection{Is there an alternative?}\label{6.2.1}
+
+Functional Programming of course :-) !
+
+Functional programming is the programming with functions, not methods. Functions are much less powerful. They follow constraints. In exchange though, they have various very useful properties which make reasoning
+about them straight forward. Functions do what they say they do and never lie. They don't throw exceptions or return nulls.
+
+Functions are associative, pluggable and composable, the same way the `Lego` blocks are. One can build a software by composing simple functions the same way as one would build a house from Lego blocks. The software complexity doesn't grow exponentially neither. Instead, a program is just a function composed of another functions. The capability to reason about the software stays constant.
+
+Also, the solution space is smaller. One just need to learn a few ideas and how to compose them together. There are design patterns in functional programming of course, but there is not 40 of them.
+
+\emph{It is like to have a car capable of driving on the roads only. One has much less power at the beginning, but one will safely reach the destination following the roads.}
+
+These methaphores were quoted from \emph{Functional Programming is Terrible} talk presented by Runar Bjarnason.
+
 
 %____________________________section____________________________
-\section{Something}\label{6.3}
+\section{What is Functional Programming?}\label{6.3}
+\begin{lstlisting}
+In the last section, I made a suggestion that there is a way to have fun while creating a software. I claimed that functional programming gives us a better way to design a software and reason about it.
 
-%____________________________section____________________________
-\section{Pure vs Impure Functions}\label{6.4}
-Well, functional programming is a programming style where programs are constructed using only \emph{pure functions}. What are these pure functions you may ask? 
+In the following sections, I will discuss the functional programming definition in comparison to imperative programming paradigm.
+\end{lstlisting}
 
-Well, pure function is any function with following properties:
+\subsection{Imperative Programming Paradigm}\label{6.3.1}
+
+Imperative programming uses statements that change the program's state. We construct programs with programming language commands and which describe how the program operates. Our programs basically tell the compiler (interpreter) how to accomplish desired results step by step.
+
+With the addition to statements, we use subroutines call procedures or functions to modularize imperative programs. Imperative programming with procedures is called \emph{procedural programming}. Procedures have no properties or restrictions defined, for example, they may or may not take arguments and may or may not return a result value. They may modify the state of the program or crash with an error.
+
+What imperative programs do:
 
 \begin{enumerate}\itemsep1pt \parskip0pt \parsep0pt
-\item The function \emph{always} evaluates to the same result given the same argument. The word always is emphasized here. The pure function can return the same result for different arguments, but it can never return different results for the same argument.
-\item Evaluation of the result does not cause any semantically observable \emph{side effect}. Well, what are these side effects then? In Computer Science, a function or expression is said to have a side effect if it modifies some state or has an interaction with calling functions or the outside world. Basically, a function has a side effect if it does something else than returning a result. Some examples of side effects:
-
-\begin{itemize}\itemsep1pt \parskip0pt \parsep0pt
-\item Modifying a variable or a data structure in place
-\item Throwing an exception or halting with an error
-\item Writing to or reading from the console or a file
-\item Drawing on the screen, updating a database, printing on a printer
-\end{itemize}
+\item They modify mutable variables with assignments.
+\item They use control structures such as loop, break, continue, if-else statements.
+\item They use procedures with no restrictions on their properties.
 \end{enumerate}
 
-\textbf{Example: Common Pure and Impure Functions}
+\textbf{Example:}
+\begin{lstlisting}[language=java]
+var numbers = List(1,2,3,4,5)
+var sum = 0
+do {
+    sum += numbers.head
+    numbers = numbers.tail
+  } while (numbers != Nil)
 
-\begin{lstlisting}
- sin(x)
- length(list)
- random(seed)
- printf(string)
+//Result:
+numbers: List[Int] = List()
+sum: Int = 15
 \end{lstlisting}
 
-Functions \emph{sin(x)} and \emph{length(list)} are pure functions because they always return the same result for the same argument and do nothing else. Function sin(0) is always 0 and length of the same list is always the same result.\par
-Functions \emph{random(seed)} and \emph{printf(string)} are impure functions because random(1) will not always return the same result. It will return a random number from 0 to 1. Function printf("hello world") will print the string literal to the console and return no result. Even that is not guaranteed. Sometimes it can throw an exception if the console is not available for example. Impure functions are called \emph{procedures} in computer science.
+In the example above the program calculates the sum of numbers from 1 to 5. Variables \emph{numbers} and \emph{sum} represent the mutable state which is modified in the \emph{do while loop} control structure. After the program executes the list \emph{numbers} is empty and \emph{sum} is 15.
 
-\textbf{Example: Function definitions in Scala}
+\subsection{Functional Programming Paradigm}\label{6.3.1}
 
-\begin{lstlisting}
-	def add1(a: Int, b: Int): Int = return a + b;
-	def add2(a: Int, b: Int): Int = a + b
-	def add3(a: Int, b: Int) = a + b
-	val add4: (Int,Int) => Int = (a: Int, b: Int) => a + b
-	val add5 = (a: Int, b: Int) => a + b
-	def add6(a: Int)(b: Int) = a + b
-	val add7 = Int => Int => Int = a => b => a + b
-\end{lstlisting}
+Functional programming is a programming style where the fundamental application is the application of pure functions to arguments. Functional programs are composed of functions.
+
+What functional programs do:
 
 \begin{enumerate}\itemsep1pt \parskip0pt \parsep0pt
-\item On line 1 is a function definition where I defined a function \emph{add1} which takes two arguments of type Int and returns Int result which is just the addition of the arguments.
-\item \emph{add2} defines exactly same function without \emph{return} word and \emph{semicolon}
-\item \emph{add3} is the same function with return type left out
-\item Line 5 is not a function definition statement, but assignment to an  
-immutable value named \emph{add4}. The value of an anonymous function described by \emph{(a: Int, b: Int) => a + b} was assigned to the name \emph{add4}. This form of function description is called a \emph{function literal} or a \emph{lambda expression}. It's the same function with emphasis on it's type: \emph{(Int, Int) => Int}. It's a type of a function which takes 2 Int arguments and returns Int result. 
-\item \emph{add5} is again a value which holds a function literal. This time the type is omitted and the function is only expressed by the lambda expression.
-\item \emph{add6} is again the same function defined in \emph{curried form}, which we will discuss later.
-\item \emph{add7} is again the same function value, but with it's type \emph{Int => Int => Int} emphasizes the curried form and the fact that every function is a function which takes one argument and returns one result. We will discuss these ideas later as well.
+\item They transform immutable values to other values.
+\item They use functions and function compositions as control structures.
+\item They use pure referentially transparent functions.
 \end{enumerate}
 
-Here are the the function call statements where 4 and 5 were passed as arguments. All seven functions will return 9 as the result. 
-\begin{lstlisting}
-	add1(4,5); add2(4,5); add3(4,5); add4(4,5);	add5(4,5); 
-	add6(4)(5);	add7(4)(5);
+\textbf{Example:}
+\begin{lstlisting}[language=java]
+var numbers = List(1,2,3,4,5)
+  
+def sumOfNumbers(numbers: List[Int]): Int = numbers match {
+  case Nil => 0
+  case head :: tail => head + sumOfNumbers(tail)
+}
+  
+val sum = sumOfNumbers(numbers)
+
+//Result:
+numbers: List[Int] = List(1, 2, 3, 4, 5)
+sumOfNumbers: (numbers: List[Int])Int
+sum: Int = 15
 \end{lstlisting}
 
-Here are some important points to realize:
+In the example above the program calculates the sum of numbers from 1 to 5 with the usage of pure function \emph{sumOfNumbers}. This is a function which takes a \emph{List[Int]} and returns \emph{Int}. The \emph{sumOfNumbers} is defined in terms of its argument \emph{List[Int]} as follows:
 
 \begin{itemize}\itemsep1pt \parskip0pt \parsep0pt
-\item All seven functions represent the same function which adds two Int values and returns the result.
-\item This function is a pure function because it always returns the same value 9 for the same arguments 4, 5 and doesn't do any side effects.
-\item In Scala and functional programming in general, functions are values. The same way as objects are values. We can assign functions to variables, pass them as arguments to other functions, create them inside the functions and return them as results of function computations. Later we will see that as long as the functions are pure they hold other very useful characteristics we can utilize in our functional programs.
-\item The functions can be expressed as literals. The same way we can create anonymous objects or a string literal "hello world", we can create a function literal in a form of a lambda expression.
+\item If the function receives empty list `Nil` it returns 0.
+\item If the function receives a list of one or more elements it adds the first  \emph{head} to the recursive call to itself with the new list \emph{tail}.  The \emph{tail} just original list without \emph{head}. Note that \emph{head :: Nil} would match list with one.
 \end{itemize}
 
-%____________________________section____________________________
-\section{Conclusion}\label{6.10}
-//TODO
+The function application \emph{sumOfNumbers(numbers)} will in effect build following call stack:
 
+\begin{lstlisting}[language=java]
+(1 + sumOfNumbers(List(2,3,4,5))
+(1 + (2 + sumOfNumbers(List(3,4,5)))
+(1 + (2 + (3 + sumOfNumbers(List(4,5))))
+(1 + (2 + (3 + sumOfNumbers(List(4,5))))
+(1 + (2 + (3 + (4 + sumOfNumbers(List(5)))))
+(1 + (2 + (3 + (4 + (5 + sumOfNumbers(Nil))))))
+(1 + (2 + (3 + (4 + (5 + 0)))))
+\end{lstlisting}
 
-
-
-
-
-
-
-
+And when it folds it returns 15. Notice that we did not define any mutable variables anywhere in the program. Everything is immutable value \emph{val} and cannot be changed. All we do is to transform a list of numbers to its sum without changing anything.
 
 
 %_______________________________chapter_______________________________________

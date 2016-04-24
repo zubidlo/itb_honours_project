@@ -2,17 +2,17 @@
 <p>In the last section, I tried to articulate my interest in functional programming and my reasons for working on this project.</p>
 <p>In this section, I will try to give you a reader some reasons to continue to read these pages.</p>
 </blockquote>
-<h3 id="why-would-i-read-these">Why Would I Read These?</h3>
+<h3 id="why-would-i-read-these">Why Would You Read These?</h3>
 <hr>
 <p>In my experience, writing software is fun. For a while at least.</p>
 <p>Before I write a software, I think about the design. I would think how to represent data and how to manipulate them. Then I start to write the code and I'm excited. It's fun. I'm transforming my ideas into a working program!</p>
 <p>Very soon, though, I start to notice that not everything works well. I must handle exceptions, null checks and to deal with another problems not related to my design ideas. I find myself solving problems related to underlying computer and programming language.</p>
-<p>As the software grows it starts to reseble a monster. My beutiful design is scattered around null checks, buried inside nested try-catch blocks. Every time I add something new, the program breaks in five places. Everything seems to be connected, dependent. Complexity grows exponentially and my capability to reason about the program degrades. It's just so many things to keep in mind. It is not fun anymore! It's rather hard and mundane.</p>
+<p>As the software grows it starts to resemble a monster. My beautiful design is scattered around null checks, buried inside nested try-catch blocks. Every time I add something new, the program breaks in five places. Everything seems to be connected, dependent. Complexity grows exponentially and my capability to reason about the program degrades. It's just so many things to keep in mind. It is not fun any more! It's rather hard and mundane.</p>
 <p>At that point, I'm ready to give up.</p>
 <br>
 <h4 id="why-this-happened">Why is this happening?</h4>
 <hr>
-<p>Well, in imperative programming languages, the methods are too powerful with no constraints. They can do whatever they want. They can change objects in place, write to a file, put something on a screen. They are liers too. For example, consider some <code>write(file)</code> method. She says she will write to a file. But instead she could throw 4 different exceptions. There are methods which say they do something and return a result. But they can do something else in the process and hide that fact from the programmer.</p>
+<p>Well, in imperative programming languages, the methods are too powerful with no constraints. They can do whatever they want. They can change objects in place, write to a file, put something on a screen. They are liars too. For example, consider some <code>write(file)</code> method. She says she will write to a file. But instead she could throw 4 different exceptions. There are methods which say they do something and return a result. But they can do something else in the process and hide that fact from the programmer.</p>
 <blockquote>
 <p>Metaphorically it is similar to a situation when one gets a powerful car which allows him to drive anywhere. The car can drive through fields for example. One could try to reach a destination by driving straight line path. It looks like a great idea in the beginning until one ends up in a ditch with no way out.</p>
 </blockquote>
