@@ -46,17 +46,17 @@ s: String = <span class="dv">123</span><br></code></pre>
 <li>The <code>Int</code> and <code>String</code> are <strong>types</strong> and represent sets of values.</li>
 <li>The type <code>Int</code> is a <strong>domain</strong> of <code>intToString</code> function.</li>
 <li>The type <code>String</code> is a <strong>codomain</strong> of <code>intToString</code> function.</li>
-<li>The <code>intToString</code> is <strong>total function</strong> because it is defined for every value from its domain. In other words <code>intToString</code> will return a value for any possible value of <code>Int</code></li>
+<li>The <code>intToString</code> is <strong>total function</strong> because it is defined for every value from its domain. In other words <code>intToString</code> will return a value for any possible value of type <code>Int</code></li>
 </ul>
-<p>Consider</p>
+<p>Consider:</p>
 <pre class="sourceCode scala"><code class="sourceCode scala"><span class="kw">val</span> stringToInt: String =&gt; Int = s =&gt; s.<span class="fu">toInt</span><br>
 <span class="kw">val</span> i = <span class="fu">stringToInt</span>(<span class="st">&quot;123&quot;</span>)<br>
 <br>
 <span class="co">//Result:</span><br>
 stringToInt: String =&gt; Int = &lt;function1&gt;<br>
 i: Int = <span class="dv">123</span><br></code></pre>
-<p>In ghe contrast the <code>stringToInt</code> is a <strong>partial function</strong> because is not defined for every value from its domain, for example application <code>stringToInt(&quot;abc&quot;)</code> would crush with <code>java.lang.NumberFormatException</code> exception.</p>
-<h4 id="functions-as-lookup-tables">Functions as lookup tables</h4>
+<p>In the contrast the <code>stringToInt</code> is a <strong>partial function</strong> because is not defined for every value from its domain, for example application <code>stringToInt(&quot;abc&quot;)</code> would crush with <code>java.lang.NumberFormatException</code> exception.</p>
+<h4 id="functions-as-lookup-tables">Functions as table lookups</h4>
 <p>As we discuss above pure functions are mappings from <em>domain</em> to <em>codomain</em>. We can always express functions in a form of a table look up. For example, we can define <code>stringToInt</code> as follows:</p>
 <pre class="sourceCode scala"><code class="sourceCode scala"><span class="kw">def</span> <span class="fu">stringToInt</span>(s: String): Int = s <span class="kw">match</span> {<br>
   <span class="kw">case</span> <span class="st">&quot;1&quot;</span> =&gt; <span class="dv">1</span><br>
