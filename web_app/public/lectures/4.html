@@ -1,0 +1,72 @@
+<blockquote>
+<p>In the last section, I compared the idioms of imperative and functional programming with simple examples. I stated that the building blocks of functional programs are pure functions.</p>
+</blockquote>
+<blockquote>
+<p>In the following section, I will discuss functions and their characteristics in more detail.</p>
+</blockquote>
+<h3 id="functions-everywhere">Functions Everywhere</h3>
+<hr />
+<h4 id="pure-function">Pure Function</h4>
+<ol style="list-style-type: decimal">
+<li><p>The function <strong>always</strong> evaluates to the same result given the same argument. The word always is emphasized here. The pure function can return the same result for different arguments, but it can never return different results for the same argument.</p></li>
+<li><p>Evaluation of the result does not cause any semantically observable <strong>side effect</strong>. Well, what are these side effects then? In Computer Science, a function or expression is said to have a side effect if it modifies some state or has an interaction with calling functions or the outside world. Basically, a function has a side effect if it does something else than returning a result. Some examples of side effects:</p>
+<ul>
+<li><p>Modifying a variable or a data structure in place</p></li>
+<li><p>Throwing an exception or halting with an error</p></li>
+<li><p>Writing to or reading from the console or a file</p></li>
+<li><p>Drawing on the screen, updating a database, printing on a printer</p></li>
+</ul></li>
+</ol>
+<p>Every function with the characteristics of a pure function is called <strong>referentially transparent</strong> and allow us to replace the expression in code which applies one of these functions with its result value without affecting the behaviour of the program in any way.</p>
+<p><strong>Example:</strong> Pure vs Impure</p>
+<pre class="sourceCode scala"><code class="sourceCode scala"><span class="fu">sin</span>(x)<br>
+<span class="fu">length</span>(list)<br>
+<span class="fu">random</span>(seed)<br>
+<span class="fu">printf</span>(string)<br></code></pre>
+<p>Functions <code>sin</code> and <code>length</code> are pure functions because they always return the same result for the same argument and do nothing else. Function <code>sin(0)</code> returns always 0 and <code>length(List(1,2,3,4,5))</code> of the same list is always 5. In other words function application <code>sin(0)</code> can be replaced with value 0 and function application <code>length(List(1,2,3,4,5))</code> with value 5.</p>
+<p>Functions <code>random(seed)</code> and <code>printf(string)</code> are impure functions because <code>random(1)</code> will not always return the same result. It will return a random number from 0 to 1. Function <code>printf(“hello world”)</code> will print the string literal to the console and return no result. Even that is not guaranteed. Sometimes it can throw an exception if the console is not available for example. Impure functions are called <strong>procedures</strong> in computer science.</p>
+<p><strong>Example:</strong> Function definition in Scala</p>
+<pre class="sourceCode scala"><code class="sourceCode scala"><span class="kw">def</span> <span class="fu">add</span>(a: Int, b: Int): Int = a + b<br></code></pre>
+<p>The function <code>add</code> is defined as a function which takes two integers and returns one integer. The <code>add</code> function signature is <code>add = (Int, Int) =&gt; Int</code>. We can think of functions as mappings from input to output. I this case <code>add</code> is a mapping from <code>a,b</code> to <code>a + b</code>. We can express this fact with the following statement:</p>
+<pre class="sourceCode scala"><code class="sourceCode scala"><span class="kw">val</span> add: (Int,Int) =&gt; Int = (a, b) =&gt; a + b<br></code></pre>
+<p>Because the Scala compiler supports type inference we can express the function with shorter statement:</p>
+<pre class="sourceCode scala"><code class="sourceCode scala"><span class="kw">val</span> add = (a: Int, b: Int) =&gt; a + b<br></code></pre>
+<p>The compiler will <em>infer</em> that <code>add</code> can only return <code>Int</code> value. In a specific cases we will be able to omit the arguments types as well and just write: <code>add = (a, b) =&gt; a + b</code>. This form of function description is called a <em>lambda expression</em>. It is basically an anonymous function, a function without name. We can read <code>val add = (a: Int, b: Int) =&gt; a + b</code> as: <em>Immutable value <code>add</code> is anonymous function which takes <code>a,b</code> and returns <code>a + b</code>.</em></p>
+<p><strong>Notice:</strong> &gt; In Scala and functional programming languages in general, functions are values. The same way the objects are values. We can assign functions to variables, pass them as arguments to other functions, create them inside the functions and return them as results of function computations.</p>
+<h4 id="general-terms">General Terms</h4>
+<p>Consider a function:</p>
+<pre class="sourceCode scala"><code class="sourceCode scala"><span class="kw">val</span> intToString: Int =&gt; String = i =&gt; i.<span class="fu">toString</span><br>
+<span class="kw">val</span> s = <span class="fu">intToString</span>(<span class="dv">123</span>)<br>
+<br>
+<span class="co">//Result:</span><br>
+intToString: Int =&gt; String = &lt;function1&gt;<br>
+s: String = <span class="dv">123</span><br></code></pre>
+<p>The immutable value <code>intToString</code> is a function which takes an <code>Int</code> and returns <code>String</code> such as it applies <code>toString</code> function to the given <code>Int</code>. The immutable <code>String</code> value <code>s</code> is the result of <code>intToString</code> function application to arguments <code>123</code>.</p>
+<ul>
+<li>The <code>Int</code> and <code>String</code> are <strong>types</strong> and represent sets of values.</li>
+<li>The type <code>Int</code> is a <strong>domain</strong> of <code>intToString</code> function.</li>
+<li>The type <code>String</code> is a <strong>codomain</strong> of <code>intToString</code> function.</li>
+<li>The <code>intToString</code> is <strong>total function</strong> because it is defined for every value from its domain. In other words <code>intToString</code> will return a value for any possible value of <code>Int</code></li>
+</ul>
+<p>Consider</p>
+<pre class="sourceCode scala"><code class="sourceCode scala"><span class="kw">val</span> stringToInt: String =&gt; Int = s =&gt; s.<span class="fu">toInt</span><br>
+<span class="kw">val</span> i = <span class="fu">stringToInt</span>(<span class="st">&quot;123&quot;</span>)<br>
+<br>
+<span class="co">//Result:</span><br>
+stringToInt: String =&gt; Int = &lt;function1&gt;<br>
+i: Int = <span class="dv">123</span><br></code></pre>
+<p>In ghe contrast the <code>stringToInt</code> is a <strong>partial function</strong> because is not defined for every value from its domain, for example application <code>stringToInt(&quot;abc&quot;)</code> would crush with <code>java.lang.NumberFormatException</code> exception.</p>
+<h4 id="functions-as-lookup-tables">Functions as lookup tables</h4>
+<p>As we discuss above pure functions are mappings from <em>domain</em> to <em>codomain</em>. We can always express functions in a form of a table look up. For example, we can define <code>stringToInt</code> as follows:</p>
+<pre class="sourceCode scala"><code class="sourceCode scala"><span class="kw">def</span> <span class="fu">stringToInt</span>(s: String): Int = s <span class="kw">match</span> {<br>
+  <span class="kw">case</span> <span class="st">&quot;1&quot;</span> =&gt; <span class="dv">1</span><br>
+  <span class="kw">case</span> <span class="st">&quot;2&quot;</span> =&gt; <span class="dv">2</span><br>
+  <span class="kw">case</span> <span class="st">&quot;3&quot;</span> =&gt; <span class="dv">3</span><br>
+  <span class="kw">case</span> s =&gt; ???<br>
+}<br>
+<span class="kw">val</span> i = <span class="fu">stringToInt</span>(<span class="st">&quot;1&quot;</span>)<br>
+<br><span class="co">//Result:</span><br>
+stringToInt: (s: String)Int<br>
+i: Int = <span class="dv">1</span><br></code></pre>
+<p>The <code>stringToInt</code> is only defined for domain: <code>{&quot;1&quot;, &quot;2&quot;, &quot;3&quot;}</code> and for any other value it would throw <code>scala.NotImplementedError: an implementation is missing</code> error. <strong>Notice:</strong> &gt;Any function can be defined as a table lookup. We can think of common data structures as partial functions as well. <code>Map (&quot;1&quot; =&gt; 1, &quot;2&quot; =&gt; 2, &quot;3&quot; =&gt; 3)</code> is the same partial function as <code>stringToInt</code> and in Scala every Map inherits the <code>PartialFunction</code> trait. Every Scala Map is a function from its keys to its values. If fact, Many Scala data structures are partial functions.</p>
+<hr />
