@@ -35,14 +35,12 @@ sum: Int = 15<br>
 <p>What functional programs do: - They transform immutable values to other values. - They use functions and function compositions as control structures. - They use pure referentially transparent functions.</p>
 <p><strong>Example:</strong></p>
 <pre class="sourceCode scala"><code class="sourceCode scala"><span class="kw">var</span> numbers = List(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">5</span>)<br>
-  
 <span class="kw">def</span> <span class="fu">sumOfNumbers</span>(numbers: List[Int]): Int = numbers <span class="kw">match</span> {<br>
   <span class="kw">case</span> Nil =&gt; <span class="dv">0</span><br>
   <span class="kw">case</span> head :: tail =&gt; head + <span class="fu">sumOfNumbers</span>(tail)<br>
 }<br>
-  
-<span class="kw">val</span> sum = <span class="fu">sumOfNumbers</span>(numbers)<br><br>
-
+<span class="kw">val</span> sum = <span class="fu">sumOfNumbers</span>(numbers)<br>
+<br>
 <span class="co">//Result:</span><br>
 numbers: List[Int] = List(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>)<br>
 sumOfNumbers: (numbers: List[Int])Int<br>
