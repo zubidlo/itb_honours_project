@@ -1,0 +1,83 @@
+<blockquote>
+<p>In the last section, we discussed the higher order functions and saw an example of a tail recursive function defined inside another function.</p>
+</blockquote>
+<blockquote>
+<p>In this section, We will continue to talk about the function applications, namely currying and partially applied functions.</p>
+</blockquote>
+<h3 id="curried-and-partialy-applied-functions.">Curried and Partialy applied functions.</h3>
+<hr />
+<h4 id="arity-of-functions-and-currying">Arity of Functions and Currying</h4>
+<p><strong>Arity</strong> of a function refers to the number of argumemts a function takes or a in mathematical definition it is <em>the dimension of domain in the coresponding cartesian product</em>. Let's look at an example:</p>
+<pre class="sourceCode scala"><code class="sourceCode scala"><span class="kw">def</span> <span class="fu">five</span>() = <span class="dv">5</span>;
+<span class="kw">def</span> <span class="fu">addFive</span>(a: Int): Int = a + <span class="fu">five</span>()
+<span class="kw">def</span> <span class="fu">addFivePlusB</span>(a: Int, b: Int): Int = <span class="fu">addFive</span>(a) + b
+<span class="kw">def</span> <span class="fu">addFivePlusBminusC</span>(a: Int, b: Int, c: Int): Int = <span class="fu">addFivePlusB</span>(a,b) - c
+
+<span class="kw">val</span> result = <span class="fu">addFivePlusBminusC</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>)
+
+<span class="co">//Result</span>
+five: ()Int
+addFive: (a: Int)Int
+addFivePlusB: (a: Int, b: Int)Int
+addFivePlusBminusC: (a: Int, b: Int, c: Int)Int
+result: Int = <span class="dv">5</span></code></pre>
+<ul>
+<li>Function <code>five</code> has a type of <code>() -&gt; Int</code>, which means that it takes no argument and returns an <code>Int</code>, which means <code>five</code> is a function of <em>arity-0</em>. Functions of arity-0 are called the <em>nullary</em> functions. Nullary functions are used to express the side effects in imperative programming. In our case we get an <code>Int</code> from &quot;nothing&quot; similarly to <code>console.read()</code> function which would get a <code>String</code> from &quot;nothing&quot;.</li>
+<li>Function <code>addFive</code> has a type of <code>Int -&gt; Int</code> and therefore <em>arity-1</em> and is called the <em>unary</em> function.</li>
+<li>Function <code>addFivePlusB</code> has a type <code>(Int, Int) -&gt; Int</code> and therefore <em>arity-2</em> and is called the <em>binary</em> function.</li>
+<li>Function <code>addFivePlusBminusC</code> has a type <code>(Int, Int, Int) -&gt; Int</code> and so it is a function of <em>arity-3</em> called <em>ternary</em> function.</li>
+</ul>
+<p>This can in analogy continue further and Scala supports functions up to arity-22, but in reality functions with higher arity than 3 are really rare in programming.</p>
+<p>The interesting property of functions with arity-n where n &gt; 1 is that they can be always transformed to the functions with arity-1. We can say in confidence that every function actually is an unary function. The technique of transforming a function of higher arity to unary function is called <strong>currying</strong>. For example the function <code>(Int, Int) -&gt; Int</code> is the same function as <code>Int -&gt; (Int -&gt; Int)</code>.</p>
+<p>Let's see an example to understand this concept better:</p>
+<pre class="sourceCode scala"><code class="sourceCode scala"><span class="kw">def</span> <span class="fu">add</span>(a: Int, b: Int): Int = a + b
+<span class="kw">def</span> <span class="fu">add1</span>(a: Int)(b: Int): Int = a + b
+  
+<span class="kw">val</span> areTheSame = <span class="fu">add</span>(<span class="dv">5</span>, <span class="dv">5</span>) == <span class="fu">add1</span>(<span class="dv">5</span>)(<span class="dv">5</span>)
+<span class="kw">val</span> addFive: Int =&gt; Int = <span class="fu">add1</span>(<span class="dv">5</span>)
+<span class="kw">val</span> ten = <span class="fu">addFive</span>(<span class="dv">5</span>)
+
+<span class="co">//Result:</span>
+add: (a: Int, b: Int)Int
+add1: (a: Int)(b: Int)Int
+areTheSame: Boolean = <span class="kw">true</span>
+addFive: Int =&gt; Int = &lt;function1&gt;
+ten: Int = <span class="dv">10</span></code></pre>
+<ul>
+<li>The functions <code>add</code> and <code>add1</code> are the same functions. Function <code>add1</code> is <em>curried form</em> of <code>add</code>. The <code>add</code> type is <code>(Int, Int) -&gt; Int</code> and <code>add1</code> type is <code>Int -&gt; Int -&gt; Int</code> which is the same as <code>Int -&gt; (Int -&gt; Int</code>) because the functions associate to left.</li>
+<li><code>Int -&gt; Int -&gt; Int</code> is a function which takes a <code>Int</code> and returns a function <code>Int -&gt; Int</code>, which we can see with <code>addFive</code> function. The <code>addFive</code> function is defined as application of <code>add1</code> to argument 5 and the result is <code>Int -&gt; Int</code></li>
+<li>The <code>addFive</code> function still requires an <code>Int</code> and will return an <code>Int</code> and we can see its application to argument 5 on line <code>val ten = addFive(5)</code></li>
+</ul>
+<p>Currying is so important concept in functional programming that most of the functional programming languages support currying by default. For example in Haskel or F# all functions are curried by default. Scala doesn't have this feature, but we can curry every function if needed by:</p>
+<pre class="sourceCode scala"><code class="sourceCode scala"><span class="kw">def</span> <span class="fu">add</span>(a: Int, b: Int): Int = a + b
+<span class="kw">def</span> addCurried = (add _).<span class="fu">curried</span>()     
+
+<span class="co">//Result:</span>
+add: (a: Int, b: Int)Int
+addCurried: Int =&gt; (Int =&gt; Int)</code></pre>
+<p>As we can see that the type of the function changed by currying from <code>(Int, Int) -&gt; Int</code> to <code>Int =&gt; (Int =&gt; Int)</code>. We can also uncurry any unary higher order function with:</p>
+<pre class="sourceCode scala"><code class="sourceCode scala"><span class="kw">def</span> <span class="fu">addCurried</span>(a: Int)(b: Int): Int = a + b     <span class="co">//&gt; addCurried: (a: Int)(b: Int)Int</span>
+<span class="kw">def</span> addUncurried = Function.<span class="fu">uncurried</span>[Int, Int, Int](addCurried)
+
+<span class="co">//Result:</span>
+addCurried: (a: Int)(b: Int)Int
+addUncurried: (Int, Int) =&gt; Int</code></pre>
+<p>As we can see in the result, the <code>addUncurried</code> function has appropriate type <code>(Int, Int) -&gt; Int)</code>. The expression <code>Function.uncurried[Int, Int, Int](addCurried)</code> is not pretty and in fact <code>uncurrying</code> is not idiomatic to Scala and used rarely.</p>
+<h4 id="partialy-applied-functions">Partialy Applied Functions</h4>
+<p>To partially apply a function is a similar concept to a function currying, where some of the arguments are supplied in the application and some are not:</p>
+<pre class="sourceCode scala"><code class="sourceCode scala"><span class="kw">def</span> <span class="fu">add</span>(a: Int, b: Int): Int = a + b
+  
+<span class="kw">def</span> <span class="fu">addFive</span>(b: Int): Int = <span class="fu">add</span>(<span class="dv">5</span>, b)
+<span class="kw">def</span> addSix = (b: Int) =&gt; <span class="fu">add</span>(<span class="dv">6</span>, b)
+<span class="kw">def</span> addSeven = <span class="fu">add</span>(<span class="dv">7</span>, _: Int)
+
+<span class="co">//Result:</span>
+add: (a: Int, b: Int)Int
+
+addFive: (b: Int)Int
+addSix: Int =&gt; Int
+addSeven: Int =&gt; Int</code></pre>
+<ul>
+<li>The unary functions <code>addFive</code>, <code>addSix</code> and <code>addSeven</code> all partially apply a different value to the first argument of binary <code>add</code> function. Each of unary functions uses a slightly different syntax to define the same type of partially applied function, which demonstrates the expressive power of Scala language.</li>
+</ul>
+<p><strong>Note:</strong> &gt; So far we discussed various properties of pure functions and their applications in the functional programming. I think we have a big enough arsenal to start to build simple pure functional programs. In the next section, we will see how to work with <code>List</code> type and what toolkit in the form of higher order functions it provides.</p>
