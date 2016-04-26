@@ -1733,7 +1733,6 @@ The \emph{stringToInt} is only defined for domain: \emph{{"1", "2", "3"}} and fo
 Any function can be defined as a table lookup. We can think of common data structures as partial functions as well. Map ("1" => 1, "2" => 2, "3" => 3) is the same partial function as `stringToInt` and in Scala every Map inherits the PartialFunction trait. Every Scala Map is a function from its keys to its values. If fact, Many Scala data structures are partial functions.
 \end{lstlisting}
 
-
 %_______________________________________________________________________
 \section{Higher Order Functions.}\label{6.5}
 \begin{lstlisting}
@@ -1845,6 +1844,112 @@ eleven: Int = 26
 \begin{lstlisting}
 The higher order function is a very powerful concept, which allows us to construct elegant programs using function compositions. There are whole libraries of predefined higher order functions in every functional programming language. For example Clojure programming language comes with around 500 predefined functions in its core library. Scala comes with rich interfaces full of useful higher order functions as well. I will show some examples of functions defined on sequences in the next section.
 \end{lstlisting}
+
+%_______________________________________________________________________
+\section{Curried and Partialy applied functions.}\label{6.6}
+
+\begin{lstlisting}
+In this section, We will continue to talk about the function applications, namely currying and partially applied functions.
+\end{lstlisting}
+
+\subsection{Arity of Functions and Currying.}\label{6.6.1}
+
+\textbf{Arity} of a function refers to the number of arguments a function takes or a in mathematical definition it is \emph{the dimension of domain in the corresponding cartesian product}. Let's look at an example:
+\begin{lstlisting}[language=python]
+def five() = 5;
+def addFive(a: Int): Int = a + five()
+def addFivePlusB(a: Int, b: Int): Int = addFive(a) + b
+def addFivePlusBminusC(a: Int, b: Int, c: Int): Int = addFivePlusB(a,b) - c
+
+val result = addFivePlusBminusC(1, 2, 3)
+
+//Result
+five: ()Int
+addFive: (a: Int)Int
+addFivePlusB: (a: Int, b: Int)Int
+addFivePlusBminusC: (a: Int, b: Int, c: Int)Int
+\end{lstlisting}
+
+\begin{itemize}\itemsep1pt \parskip0pt \parsep0pt
+\item Function \emph{five} has a type of \emph{() -> Int}, which means that it takes no argument and returns an \emph{Int}, which means \emph{five} is a function of \textbf{arity-0}. Functions of arity-0 are called the \textbf{nullary} functions. The nullary functions are used to express the side effects in imperative programming. In our case we get an \emph{Int} from "nothing" similarly to \emph{Console.readline()} function in C\# which would get a \emph{String} from "nothing".
+\item Function \emph{addFive} has a type of \emph{Int -> Int} and therefore \textbf{arity-1} and is called the \textbf{unary} function.
+\item Function \emph{addFivePlusB} has a type \emph{(Int, Int) -> Int} and therefore \textbf{arity-2} and is called the \textbf{binary} function.
+\item Function \emph{addFivePlusBminusC} has a type \emph{(Int, Int, Int) -> Int} and so it is a function of \textbf{arity-3} called the \textbf{ternary} function.
+\end{itemize}
+
+This can in analogy continue further and Scala supports functions up to arity-22, but in reality functions with higher arity than 3 are really rare in programming.
+
+The interesting property of functions with arity-n where n > 1 is that they can be always transformed to the functions with arity-1. We can say in confidence that every function actually is an unary function. The technique of transforming a function of higher arity to unary function is called \textbf{currying}. For example the function \emph{(Int, Int) -> Int} is the same function as \emph{Int -> (Int -> Int)}.
+
+Let's see an example to understand this concept better:
+
+\begin{lstlisting}[language=python]
+def add(a: Int, b: Int): Int = a + b
+def add1(a: Int)(b: Int): Int = a + b
+  
+val areTheSame = add(5, 5) == add1(5)(5)
+val addFive: Int => Int = add1(5)
+val ten = addFive(5)
+
+//Result:
+add: (a: Int, b: Int)Int
+add1: (a: Int)(b: Int)Int
+areTheSame: Boolean = true
+addFive: Int => Int = <function1>
+ten: Int = 10
+\end{lstlisting}
+
+\begin{itemize}\itemsep1pt \parskip0pt \parsep0pt
+\item The functions \emph{add} and \emph{add1} are the same functions. Function \emph{add1} is \textbf{curried form} of \emph{add}. The \emph{add} type is \emph{(Int, Int) -> Int} and \emph{add1} type is \emph{Int -> Int -> Int} which is the same as \emph{Int -> (Int -> Int)} because the functions associate to left.
+\item \emph{Int -> Int -> Int} is a function which takes a \emph{Int} and returns a function \emph{Int -> Int}, which we can see with \emph{addFive} function. The \emph{addFive} function is defined as application of \emph{add1} to argument 5 and the result is \emph{Int -> Int} function.
+\item The \emph{addFive} function still requires an \emph{Int} and will return an \emph{Int} and we can see its application to argument 5 on line \emph{val ten = addFive(5)}.
+\end{itemize}
+
+Currying is so important concept in functional programming that most of the functional programming languages support currying by default. For example in Haskell or F\# all functions are curried by default. Scala doesn't have this feature, but we can curry every function if needed by:
+\begin{lstlisting}[language=python]
+def add(a: Int, b: Int): Int = a + b
+def addCurried = (add _).curried()     
+
+//Result:
+add: (a: Int, b: Int)Int
+addCurried: Int => (Int => Int)
+\end{lstlisting}
+As we can see, the type of the function changed by currying from `(Int, Int) -> Int` to `Int => (Int => Int)`. We can also uncurry any unary higher order function with:
+\begin{lstlisting}[language=python]
+def addCurried(a: Int)(b: Int): Int = a + b     //> addCurried: (a: Int)(b: Int)Int
+def addUncurried = Function.uncurried[Int, Int, Int](addCurried)
+
+//Result:
+addCurried: (a: Int)(b: Int)Int
+addUncurried: (Int, Int) => Int
+\end{lstlisting}
+As we can see in the result, the \emph{addUncurried} function has appropriate type \emph{(Int, Int) -> Int)}.
+
+\subsection{Partialy Applied Functions.}\label{6.6.2}
+
+To partially apply a function is a similar concept to the function currying, where some of the arguments are supplied in the application and some are not:
+\begin{lstlisting}[language=python]
+def add(a: Int, b: Int): Int = a + b
+  
+def addFive(b: Int): Int = add(5, b)
+def addSix = (b: Int) => add(6, b)
+def addSeven = add(7, _: Int)
+
+//Result:
+add: (a: Int, b: Int)Int
+
+addFive: (b: Int)Int
+addSix: Int => Int
+addSeven: Int => Int
+\end{lstlisting}
+
+The unary functions \emph{addFive}, \emph{addSix} and \emph{addSeven} all partially apply a different value to the first argument of binary \emph{add} function. Each of unary functions uses a slightly different syntax to define the same type of partially applied function, which demonstrates the expressive power of Scala language.
+
+
+
+
+
+
 
 
 
