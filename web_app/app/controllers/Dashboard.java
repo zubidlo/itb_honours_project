@@ -4,6 +4,7 @@ package controllers;
 import java.io.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
 import models.User;
 import play.Play;
 import play.mvc.Controller;
@@ -17,6 +18,7 @@ public class Dashboard extends Controller {
 	@Security.Authenticated(Secured.class)
     public Result index() {
 		User user = User.findByEmail(request().username());
+		if(user == null) redirect(routes.Application.index());
         return ok(index.render(user));
     }
     
@@ -24,6 +26,7 @@ public class Dashboard extends Controller {
     public Result lecture(String file) {
     	
     	User user = User.findByEmail(request().username());
+    	if(user == null) redirect(routes.Application.index());
     	String path = "public/lectures/" + file;
     	try(InputStream in = Play.application().classloader().getResourceAsStream(path)) {
     		Stream<String> lines = new BufferedReader(new InputStreamReader(in)).lines();
