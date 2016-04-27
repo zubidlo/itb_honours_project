@@ -1,0 +1,119 @@
+<blockquote>
+<p>In the last section, I stated that every function is an unary function and I showcased how to partially apply a function. In this chapter, we will look at List data structure and it's rich toolkit of helpful functions.</p>
+</blockquote>
+<h3 id="lists-part-1.">Lists: Part 1.</h3>
+<hr />
+<p>Immutable lists are the most used sequences in functional programming. They are modelled as single linked lists of nodes. Also the lists are functions of their indexes, meaning that for example if <code>val chars = List('A', 'B', 'C')</code>, the <code>chars</code> is a partial function of type <code>Int -&gt; Char</code> and <code>chars(0)</code> would return 'A', because list index starts from 0, but <code>chars(3)</code> would return <code>java.lang.IndexOutOfBoundsException: 3</code>.</p>
+<p>Scala list is also a <strong>monad</strong>. Monads are one of the most used abstractions in the functional programming. Monads come from category theory and are designed to put values in a some sort of computational context. The list monad is representing a type which can have 0 or more elements. I'm not going to discuss monads, because it is an advanced topic, but I want to point out that Scala list is MUCH more powerful abstraction than Java list solely because it is a monad, which Java list is not. In terms of the performance, list in Scala has O(1) prepend and head/tail access. Most other operations are O(n) on the number of elements in the list.</p>
+<h4 id="constructing-lists">Constructing Lists</h4>
+<p><code>Cons</code> <code>(::)</code> is the shorthand for 'construct' and creates an immutable list. Also there is a syntactic sugar in form of <code>List(elements*)</code> to create the lists. Let's look at some examples:</p>
+<pre class="sourceCode scala"><code class="sourceCode scala"><span class="kw">val</span> fruits1 = <span class="st">&quot;apples&quot;</span> :: (<span class="st">&quot;oranges&quot;</span> :: (<span class="st">&quot;pears&quot;</span> :: Nil))
+<span class="kw">val</span> fruits2 = List(<span class="st">&quot;apples&quot;</span>, <span class="st">&quot;oranges&quot;</span>, <span class="st">&quot;pears&quot;</span>)<br>
+<br>
+<span class="kw">val</span> empty1 = Nil<br>
+<span class="kw">val</span> empty2 = List()<br>
+<br>
+<span class="kw">val</span> numbers1 = List(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>)<br>
+<span class="kw">val</span> numbers2 = <span class="dv">1</span> :: (<span class="dv">2</span> :: (<span class="dv">3</span> :: (<span class="dv">4</span> :: Nil)))<br>
+<br>
+<span class="co">//Result:</span><br>
+fruits1: List[String] = List(apples, oranges, pears)<br>
+fruits2: List[String] = List(apples, oranges, pears)<br>
+<br>
+empty1: scala.<span class="fu">collection</span>.<span class="fu">immutable</span>.<span class="fu">Nil</span>.<span class="fu">type</span> = List()<br>
+empty2: List[Nothing] = List()<br>
+<br>
+numbers1: List[Int] = List(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>)<br>
+numbers2: List[Int] = List(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>)<br></code></pre>
+<p>In the example above we created the lists with usage of a type constructor <code>Cons</code>. As you can see, the <code>e1 :: e2 :: Nil</code> is the same list as <code>List(e1,e2)</code></p>
+<p>There are many more ways to create lists. For example, we can create a new list by concatenating 2 or more lists with <code>:::</code>, <code>++</code>, <code>+:</code>, <code>:+</code> functions:</p>
+<pre class="sourceCode Scala"><code class="sourceCode scala"><span class="kw">val</span> numbers1 = List(<span class="dv">1</span>, <span class="dv">2</span>) ::: List(<span class="dv">3</span>, <span class="dv">4</span>)<br>
+<span class="kw">val</span> numbers2 = List(<span class="dv">1</span>,<span class="dv">2</span>) ++ List(<span class="dv">2</span>,<span class="dv">3</span>)<br>
+<span class="kw">val</span> numbers3 = <span class="dv">1</span> +: List(<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>)<br>
+<span class="kw">val</span> numbers4 = List(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>) :+ <span class="dv">4</span><br>
+<br>
+<span class="co">//Result:</span><br>
+numbers1: List[Int] = List(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>)<br>
+numbers2: List[Int] = List(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">3</span>)<br>
+numbers3: List[Int] = List(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>)<br>
+numbers4: List[Int] = List(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>)<br></code></pre>
+<p>Create a list from a range:</p>
+<pre class="sourceCode Scala"><code class="sourceCode scala"><span class="kw">val</span> numbers = List.<span class="fu">range</span>(<span class="dv">1</span>,<span class="dv">10</span>)<br>
+<span class="co">//numbers: List[Int] = List(1, 2, 3, 4, 5, 6, 7, 8, 9)</span><br></code></pre>
+<p>Create a list by filling the list with some values:</p>
+<pre class="sourceCode scala"><code class="sourceCode scala"><span class="kw">val</span> numbers1 = List.<span class="fu">fill</span>(<span class="dv">5</span>)(<span class="dv">1</span>)<br>
+<span class="kw">val</span> numbers2 = List.<span class="fu">fill</span>(<span class="dv">5</span>)(<span class="dv">1</span>,<span class="dv">2</span>)<br>
+<span class="kw">val</span> numbers3 = List.<span class="fu">fill</span>(<span class="dv">5</span>)(<span class="dv">1</span> + (Math.<span class="fu">random</span>() * <span class="dv">10</span>).<span class="fu">round</span>)<br>
+<br>
+<span class="co">//Result:</span><br>
+numbers1: List[Int] = List(<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>)<br>
+numbers2: List[(Int, Int)] = List((<span class="dv">1</span>,<span class="dv">2</span>), (<span class="dv">1</span>,<span class="dv">2</span>), (<span class="dv">1</span>,<span class="dv">2</span>), (<span class="dv">1</span>,<span class="dv">2</span>), (<span class="dv">1</span>,<span class="dv">2</span>))<br>
+numbers3: List[Long] = List(<span class="dv">5</span>, <span class="dv">10</span>, <span class="dv">2</span>, <span class="dv">1</span>, <span class="dv">6</span>)<br></code></pre>
+<p>Create lists of lists with tabulate functions:</p>
+<pre class="sourceCode scala"><code class="sourceCode scala"><span class="kw">val</span> numbers1 = List.<span class="fu">tabulate</span>(<span class="dv">5</span>)(e =&gt; e + <span class="dv">2</span>)<br>
+<span class="kw">val</span> numbers2 = List.<span class="fu">tabulate</span>(<span class="dv">2</span>,<span class="dv">2</span>)((e1,e2) =&gt; (e1,e2))<br>
+<br>
+<span class="co">//Results:</span><br>
+numbers1: List[Int] = List(<span class="dv">0</span>, <span class="dv">2</span>, <span class="dv">4</span>, <span class="dv">6</span>, <span class="dv">8</span>)<br>
+numbers2: List[List[(Int, Int)]] = List(List((<span class="dv">0</span>,<span class="dv">0</span>), (<span class="dv">0</span>,<span class="dv">1</span>)), List((<span class="dv">1</span>,<span class="dv">0</span>), (<span class="dv">1</span>,<span class="dv">1</span>)))<br></code></pre>
+<ul>
+<li><code>List.tabulate(5)(e =&gt; e + 2)</code> creates new list from the range (0..4) where anonymous function <code>e =&gt; e + 2</code> is applied to each element 'e'.</li>
+<li><code>List.tabulate(2,2)((e1,e2) =&gt; (e1,e2))</code> creates new <code>List[List[(Int, Int)]]</code> where both e1 and e2 are from range (0..1) and tabulate will generate all 4 permutations of the elements.</li>
+</ul>
+<h4 id="list-functions">List functions</h4>
+<pre class="sourceCode scala"><code class="sourceCode scala"><span class="kw">val</span> chars = List(&#39;a&#39;,&#39;b&#39;,&#39;c&#39;,&#39;d&#39;,&#39;e&#39;)<br>
+<br>
+<span class="kw">val</span> first = <span class="fu">chars</span>(<span class="dv">0</span>)<br>
+<span class="kw">val</span> isThere = chars.<span class="fu">contains</span>(&#39;c&#39;)<br>
+<span class="kw">val</span> areThere = chars.<span class="fu">containsSlice</span>(List(&#39;d&#39;,&#39;e&#39;))<br>
+<span class="kw">val</span> defined = chars.<span class="fu">isDefinedAt</span>(<span class="dv">1</span>)<br>
+<span class="kw">val</span> really = chars.<span class="fu">corresponds</span>(List(&#39;A&#39;,&#39;B&#39;,&#39;C&#39;,&#39;D&#39;,&#39;E&#39;))((a,b) =&gt; a.<span class="fu">toUpper</span> == b)<br>
+<span class="kw">val</span> exists = chars.<span class="fu">exists</span>(e =&gt; e &gt;= &#39;a&#39;)<br>
+<br>
+<span class="co">//Result:</span><br>
+chars: List[Char] = List(a, b, c, d, e)<br>
+first: Char = a<br>
+isThere: Boolean = <span class="kw">true</span><br>
+areThere: Boolean = <span class="kw">true</span><br>
+defined: Boolean = <span class="kw">true</span><br>
+really: Boolean = <span class="kw">true</span><br>
+exists: Boolean = <span class="kw">true</span><br></code></pre>
+<ul>
+<li>As mentioned before, the list is a function its indices to its elements and so <code>chars(0)</code> would return <code>Char</code> <code>'a'</code>.</li>
+<li>Functions <code>contains</code> and <code>containsSlice</code> are self explanatory, the <code>isDefinedAt</code> returns true if there is an value for given index.</li>
+<li><code>chars.corresponds(List('A','B','C','D','E'))((a,b) =&gt; a.toUpper == b)</code> application is comparing <code>nums</code> to List('A','B','C','D','E') after function <code>(a,b) =&gt; a.toUpper == b</code> is applied to each elements of both lists, where 'a' is from <code>chars</code> and 'b' is bind to <code>List('A','B','C','D','E')</code> elements.</li>
+<li>The last function application asks if there is an element which is greater or equal to <code>'a'</code>.</li>
+</ul>
+<pre class="sourceCode scala"><code class="sourceCode scala"><span class="kw">val</span> c = List(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">5</span>).<span class="fu">count</span>(e =&gt; e &gt; <span class="dv">2</span>)<br>
+<span class="co">//c: Int = 3</span><br></code></pre>
+<ul>
+<li>Application of <code>count(e =&gt; e &gt; 2)</code> counts all the elements which are greater than 2.</li>
+</ul>
+<pre class="sourceCode scala"><code class="sourceCode scala"><span class="kw">val</span> nums = List(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">5</span>).<span class="fu">distinct</span><br>
+<span class="co">// nums: List[Int] = List(1, 2, 5)</span><br></code></pre>
+<ul>
+<li>Application of <code>distinct()</code> returns list of elements without any duplicates.</li>
+</ul>
+<pre class="sourceCode scala"><code class="sourceCode scala"><span class="kw">val</span> head = List(&#39;a&#39;,&#39;b&#39;,&#39;c&#39;,&#39;d&#39;,&#39;e&#39;).<span class="fu">head</span><br>
+<span class="kw">val</span> tail = List(&#39;a&#39;,&#39;b&#39;,&#39;c&#39;,&#39;d&#39;,&#39;e&#39;).<span class="fu">tail</span><br>
+<span class="kw">val</span> last = List(&#39;a&#39;,&#39;b&#39;,&#39;c&#39;,&#39;d&#39;,&#39;e&#39;).<span class="fu">last</span><br>
+<span class="kw">val</span> init = List(&#39;a&#39;,&#39;b&#39;,&#39;c&#39;,&#39;d&#39;,&#39;e&#39;).<span class="fu">init</span><br>
+<span class="kw">val</span> chars1 = List(&#39;a&#39;,&#39;b&#39;,&#39;c&#39;,&#39;d&#39;,&#39;e&#39;).<span class="fu">drop</span>(<span class="dv">3</span>)<br>
+<span class="kw">val</span> chars2 = List(&#39;a&#39;,&#39;b&#39;,&#39;c&#39;,&#39;d&#39;,&#39;e&#39;).<span class="fu">take</span>(<span class="dv">3</span>)<br>
+<span class="kw">val</span> indices = List(&#39;a&#39;,&#39;b&#39;,&#39;c&#39;,&#39;d&#39;,&#39;e&#39;).<span class="fu">indices</span><br>
+<span class="kw">val</span> length = List(&#39;a&#39;,&#39;b&#39;,&#39;c&#39;,&#39;d&#39;,&#39;e&#39;).<span class="fu">length</span><br>
+<br>
+<span class="co">//Result:</span><br>
+head: Char = a<br>
+tail: List[Char] = List(b, c, d, e)<br>
+last: Char = e<br>
+init: List[Char] = List(a, b, c, d)<br>
+chars1: List[Char] = List(d, e)<br>
+chars2: List[Char] = List(a, b, c)<br>
+indices: scala.<span class="fu">collection</span>.<span class="fu">immutable</span>.<span class="fu">Range</span> = <span class="fu">Range</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>)<br>
+length: Int = <span class="dv">5</span></code></pre><br>
+<ul>
+<li><code>head</code> returns first element of the list, <code>tail</code> the rest of the elements without the first element.</li>
+<li><code>init</code> returns all elements except the last and rest of the functions are self explanatory.</li>
+</ul>
+<p>I will stop here, and in the next chapter, we will see more useful functions defined on the list.</p>
